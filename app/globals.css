@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Warm paper — the page canvas */
+  --color-paper: #faf7f0;
+
+  /* Brand — deep forest green (growth, grounded, African green) */
+  --color-brand-50: #eef3ec;
+  --color-brand-100: #d9e5d6;
+  --color-brand-200: #b4ccb0;
+  --color-brand-300: #89ab86;
+  --color-brand-400: #5f8a60;
+  --color-brand-500: #446f48;
+  --color-brand-600: #345938;
+  --color-brand-700: #2b4a2f;
+  --color-brand-800: #233c27;
+  --color-brand-900: #1b2f1f;
+  --color-brand-950: #0e1b11;
+
+  /* Sun — warm amber (energy / power) */
+  --color-sun-50: #fdf8eb;
+  --color-sun-100: #f9edc8;
+  --color-sun-200: #f2d98f;
+  --color-sun-300: #eabf57;
+  --color-sun-400: #e2a532;
+  --color-sun-500: #d18a1e;
+  --color-sun-600: #b36b16;
+  --color-sun-700: #8f4e15;
+  --color-sun-800: #763f17;
+  --color-sun-900: #643516;
+
+  /* Ink — warm brown-tinted neutrals */
+  --color-ink-50: #f7f5ee;
+  --color-ink-100: #ece7da;
+  --color-ink-200: #d9d1bd;
+  --color-ink-300: #b9ae93;
+  --color-ink-400: #8d8270;
+  --color-ink-500: #756b5c;
+  --color-ink-600: #5d5447;
+  --color-ink-700: #4a4238;
+  --color-ink-800: #3a332b;
+  --color-ink-900: #27231c;
+  --color-ink-950: #171409;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.6s ease-out both;
+  --animate-pop: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-ping-slow: ping-slow 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes ping-slow {
+  0% { transform: scale(1); opacity: 0.6; }
+  80%, 100% { transform: scale(1.9); opacity: 0; }
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv01";
+}
+
+::selection {
+  background-color: var(--color-sun-200);
+  color: var(--color-ink-950);
+}
+
+/* Decorative helper backgrounds */
+.bg-grid-light {
+  background-image: linear-gradient(to right, rgb(39 35 28 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(39 35 28 / 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.bg-grid-dark {
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.bg-radial-sun {
+  background: radial-gradient(42rem 28rem at 78% -10%, rgb(226 165 50 / 0.14), transparent 60%),
+    radial-gradient(36rem 26rem at 10% 110%, rgb(68 111 72 / 0.25), transparent 60%);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Thin elegant scrollbar */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink-200);
+  border-radius: 999px;
+  border: 2px solid var(--color-paper);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--color-ink-300); }
