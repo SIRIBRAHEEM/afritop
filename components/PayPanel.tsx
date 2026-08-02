@@ -66,6 +66,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
 
   const selectedChain = useMemo(
     () => USDC_CHAINS.find((c) => c.chain.id === selectedChainId) ?? USDC_CHAINS[0],
@@ -79,9 +80,13 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
   const ready = connected && walletMatchesChain && !busy && !lockedSelected;
 
   async function connect() {
-    if (!hasEthereum()) return;
     setBusy("connecting");
     setError(null);
+    if (!hasEthereum()) {
+      setBusy(null);
+      setShowInstallHelp(true);
+      return;
+    }
     try {
       const ethereum = (window as unknown as { ethereum: EIP1193Provider }).ethereum;
       const accounts = (await ethereum.request({ method: "eth_requestAccounts" })) as string[];
@@ -358,24 +363,50 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
 
           {/* Connect / pay */}
           <div className="mt-6 space-y-3">
-            {!hasEthereum() ? (
-              <div className="rounded-2xl border border-ink-100 bg-ink-50 p-4 text-sm text-ink-500">
-                No EVM wallet detected. Install{" "}
-                <a href="https://metamask.io/download" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-700 hover:underline">
-                  MetaMask
-                </a>{" "}
-                or another wallet to pay in USDC.
-              </div>
-            ) : !wallet ? (
-              <button
-                type="button"
-                onClick={() => void connect()}
-                disabled={busy === "connecting"}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink-900 px-6 py-4 text-base font-extrabold text-white shadow-lg shadow-ink-900/15 transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-70"
-              >
-                {busy === "connecting" ? <Spinner /> : null}
-                {busy === "connecting" ? "Waiting for your wallet…" : "Connect wallet"}
-              </button>
+            {!wallet ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => void connect()}
+                  disabled={busy === "connecting"}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink-900 px-6 py-4 text-base font-extrabold text-white shadow-lg shadow-ink-900/15 transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-70"
+                >
+                  {busy === "connecting" ? <Spinner /> : null}
+                  {busy === "connecting" ? "Waiting for your wallet…" : "Connect wallet"}
+                </button>
+
+                {showInstallHelp && (
+                  <div className="rounded-2xl border border-sun-200 bg-sun-50 p-4 text-sm text-sun-800 animate-fade-in">
+                    <p className="font-bold">No wallet extension detected.</p>
+                    <p className="mt-1 leading-relaxed">
+                      Install a browser wallet to pay USDC on-chain, then click{" "}
+                      <strong>Connect wallet</strong> again:
+                    </p>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {WALLETS.map((w) => (
+                        <a
+                          key={w.name}
+                          href={w.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 rounded-xl border border-ink-100 bg-white px-3 py-2.5 font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
+                        >
+                          <span className="text-lg">{w.icon}</span>
+                          <span className="text-xs">{w.name}</span>
+                        </a>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => void connect()}
+                      disabled={busy === "connecting"}
+                      className="mt-3 text-xs font-bold text-brand-700 hover:text-brand-600"
+                    >
+                      I&apos;ve installed a wallet — try again →
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               <>
                 <div className="flex items-center justify-between rounded-2xl border border-ink-100 bg-ink-50 px-4 py-3">
@@ -507,6 +538,13 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     </div>
   );
 }
+
+const WALLETS = [
+  { name: "MetaMask", icon: "🦊", url: "https://metamask.io/download/" },
+  { name: "Coinbase Wallet", icon: "🔵", url: "https://www.coinbase.com/wallet" },
+  { name: "Trust Wallet", icon: "🔷", url: "https://trustwallet.com/download" },
+  { name: "Rabby", icon: "🐰", url: "https://rabby.io" },
+] as const;
 
 function Spinner() {
   return (

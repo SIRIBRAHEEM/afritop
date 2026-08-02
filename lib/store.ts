@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import os from "os";
 import path from "path";
 import type { ServiceId } from "@/lib/catalog";
 
@@ -28,8 +29,20 @@ export interface Order {
   message?: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
+/**
+ * Serverless-friendly storage. Platforms like Vercel / Netlify give functions
+ * a read-only filesystem except for /tmp, so we keep the JSON store there when
+ * running on those platforms. As a final safety net, if the filesystem can't
+ * be written at all, we fall back to an in-process in-memory store.
+ * (Both are ephemeral — for production use a real database instead.)
+ */
+const DATA_DIR =
+  process.env.VERCEL || process.env.NETLIFY
+    ? path.join(os.tmpdir(), "afritop-data")
+    : path.join(process.cwd(), "data");
 const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
+
+let memoryStore: Order[] | null = null;
 
 async function ensureFile(): Promise<void> {
   await fs.mkdir(DATA_DIR, { recursive: true });
@@ -41,19 +54,31 @@ async function ensureFile(): Promise<void> {
 }
 
 async function readOrders(): Promise<Order[]> {
-  await ensureFile();
-  const raw = await fs.readFile(ORDERS_FILE, "utf8");
+  if (memoryStore) return memoryStore;
   try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
+    await ensureFile();
+    const raw = await fs.readFile(ORDERS_FILE, "utf8");
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  } catch (err) {
+    console.warn("[store] filesystem unavailable — using in-memory store", err);
+    memoryStore = [];
+    return memoryStore;
   }
 }
 
 async function writeOrders(orders: Order[]): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(ORDERS_FILE, JSON.stringify(orders, null, 2), "utf8");
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.writeFile(ORDERS_FILE, JSON.stringify(orders, null, 2), "utf8");
+  } catch (err) {
+    console.warn("[store] filesystem unavailable — keeping orders in memory", err);
+    memoryStore = orders;
+  }
 }
 
 /**

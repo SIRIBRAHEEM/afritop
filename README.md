@@ -18,7 +18,9 @@ npm run dev                        # → http://localhost:3000
 ## How payments work
 
 1. Build a top-up in the **Buy** flow.
-2. You land on `/pay/[order]` — connect any EVM wallet (MetaMask, Coinbase Wallet, …).
+2. You land on `/pay/[order]` — click **Connect wallet** (MetaMask, Coinbase
+   Wallet, Trust Wallet, Rabby, …). No wallet installed? The page shows you
+   where to get one.
 3. Pay on **Arc Testnet** — Circle's stablecoin L1, gas in USDC (testnet-only
    phase; Arc mainnet isn't live yet).
 4. Your wallet sends the exact USDC amount to the **receiver** address shown.
@@ -100,5 +102,7 @@ components/
 
 - Exchange rates in `lib/fx.ts` are **indicative placeholders** — swap in a live
   FX feed before going to production.
-- Order history is a simple JSON file (`data/orders.json`, gitignored) — replace
-  with a real database (e.g. Postgres + Prisma) for production.
+- Order history is a simple JSON file (`data/orders.json`, gitignored). On
+  serverless hosts (Vercel / Netlify) it's kept in `/tmp` (ephemeral), falling
+  back to in-memory storage if the filesystem isn't writable — for a production
+  deployment use a real database (e.g. Postgres + Prisma).
