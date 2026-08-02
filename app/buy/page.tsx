@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useSyncExternalStore } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { COUNTRIES, SERVICES, getCountry, findBundle, type ServiceId } from "@/lib/catalog";
 import { toUsd, platformFee, round2, formatLocal, formatUsd, FX_RATES } from "@/lib/fx";
@@ -21,6 +21,7 @@ import {
 
 function BuyFlow() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const cancelled = searchParams.get("cancelled") === "1";
 
   const [service, setService] = useState<ServiceId>("airtime");
@@ -183,7 +184,7 @@ function BuyFlow() {
       if (!confirm.ok) {
         throw new Error(confirmData.error ?? "The payment couldn't be confirmed. Please try again.");
       }
-      window.location.assign(`/success?orderId=${data.orderId}`);
+      router.push(`/success?orderId=${data.orderId}`);
     } catch (e) {
       setError(humanizeWalletError(e));
       setLoading(false);

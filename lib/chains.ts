@@ -23,7 +23,7 @@ export const arcTestnet = defineChain({
   nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 6 },
   rpcUrls: {
     default: { http: ["https://rpc.testnet.arc.io"] },
-    public: { http: ["https://rpc.testnet.arc.io"] },
+    public: { http: ["https://rpc.testnet.arc.io", "https://rpc.drpc.testnet.arc.io"] },
   },
   blockExplorers: { default: { name: "ArcScan", url: "https://testnet.arcscan.app" } },
   testnet: true,

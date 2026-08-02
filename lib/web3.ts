@@ -149,7 +149,9 @@ export async function sendUsdcPayment(opts: {
     chain: opts.chain,
     transport: http(opts.chain.rpcUrls.public.http[0]),
   });
-  await publicClient.waitForTransactionReceipt({ hash });
+  // Arc finalizes in under a second — poll fast so delivery isn't gated on the
+  // default 4s RPC polling interval.
+  await publicClient.waitForTransactionReceipt({ hash, pollingInterval: 400 });
   return { txHash: hash };
 }
 

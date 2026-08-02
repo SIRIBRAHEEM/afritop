@@ -82,8 +82,9 @@ export async function verifyUsdcPayment(opts: {
 
         return { ok: true, value, from, to };
       } catch {
-        // Transaction not indexed yet — wait and retry.
-        await new Promise((r) => setTimeout(r, 1200));
+        // Transaction not indexed yet — wait briefly and retry. Arc finalizes
+        // in under a second, so a short backoff is enough.
+        await new Promise((r) => setTimeout(r, 250));
       }
     }
   }

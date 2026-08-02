@@ -1,5 +1,5 @@
 import { getOrder, updateOrder, type Order } from "@/lib/store";
-import { sendAirtime, simulateDelivery } from "@/lib/africastalking";
+import { sendAirtime } from "@/lib/africastalking";
 
 /** Generate a standard 20-digit prepaid electricity token, grouped like "1234-5678-…". */
 function generateElectricityToken(): string {
@@ -40,15 +40,13 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
         message: result.message,
       });
     } else {
-      // No API key configured → simulate a successful credit so the demo works end-to-end.
-      await simulateDelivery(1100);
+      // No API key configured → credit instantly so the demo works end-to-end.
       await updateOrder(orderId, {
         status: "delivered",
         message: "Simulated credit — add your Africa's Talking key to go live.",
       });
     }
   } else if (order.service === "electricity") {
-    await simulateDelivery(1500);
     const token = generateElectricityToken();
     await updateOrder(orderId, {
       status: "delivered",
@@ -57,7 +55,6 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
     });
   } else {
     // data bundles
-    await simulateDelivery(1200);
     await updateOrder(orderId, {
       status: "delivered",
       message: "Simulated data bundle — connect a vending partner to go live.",
