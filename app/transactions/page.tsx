@@ -105,7 +105,7 @@ export default function TransactionsPage() {
           <button
             type="button"
             onClick={() => setReload((r) => r + 1)}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-ink-100 bg-white px-5 py-2.5 text-sm font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
             <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6" />
@@ -115,7 +115,7 @@ export default function TransactionsPage() {
         </div>
 
         {error && (
-          <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+          <div className="mt-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
             {error}
           </div>
         )}
@@ -127,7 +127,7 @@ export default function TransactionsPage() {
             </svg>
           </div>
         ) : rows.length === 0 ? (
-          <div className="mt-12 rounded-3xl border border-dashed border-ink-200 bg-white/60 px-6 py-20 text-center">
+          <div className="mt-12 rounded-3xl bg-ink-50/50 px-6 py-20 text-center">
             <span className="text-5xl">🧾</span>
             <h2 className="mt-5 text-xl font-extrabold text-ink-900">No transactions yet</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">
@@ -143,10 +143,10 @@ export default function TransactionsPage() {
         ) : (
           <>
             {/* Desktop table */}
-            <div className="mt-8 hidden overflow-hidden rounded-3xl border border-ink-100 bg-white shadow-sm md:block">
+            <div className="mt-8 hidden overflow-hidden rounded-3xl bg-white shadow-[0_30px_70px_-40px_rgba(22,20,14,0.35)] md:block">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-ink-100 bg-ink-50/70 text-xs font-bold uppercase tracking-wider text-ink-400">
+                  <tr className="bg-ink-50/70 text-xs font-bold uppercase tracking-wider text-ink-400">
                     <th className="px-6 py-4">Order</th>
                     <th className="px-6 py-4">Service</th>
                     <th className="px-6 py-4">Details</th>
@@ -159,7 +159,7 @@ export default function TransactionsPage() {
                   {rows.map((o) => {
                     const mark = providerMark(o);
                     return (
-                      <tr key={o.id} className="border-b border-ink-50 transition-colors last:border-0 hover:bg-brand-50/40">
+                      <tr key={o.id} className="transition-colors even:bg-ink-50/40 hover:bg-brand-50/40">
                         <td className="px-6 py-4">
                           <Link
                             href={`/success?orderId=${o.id}`}
@@ -208,7 +208,7 @@ export default function TransactionsPage() {
                   <Link
                     key={o.id}
                     href={`/success?orderId=${o.id}`}
-                    className="block rounded-3xl border border-ink-100 bg-white p-5 shadow-sm transition-all hover:shadow-md"
+                    className="block rounded-3xl bg-white p-5 shadow-sm transition-all hover:shadow-md"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-xs font-bold text-brand-700">{o.id}</span>
@@ -234,7 +234,7 @@ export default function TransactionsPage() {
                         <p className="font-mono text-xs font-semibold text-brand-700">{formatUsd(o.usdTotal)} USDC</p>
                       </div>
                     </div>
-                    <p className="mt-3 border-t border-ink-50 pt-2.5 text-xs text-ink-400">
+                    <p className="mt-3 pt-2.5 text-xs text-ink-400">
                       {new Date(o.createdAt).toLocaleString()}
                     </p>
                   </Link>

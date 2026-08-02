@@ -21,7 +21,7 @@ export default async function PayPage({
   if (!order) {
     return (
       <div className="grid flex-1 place-items-center bg-paper px-4 py-24">
-        <div className="max-w-md rounded-3xl border border-ink-100 bg-white p-8 text-center shadow-xl shadow-ink-900/5">
+        <div className="max-w-md rounded-3xl bg-white p-8 text-center shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
           <span className="text-4xl">🔍</span>
           <h1 className="mt-4 font-display text-2xl font-bold text-ink-900">Order not found</h1>
           <p className="mt-2 text-sm text-ink-500">

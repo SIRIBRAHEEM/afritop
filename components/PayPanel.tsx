@@ -310,7 +310,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     <div className="flex-1 bg-paper">
       <div className="mx-auto max-w-lg px-4 py-10 sm:py-14">
         {cancelled && (
-          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+          <div className="mb-6 flex items-start gap-3 rounded-2xl bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
             <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="12" cy="12" r="9" />
               <path d="M12 8v4M12 16h.01" />
@@ -320,7 +320,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         )}
 
         {/* Order summary */}
-        <div className="animate-fade-up overflow-hidden rounded-3xl border border-ink-100 bg-white shadow-[0_20px_60px_-30px_rgba(22,20,14,0.35)]">
+        <div className="animate-fade-up overflow-hidden rounded-3xl bg-white shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
           <div className="bg-ink-950 px-7 py-6 text-white">
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-400">
@@ -347,7 +347,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         </div>
 
         {/* Wallet payment */}
-        <div className="mt-6 rounded-3xl border border-ink-100 bg-white p-6 sm:p-7 shadow-sm">
+        <div className="mt-6 rounded-3xl bg-white p-6 sm:p-7 shadow-[0_24px_60px_-32px_rgba(22,20,14,0.35)]">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-bold tracking-tight text-ink-900">
               Pay with your wallet
@@ -373,10 +373,10 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   disabled={locked || busy === "switching"}
                   onClick={() => void switchChain(c)}
                   className={cn(
-                    "relative rounded-xl border-2 px-2.5 py-2.5 text-center transition-all duration-200",
+                    "relative rounded-xl px-2.5 py-2.5 text-center shadow-sm transition-all duration-200",
                     active
-                      ? "border-brand-600 bg-brand-50"
-                      : "border-ink-100 hover:border-ink-200",
+                      ? "bg-brand-50 ring-2 ring-brand-600"
+                      : "bg-white hover:shadow-md",
                     locked && "cursor-not-allowed opacity-50",
                   )}
                 >
@@ -429,7 +429,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                 </button>
 
                 {showInstallHelp && (
-                  <div className="rounded-2xl border border-sun-200 bg-sun-50 p-4 text-sm text-sun-800 animate-fade-in">
+                  <div className="rounded-2xl bg-sun-50 p-4 text-sm text-sun-800 animate-fade-in">
                     <p className="font-bold">No wallet extension detected.</p>
                     <p className="mt-1 leading-relaxed">
                       Install a browser wallet to pay USDC on-chain, then click{" "}
@@ -442,7 +442,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                           href={w.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-xl border border-ink-100 bg-white px-3 py-2.5 font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
+                          className="flex items-center gap-2 rounded-xl bg-white px-3 py-2.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                         >
                           <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={24} />
                           <span className="text-xs">{w.name}</span>
@@ -462,7 +462,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               </>
             ) : (
               <>
-                <div className="flex items-center justify-between rounded-2xl border border-ink-100 bg-ink-50 px-4 py-3">
+                <div className="flex items-center justify-between rounded-2xl bg-ink-50 px-4 py-3">
                   <div className="flex items-center gap-2.5">
                     <span className="relative flex size-2.5">
                       <span className="absolute inline-flex size-2.5 rounded-full bg-emerald-400 opacity-75" />
@@ -480,7 +480,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                 </div>
 
                 {!walletMatchesChain && (
-                  <p className="rounded-xl border border-sun-200 bg-sun-50 px-4 py-2.5 text-xs font-semibold text-sun-800">
+                  <p className="rounded-xl bg-sun-50 px-4 py-2.5 text-xs font-semibold text-sun-800">
                     Your wallet is on another network. Pick <strong>{selectedChain.label}</strong> above —
                     we&apos;ll prompt your wallet to switch.
                   </p>
@@ -513,7 +513,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               href={selectedChain.explorerTx(txHash)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-between rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm animate-fade-in"
+              className="mt-4 flex items-center justify-between rounded-2xl bg-brand-50 px-4 py-3 text-sm animate-fade-in"
             >
               <span className="flex items-center gap-2 font-bold text-brand-800">
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -528,13 +528,13 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           )}
 
           {error && (
-            <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
+            <div className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
               {error}
             </div>
           )}
 
           {lastConfirm && (
-            <div className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+            <div className="mt-4 rounded-2xl bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
               <p className="flex items-center gap-2 font-bold text-sun-900">
                 <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <circle cx="12" cy="12" r="9" />
@@ -563,7 +563,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   href={confirmChain?.explorerTx(lastConfirm.txHash)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-bold text-ink-700 transition-colors hover:border-ink-300"
+                  className="rounded-full bg-white px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
                 >
                   View on {confirmChain?.short ?? "explorer"} ↗
                 </a>
@@ -572,7 +572,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           )}
 
           {/* Receiver */}
-          <div className="mt-5 rounded-2xl border border-dashed border-ink-200 px-4 py-3">
+          <div className="mt-5 rounded-2xl bg-ink-50/70 px-4 py-3">
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
                 Paying to (receiver)
@@ -596,7 +596,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               type="button"
               onClick={() => void payWithCircle()}
               disabled={busy === "circle"}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-ink-100 bg-white px-6 py-3.5 text-sm font-extrabold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md disabled:cursor-wait disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-extrabold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:cursor-wait disabled:opacity-70"
             >
               {busy === "circle" ? <Spinner /> : null}
               {busy === "circle" ? "Preparing Circle checkout…" : "Or pay with Circle (hosted checkout)"}
@@ -607,7 +607,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               type="button"
               onClick={() => void simulatePayment()}
               disabled={busy === "simulating"}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-ink-200 bg-transparent px-6 py-3 text-sm font-bold text-ink-400 transition-colors hover:text-ink-600 disabled:cursor-wait disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-transparent px-6 py-3 text-sm font-bold text-ink-400 transition-colors hover:bg-ink-50 hover:text-ink-600 disabled:cursor-wait disabled:opacity-70"
             >
               {busy === "simulating" ? <Spinner /> : null}
               {busy === "simulating" ? "Simulating…" : "Demo mode — simulate payment"}
@@ -616,7 +616,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         </div>
 
         {demoMode && (
-          <p className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
+          <p className="mt-4 rounded-2xl bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
             <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. Set{" "}
             <code className="font-mono">USDC_RECEIVER</code> to your own EVM address to receive
             testnet USDC directly, instead of the demo burn address.

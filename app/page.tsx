@@ -163,7 +163,7 @@ export default function Home() {
       </section>
 
       {/* ── Trust bar ────────────────────────────────────────── */}
-      <section className="border-b border-ink-100 bg-white">
+      <section className="bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-4 py-6 text-center text-xs font-semibold uppercase tracking-widest text-ink-400 sm:px-6">
           <span className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-brand-500" /> Powered by Africa&apos;s Talking
@@ -195,7 +195,7 @@ export default function Home() {
               <Link
                 key={s.id}
                 href="/buy"
-                className="group relative overflow-hidden rounded-3xl border border-ink-100 bg-white p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-900/10"
+                className="group relative overflow-hidden rounded-3xl bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_40px_80px_-40px_rgba(43,74,47,0.45)]"
               >
                 <span className="absolute right-6 top-5 font-display text-3xl italic text-ink-100 transition-colors group-hover:text-brand-200">
                   0{i + 1}
@@ -207,7 +207,7 @@ export default function Home() {
                 </div>
                 <h3 className="mt-6 font-display text-2xl font-bold text-ink-900">{s.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-500">{s.tagline}</p>
-                <div className="mt-6 flex items-center justify-between border-t border-ink-100 pt-4 text-sm">
+                <div className="mt-6 flex items-center justify-between pt-4 text-sm">
                   <span className="font-bold text-brand-700">
                     {s.id === "airtime" && `from ${formatLocal(ng.minAirtime, "NGN")}`}
                     {s.id === "data" && "from ₦300 / 500MB"}
@@ -241,7 +241,7 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <div
                 key={step.title}
-                className="relative rounded-3xl border border-ink-100 bg-white/80 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-ink-900/5"
+                className="relative rounded-3xl bg-white/80 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-ink-900/5"
               >
                 <span className="absolute right-5 top-4 font-display text-5xl italic leading-none text-ink-100">
                   {i + 1}
@@ -277,7 +277,7 @@ export default function Home() {
               <Link
                 key={c.code}
                 href="/buy"
-                className="group rounded-3xl border border-ink-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-900/10"
+                className="group rounded-3xl bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-900/10"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-4xl transition-transform duration-300 group-hover:scale-110">{c.flag}</span>
@@ -290,13 +290,13 @@ export default function Home() {
                   {c.networks.map((n) => (
                     <span
                       key={n.id}
-                      className="rounded-full border border-ink-100 bg-ink-50 px-2.5 py-1 text-[11px] font-semibold text-ink-600"
+                      className="rounded-full bg-ink-50 px-2.5 py-1 text-[11px] font-semibold text-ink-600"
                     >
                       {n.short}
                     </span>
                   ))}
                 </div>
-                <p className="mt-4 border-t border-ink-100 pt-3 text-xs text-ink-400">
+                <p className="mt-4 pt-3 text-xs text-ink-400">
                   {c.distributors.length} power utilities · {c.networks.length} networks
                 </p>
               </Link>
@@ -320,7 +320,7 @@ export default function Home() {
             {FEATURES.map((f) => (
               <div
                 key={f.title}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur transition-colors hover:border-brand-400/40 hover:bg-white/[0.08]"
+                className="rounded-3xl bg-white/[0.06] p-6 backdrop-blur transition-colors hover:bg-white/[0.09]"
               >
                 <span className="grid size-10 place-items-center rounded-xl bg-brand-500/20 text-brand-300">
                   <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

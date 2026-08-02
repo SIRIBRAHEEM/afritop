@@ -20,7 +20,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
   return (
     <div className="flex-1 bg-paper">
       <div className="mx-auto max-w-xl px-4 py-14 sm:py-20">
-        <div className="animate-pop overflow-hidden rounded-3xl border border-ink-100 bg-white shadow-xl shadow-ink-900/5">
+        <div className="animate-pop overflow-hidden rounded-3xl bg-white shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
           {/* Header */}
           <div
             className={
@@ -107,12 +107,12 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             )}
 
             {entry.message && delivered && (
-              <p className="mt-5 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
+              <p className="mt-5 rounded-2xl bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
                 ℹ️ {entry.message}
               </p>
             )}
 
-            <div className="mt-5 flex items-center justify-between rounded-2xl border border-dashed border-ink-200 px-4 py-3 text-sm">
+            <div className="mt-5 flex items-center justify-between rounded-2xl bg-ink-50/70 px-4 py-3 text-sm">
               <span className="font-bold text-ink-900">Paid</span>
               <span className="font-mono text-base font-extrabold text-brand-700">
                 {formatUsd(entry.usdTotal)}
@@ -148,7 +148,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
               </Link>
               <Link
                 href="/transactions"
-                className="flex-1 rounded-2xl border-2 border-ink-100 bg-white px-6 py-3.5 text-center text-sm font-extrabold text-ink-700 transition-colors hover:border-ink-200 hover:bg-ink-50"
+                className="flex-1 rounded-2xl bg-ink-50 px-6 py-3.5 text-center text-sm font-extrabold text-ink-700 transition-colors hover:bg-ink-100"
               >
                 View transactions
               </Link>

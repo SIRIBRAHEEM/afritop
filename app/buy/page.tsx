@@ -269,7 +269,7 @@ function BuyFlow() {
         </div>
 
         {cancelled && (
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+          <div className="mt-6 flex items-start gap-3 rounded-2xl bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
             <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="12" cy="12" r="9" />
               <path d="M12 8v4M12 16h.01" />
@@ -322,10 +322,10 @@ function BuyFlow() {
                     type="button"
                     onClick={() => selectService(s.id)}
                     className={cn(
-                      "flex items-center gap-3 rounded-2xl border-2 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                      "flex items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       service === s.id
-                        ? "border-brand-500 shadow-lg shadow-brand-600/10"
-                        : "border-ink-100 hover:border-ink-200",
+                        ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
+                        : "hover:shadow-lg",
                     )}
                   >
                     <span
@@ -355,10 +355,10 @@ function BuyFlow() {
                     type="button"
                     onClick={() => selectCountry(c.code)}
                     className={cn(
-                      "rounded-2xl border-2 bg-white p-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                      "rounded-2xl bg-white p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       countryCode === c.code
-                        ? "border-brand-500 shadow-lg shadow-brand-600/10"
-                        : "border-ink-100 hover:border-ink-200",
+                        ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
+                        : "hover:shadow-lg",
                     )}
                   >
                     <span className="block text-2xl">{c.flag}</span>
@@ -385,10 +385,10 @@ function BuyFlow() {
                       type="button"
                       onClick={() => setProviderId(p.id)}
                       className={cn(
-                        "flex items-center gap-2.5 rounded-full border-2 bg-white py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 transition-all duration-200",
+                        "flex items-center gap-2.5 rounded-full bg-white py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
                         active
-                          ? "border-brand-500 bg-brand-50 text-brand-800 shadow-md shadow-brand-600/10"
-                          : "border-ink-100 hover:border-ink-300",
+                          ? "bg-brand-50 text-brand-800 ring-2 ring-brand-500 shadow-md shadow-brand-600/10"
+                          : "hover:shadow-md",
                       )}
                     >
                       <BrandMark logo={p.logo} name={p.name} short={p.short} color={p.color} size={28} />
@@ -405,16 +405,16 @@ function BuyFlow() {
               <div className="mt-4">
                 <div
                   className={cn(
-                    "flex items-stretch overflow-hidden rounded-2xl border-2 bg-white transition-all duration-200",
+                    "flex items-stretch overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200",
                     recipientValid
-                      ? "border-brand-400 ring-4 ring-brand-100"
+                      ? "ring-2 ring-brand-400 shadow-md"
                       : recipient
-                        ? "border-red-300 ring-4 ring-red-100"
-                        : "border-ink-100 focus-within:border-brand-400 focus-within:ring-4 focus-within:ring-brand-100",
+                        ? "ring-2 ring-red-300"
+                        : "focus-within:ring-2 focus-within:ring-brand-400 focus-within:shadow-md",
                   )}
                 >
                   {service !== "electricity" && (
-                    <span className="flex items-center gap-1.5 border-r border-ink-100 bg-ink-50 px-4 font-mono text-sm font-bold text-ink-600">
+                    <span className="flex items-center gap-1.5 bg-ink-50 px-4 font-mono text-sm font-bold text-ink-600">
                       {country.phonePrefix}
                     </span>
                   )}
@@ -462,10 +462,10 @@ function BuyFlow() {
                         type="button"
                         onClick={() => setBundleId(b.id)}
                         className={cn(
-                          "flex items-center justify-between rounded-2xl border-2 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                          "flex items-center justify-between rounded-2xl bg-white p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                           active
-                            ? "border-brand-500 shadow-lg shadow-brand-600/10"
-                            : "border-ink-100 hover:border-ink-200",
+                            ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
+                            : "hover:shadow-lg",
                         )}
                       >
                         <span>
@@ -488,10 +488,10 @@ function BuyFlow() {
                         type="button"
                         onClick={() => pickQuick(v)}
                         className={cn(
-                          "rounded-full border-2 px-4 py-2 font-mono text-sm font-bold transition-all duration-200",
+                          "rounded-full px-4 py-2 font-mono text-sm font-bold shadow-sm transition-all duration-200",
                           quick === v
-                            ? "border-brand-500 bg-brand-50 text-brand-800 shadow-md shadow-brand-600/10"
-                            : "border-ink-100 bg-white text-ink-600 hover:border-ink-300",
+                            ? "bg-brand-50 text-brand-800 ring-2 ring-brand-500 shadow-md shadow-brand-600/10"
+                            : "bg-white text-ink-600 hover:shadow-md",
                         )}
                       >
                         {formatLocal(v, country.currency)}
@@ -509,7 +509,7 @@ function BuyFlow() {
                         setQuick(undefined);
                       }}
                       placeholder="Custom amount"
-                      className="w-full max-w-xs rounded-2xl border-2 border-ink-100 bg-white px-4 py-3 text-base font-bold text-ink-900 outline-none transition-all placeholder:font-semibold placeholder:text-ink-300 focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
+                      className="w-full max-w-xs rounded-2xl bg-white px-4 py-3 text-base font-bold text-ink-900 shadow-sm outline-none transition-all placeholder:font-semibold placeholder:text-ink-300 focus:ring-2 focus:ring-brand-400 focus:shadow-md"
                     />
                   </div>
                   {!Number.isFinite(amountLocal) && amount.length > 0 && (
@@ -529,7 +529,7 @@ function BuyFlow() {
 
           {/* ── Summary ── */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-3xl border border-ink-100 bg-white p-6 shadow-xl shadow-ink-900/5">
+            <div className="rounded-3xl bg-white p-6 shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
               <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">Order summary</h2>
 
               <div className="mt-4 space-y-3 text-sm">
@@ -548,7 +548,7 @@ function BuyFlow() {
                 )}
               </div>
 
-              <div className="mt-5 space-y-2 border-t border-dashed border-ink-200 pt-4 text-sm">
+              <div className="mt-5 space-y-2 pt-4 text-sm">
                 <Row label="Subtotal" value={formatUsd(usdSubtotal)} mono />
                 <Row label="Platform fee (1.5%)" value={formatUsd(fee)} mono />
                 <div className="flex items-center justify-between pt-2">
@@ -564,7 +564,7 @@ function BuyFlow() {
               </div>
 
               {txRef && (
-                <div className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+                <div className="mt-4 rounded-2xl bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
                   <p className="flex items-center gap-2 font-bold text-sun-900">
                     <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                       <circle cx="12" cy="12" r="9" />
@@ -593,7 +593,7 @@ function BuyFlow() {
                       href={`https://testnet.arcscan.app/tx/${txRef.txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-bold text-ink-700 transition-colors hover:border-ink-300"
+                      className="rounded-full bg-white px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
                     >
                       View on ArcScan ↗
                     </a>
@@ -612,13 +612,13 @@ function BuyFlow() {
               )}
 
               {error && !txRef && (
-                <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
+                <div className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
                   {error}
                 </div>
               )}
 
               {walletHelp && (
-                <div className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 animate-fade-in">
+                <div className="mt-4 rounded-2xl bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 animate-fade-in">
                   <p className="font-bold">No wallet extension detected.</p>
                   <p className="mt-1">
                     Install a browser wallet to pay USDC on-chain — then click pay again:
@@ -630,7 +630,7 @@ function BuyFlow() {
                         href={w.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full border border-ink-100 bg-white px-3 py-1.5 font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={22} />
                         <span className="text-[11px]">{w.name}</span>
@@ -676,7 +676,7 @@ function BuyFlow() {
             </div>
 
             {!ready && (
-              <p className="mt-4 rounded-2xl border border-ink-100 bg-white px-4 py-3 text-xs leading-relaxed text-ink-400">
+              <p className="mt-4 rounded-2xl bg-ink-50 px-4 py-3 text-xs leading-relaxed text-ink-400">
                 {step === 1
                   ? "👉 Tell us what to top up and the amount above — your total appears here."
                   : "👉 Finish the recipient and amount fields above to unlock checkout."}
@@ -693,7 +693,7 @@ function BuyFlow() {
           onClick={() => setWalletModalOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl border border-ink-100 bg-white p-6 shadow-2xl animate-pop"
+            className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl animate-pop"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -721,7 +721,7 @@ function BuyFlow() {
                     setWalletModalOpen(false);
                     void runWalletPayment(w);
                   }}
-                  className="flex w-full items-center gap-3 rounded-2xl border border-ink-100 bg-white px-4 py-3 text-left transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
+                  className="flex w-full items-center gap-3 rounded-2xl bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <BrandMark logo={w.icon} name={w.name} short={w.name} color="#E7E5DF" size={32} />
                   <span className="text-sm font-extrabold text-ink-900">{w.name}</span>

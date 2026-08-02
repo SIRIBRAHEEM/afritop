@@ -28,10 +28,10 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b transition-all duration-300",
+        "sticky top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-ink-100 bg-paper/90 shadow-[0_8px_30px_-18px_rgba(23,20,9,0.35)] backdrop-blur-xl"
-          : "border-transparent bg-paper/70 backdrop-blur-md",
+          ? "bg-paper/90 shadow-[0_12px_40px_-24px_rgba(23,20,9,0.4)] backdrop-blur-xl"
+          : "bg-transparent backdrop-blur-md",
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -90,7 +90,7 @@ export function Navbar() {
           open ? "max-h-80 opacity-100" : "max-h-0 opacity-0",
         )}
       >
-        <div className="space-y-1 border-t border-ink-100 bg-paper px-4 py-3">
+        <div className="space-y-1 bg-paper/95 px-4 py-3 shadow-[0_20px_40px_-20px_rgba(23,20,9,0.3)] backdrop-blur-xl">
           {LINKS.map((link) => (
           <Link
             key={link.href}

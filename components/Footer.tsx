@@ -39,7 +39,7 @@ export function Footer() {
               Airtime, data and prepaid electricity for Nigeria, Ghana, Kenya and
               South Africa — paid in USDC, delivered in seconds.
             </p>
-            <div className="mt-5 flex items-center gap-2 rounded-2xl border border-ink-800 bg-ink-900/60 px-3.5 py-2.5 text-xs text-ink-400">
+            <div className="mt-5 flex items-center gap-2 rounded-2xl bg-ink-900/70 px-3.5 py-2.5 text-xs text-ink-400 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)]">
               <svg viewBox="0 0 24 24" className="size-4 text-sun-400" fill="currentColor" aria-hidden="true">
                 <path d="M12 2a5 5 0 0 0-5 5v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7h6v2H9V9Zm3-5a3 3 0 0 1 3 3v2H9V7a3 3 0 0 1 3-3Z" />
               </svg>
@@ -66,7 +66,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-ink-800 pt-6 text-xs text-ink-500 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 pt-6 text-xs text-ink-500 sm:flex-row">
           <p>© {new Date().getFullYear()} Afritop. All rights reserved.</p>
           <p>
             Airtime via <span className="text-ink-300">Africa&apos;s Talking</span> · Settlement in{" "}
