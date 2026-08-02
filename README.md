@@ -4,7 +4,7 @@ Buy **airtime**, **data bundles** and **prepaid electricity** for Africa — pai
 
 - **Countries:** 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya · 🇿🇦 South Africa
 - **Airtime delivery:** [Africa's Talking](https://developers.africastalking.com) API
-- **Payments:** USDC **directly from any EVM wallet** — on [Arc](https://docs.arc.io) (Circle's stablecoin L1), Base, Polygon, Ethereum or Arbitrum, verified on-chain
+- **Payments:** USDC **directly from any EVM wallet** — on [Arc Testnet](https://docs.arc.io) (Circle's stablecoin L1), verified on-chain
 - **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · viem
 
 ## Quick start
@@ -19,17 +19,18 @@ npm run dev                        # → http://localhost:3000
 
 1. Build a top-up in the **Buy** flow.
 2. You land on `/pay/[order]` — connect any EVM wallet (MetaMask, Coinbase Wallet, …).
-3. Pick a network: **Arc Testnet** (default — Circle's stablecoin L1, gas in USDC) or
-   Base, Polygon, Ethereum, Arbitrum.
+3. Pay on **Arc Testnet** — Circle's stablecoin L1, gas in USDC (testnet-only
+   phase; Arc mainnet isn't live yet).
 4. Your wallet sends the exact USDC amount to the **receiver** address shown.
 5. We verify the transfer **on-chain** (`/api/confirm-usdc`) — recipient, amount and
    sender are checked against public RPCs — then deliver the top-up.
 
-- **Demo mode:** without `USDC_RECEIVER`, payments go to a burn address on Arc
-  Testnet (grab free testnet USDC from [faucet.circle.com](https://faucet.circle.com)),
-  mainnet chains are locked, and a *simulate payment* button is available.
-- **Going live:** set `USDC_RECEIVER` to your own EVM address to unlock mainnet and
-  real USDC. Airtime delivery goes live by adding your Africa's Talking key.
+- **Testnet-only phase:** all payments run on Arc Testnet. Without `USDC_RECEIVER`,
+  payments go to a burn address (grab free testnet USDC from
+  [faucet.circle.com](https://faucet.circle.com)) and a *simulate payment* button is
+  available. Set `USDC_RECEIVER` to your own EVM address to receive testnet USDC
+  directly instead.
+- **Airtime delivery** goes live by adding your Africa's Talking key (`AT_ENV=live`).
 
 > ⚠️ **Arc note:** Arc's USDC is dual-decimal — native gas uses 18 decimals while the
 > ERC-20 interface (`0x3600…`) uses 6. The on-chain verification parses standard
@@ -45,7 +46,7 @@ npm run dev                        # → http://localhost:3000
 | `AT_USERNAME` | Your Africa's Talking app username (`sandbox` for testing) |
 | `AT_ENV` | `sandbox` or `live` |
 | `CIRCLE_API_KEY` | Optional — enables the alternate Circle hosted checkout |
-| `CIRCLE_ENV` | `sandbox` or `live` |
+| `CIRCLE_ENV` | `sandbox` or `live` — currently ignored: checkout is testnet-forced until Arc mainnet ships |
 | `CIRCLE_WEBHOOK_SECRET` | Verifies webhook signatures (HMAC-SHA256) |
 | `NEXT_PUBLIC_APP_URL` | Public base URL for Circle redirects |
 
@@ -61,7 +62,7 @@ fulfil the linked order automatically.
 ## What's live vs simulated
 
 - **Payments** — real on-chain USDC verification (`/api/confirm-usdc`) via public
-  RPCs on Arc Testnet / Base / Polygon / Ethereum / Arbitrum.
+  RPCs on Arc Testnet.
 - **Airtime** — real via Africa's Talking when `AT_API_KEY` is set; otherwise simulated.
 - **Data bundles & electricity tokens** — currently simulated. The fulfilment logic
   in `lib/fulfill.ts` is where you'd plug in a vending partner (e.g. VTpass for
@@ -84,7 +85,7 @@ app/
     webhook/                  # Circle hosted-checkout webhook (HMAC verified)
 lib/
   catalog.ts                  # countries, networks, distributors, bundles, FX
-  chains.ts                   # Arc testnet + Base/Polygon/Ethereum/Arbitrum, USDC, receiver
+  chains.ts                   # Arc Testnet (testnet-only for now), USDC, receiver
   usdc-verify.ts              # on-chain USDC transfer verification (viem)
   africastalking.ts           # airtime send client
   circle.ts                   # optional Circle hosted-checkout client

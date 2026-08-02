@@ -494,9 +494,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
 
         {demoMode && (
           <p className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
-            <strong>Demo mode.</strong> The receiver is a burn address and mainnet chains are
-            locked. Set <code className="font-mono">USDC_RECEIVER</code> in your environment to use
-            your own address and enable real USDC payments on Base, Polygon, Ethereum or Arbitrum.
+            <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. Set{" "}
+            <code className="font-mono">USDC_RECEIVER</code> to your own EVM address to receive
+            testnet USDC directly, instead of the demo burn address.
           </p>
         )}
 

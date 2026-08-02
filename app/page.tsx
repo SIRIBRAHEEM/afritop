@@ -20,7 +20,7 @@ const STEPS = [
       </svg>
     ),
     title: "Pay from your wallet",
-    text: "Connect any EVM wallet and pay USDC on Arc, Base or Polygon — confirmed on-chain.",
+    text: "Connect any EVM wallet and pay USDC on Arc Testnet — confirmed on-chain.",
   },
   {
     icon: (

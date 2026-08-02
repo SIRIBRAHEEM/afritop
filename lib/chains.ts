@@ -29,50 +29,11 @@ export const arcTestnet = defineChain({
   testnet: true,
 });
 
-const base = defineChain({
-  id: 8453,
-  name: "Base",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://mainnet.base.org"] },
-    public: { http: ["https://mainnet.base.org", "https://base-rpc.publicnode.com"] },
-  },
-  blockExplorers: { default: { name: "Basescan", url: "https://basescan.org" } },
-});
-
-const polygon = defineChain({
-  id: 137,
-  name: "Polygon",
-  nativeCurrency: { name: "POL", symbol: "POL", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://polygon-rpc.com"] },
-    public: { http: ["https://polygon-rpc.com", "https://polygon-bor-rpc.publicnode.com"] },
-  },
-  blockExplorers: { default: { name: "Polygonscan", url: "https://polygonscan.com" } },
-});
-
-const ethereum = defineChain({
-  id: 1,
-  name: "Ethereum",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://ethereum-rpc.publicnode.com"] },
-    public: { http: ["https://ethereum-rpc.publicnode.com", "https://cloudflare-eth.com"] },
-  },
-  blockExplorers: { default: { name: "Etherscan", url: "https://etherscan.io" } },
-});
-
-const arbitrum = defineChain({
-  id: 42161,
-  name: "Arbitrum One",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://arb1.arbitrum.io/rpc"] },
-    public: { http: ["https://arb1.arbitrum.io/rpc", "https://arbitrum-mainnet.public.blastapi.io"] },
-  },
-  blockExplorers: { default: { name: "Arbiscan", url: "https://arbiscan.io" } },
-});
-
+/**
+ * Testnet-only phase: Arc mainnet isn't live yet, so we only accept payments
+ * on Arc Testnet. Base / Polygon / Ethereum / Arbitrum (mainnet) entries were
+ * removed — re-add them from git history once Arc mainnet ships.
+ */
 export const USDC_CHAINS: UsdcChain[] = [
   {
     id: "arc",
@@ -84,46 +45,6 @@ export const USDC_CHAINS: UsdcChain[] = [
     testnet: true,
     blurb: "Circle's stablecoin L1 · gas in USDC",
     faucetUrl: "https://faucet.circle.com",
-  },
-  {
-    id: "base",
-    chain: base,
-    label: "Base",
-    short: "BASE",
-    usdc: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    explorerTx: (h) => `https://basescan.org/tx/${h}`,
-    testnet: false,
-    blurb: "Cheap L2 · Coinbase",
-  },
-  {
-    id: "polygon",
-    chain: polygon,
-    label: "Polygon",
-    short: "POL",
-    usdc: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
-    explorerTx: (h) => `https://polygonscan.com/tx/${h}`,
-    testnet: false,
-    blurb: "Low fees · PoS",
-  },
-  {
-    id: "ethereum",
-    chain: ethereum,
-    label: "Ethereum",
-    short: "ETH",
-    usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-    explorerTx: (h) => `https://etherscan.io/tx/${h}`,
-    testnet: false,
-    blurb: "The original chain",
-  },
-  {
-    id: "arbitrum",
-    chain: arbitrum,
-    label: "Arbitrum",
-    short: "ARB",
-    usdc: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-    explorerTx: (h) => `https://arbiscan.io/tx/${h}`,
-    testnet: false,
-    blurb: "Fast L2 · low fees",
   },
 ];
 

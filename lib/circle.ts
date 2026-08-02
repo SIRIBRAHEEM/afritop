@@ -23,10 +23,10 @@ export function isCircleConfigured(): boolean {
 export async function createCheckoutSession(input: CheckoutSessionInput): Promise<string | null> {
   if (!isCircleConfigured()) return null;
 
-  const base =
-    process.env.CIRCLE_ENV === "live"
-      ? "https://api.circle.com/v1"
-      : "https://api-sandbox.circle.com/v1";
+  // Testnet-only phase: Arc mainnet isn't live yet, so the hosted checkout
+  // must run against the sandbox (testnet) API — buyers pay with testnet USDC
+  // on Arc Testnet. Flip to https://api.circle.com/v1 only once Arc mainnet ships.
+  const base = "https://api-sandbox.circle.com/v1";
 
   const res = await fetch(`${base}/checkout/sessions`, {
     method: "POST",
