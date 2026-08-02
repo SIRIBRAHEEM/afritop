@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
+import { subscribeReceipts, getReceiptsSnapshot, type ReceiptEntry } from "@/lib/receipt-journal";
+import { ReceiptCard } from "@/components/ReceiptCard";
 
 interface RawOrder {
   id: string;
@@ -11,8 +13,16 @@ interface RawOrder {
 export function PollOrder({ orderId }: { orderId: string }) {
   const router = useRouter();
   const [elapsed, setElapsed] = useState(0);
+  // Wallet payments write the receipt journal synchronously before navigating
+  // here, so we can show the receipt immediately instead of polling a server
+  // store that may be ephemeral on serverless platforms.
+  const receipts = useSyncExternalStore(subscribeReceipts, getReceiptsSnapshot, () => null);
+  const entry: ReceiptEntry | undefined =
+    receipts?.find((r) => r.id === orderId) ?? undefined;
+  const done = entry !== undefined && entry.status !== "pending_payment";
 
   useEffect(() => {
+    if (done) return;
     let cancelled = false;
     const started = Date.now();
     const tick = async () => {
@@ -36,7 +46,11 @@ export function PollOrder({ orderId }: { orderId: string }) {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [orderId, router]);
+  }, [orderId, router, done]);
+
+  if (done && entry) {
+    return <ReceiptCard entry={entry} />;
+  }
 
   return (
     <div className="grid flex-1 place-items-center bg-ink-50 px-4 py-24">

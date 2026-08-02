@@ -49,10 +49,13 @@ export default async function PayPage({
         usdTotal: order.usdTotal,
         service: order.service,
         provider: order.provider.short,
+        providerId: order.provider.id,
+        providerName: order.provider.name,
         recipient: order.recipient,
         recipientLabel: order.recipientLabel,
         amountLocal: order.amountLocal,
         currency: order.currency,
+        countryCode: order.countryCode,
         receiver: order.receiver ?? "",
       }}
       demoMode={receiverIsDemo()}

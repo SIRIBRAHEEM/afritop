@@ -7,6 +7,7 @@ import { COUNTRIES, SERVICES, getCountry, findBundle, type ServiceId } from "@/l
 import { toUsd, platformFee, round2, formatLocal, formatUsd, FX_RATES } from "@/lib/fx";
 import { cn, isValidPhone, isValidMeter } from "@/lib/utils";
 import { BrandMark } from "@/components/BrandMark";
+import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { USDC_CHAINS } from "@/lib/chains";
 import {
   confirmUsdcPayment,
@@ -178,6 +179,27 @@ function BuyFlow() {
         address: conn.address,
       });
 
+      // Mirror the payment into the local receipt journal immediately — the
+      // server store is ephemeral, so the receipt & history must not depend on it.
+      saveReceipt({
+        id: data.orderId,
+        createdAt: new Date().toISOString(),
+        status: "paid",
+        service,
+        countryCode,
+        providerId: provider!.id,
+        providerShort: provider!.short,
+        providerName: provider!.name,
+        recipientLabel: service === "electricity" ? "Meter no." : "Phone",
+        recipient,
+        amountLocal,
+        currency: country.currency,
+        usdTotal,
+        bundle: bundle ? { size: bundle.size, validity: bundle.validity } : undefined,
+        txHash,
+        chainId: payChain.chain.id,
+      });
+
       // 5) Server-side on-chain verification + fulfillment (authoritative).
       setPayStage("Confirming on-chain…");
       const confirm = await confirmUsdcPayment({
@@ -192,12 +214,16 @@ function BuyFlow() {
         // plain error instead, so re-paying is safe and immediate.
         if (confirm.retryable) {
           setTxRef({ orderId: data.orderId, txHash, chainId: payChain.chain.id, sender: conn.address });
+        } else {
+          // Definitive failure (e.g. the tx reverted on-chain) — reflect it.
+          updateReceipt(data.orderId, { status: "failed" });
         }
         setError(confirm.error);
         setLoading(false);
         setPayStage(null);
         return;
       }
+      updateReceipt(data.orderId, { status: "delivered", token: confirm.token, message: confirm.message });
       setTxRef(null);
       router.push(`/success?orderId=${data.orderId}`);
     } catch (e) {
@@ -216,6 +242,7 @@ function BuyFlow() {
     try {
       const confirm = await confirmUsdcPayment(txRef);
       if (!confirm.ok) throw new Error(confirm.error);
+      updateReceipt(txRef.orderId, { status: "delivered", token: confirm.token, message: confirm.message });
       setTxRef(null);
       router.push(`/success?orderId=${txRef.orderId}`);
     } catch (e) {

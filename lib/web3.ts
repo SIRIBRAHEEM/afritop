@@ -226,7 +226,10 @@ export async function confirmUsdcPayment(opts: {
   chainId: number;
   sender: string;
   attempts?: number;
-}): Promise<{ ok: true } | { ok: false; error: string; retryable: boolean }> {
+}): Promise<
+  | { ok: true; token?: string; message?: string }
+  | { ok: false; error: string; retryable: boolean }
+> {
   const attempts = opts.attempts ?? 3;
   let lastError = "The payment couldn't be confirmed yet.";
   let retryable = false;
@@ -243,7 +246,12 @@ export async function confirmUsdcPayment(opts: {
         }),
       });
       const data = await res.json();
-      if (res.ok) return { ok: true };
+      if (res.ok) {
+        // Surface the fulfilled order's delivery details (e.g. the electricity
+        // recharge token) so the client journal can render the full receipt
+        // even if the ephemeral server store is reset.
+        return { ok: true, token: data?.order?.token, message: data?.order?.message };
+      }
       lastError = data?.error ?? "The payment couldn't be confirmed. Please try again.";
       // Retryable = the tx was likely broadcast but hasn't surfaced on-chain yet
       // (still settling / not indexed). Anything else (failed on-chain, wrong

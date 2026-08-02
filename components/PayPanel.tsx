@@ -6,6 +6,7 @@ import { createWalletClient, custom, getAddress, parseUnits, type EIP1193Provide
 import { USDC_CHAINS, ERC20_TRANSFER_ABI, getUsdcChain, type UsdcChain } from "@/lib/chains";
 import { confirmUsdcPayment, WALLET_INSTALLS, withTimeout } from "@/lib/web3";
 import { BrandMark } from "@/components/BrandMark";
+import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { formatLocal, formatUsd } from "@/lib/fx";
 import { cn, shortenAddress } from "@/lib/utils";
 
@@ -14,10 +15,13 @@ export interface PayPanelOrder {
   usdTotal: number;
   service: string;
   provider: string;
+  providerId: string;
+  providerName: string;
   recipient: string;
   recipientLabel: string;
   amountLocal: number;
   currency: string;
+  countryCode: string;
   receiver: string;
 }
 
@@ -178,6 +182,26 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
       setTxHash(hash);
       setBusy("confirming");
 
+      // Mirror the payment into the local receipt journal immediately — the
+      // server store is ephemeral, so the receipt & history must not depend on it.
+      saveReceipt({
+        id: order.id,
+        createdAt: new Date().toISOString(),
+        status: "paid",
+        service: order.service,
+        countryCode: order.countryCode,
+        providerId: order.providerId,
+        providerShort: order.provider,
+        providerName: order.providerName,
+        recipientLabel: order.recipientLabel,
+        recipient: order.recipient,
+        amountLocal: order.amountLocal,
+        currency: order.currency,
+        usdTotal: order.usdTotal,
+        txHash: hash,
+        chainId: selectedChain.chain.id,
+      });
+
       // No client-side receipt wait: the browser's link to a public RPC is the
       // most failure-prone hop (CORS, rate limits), and viem's default wait is
       // 180 seconds. The server verifies on-chain with multi-RPC failover.
@@ -194,11 +218,15 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         // plain error instead, so re-paying is safe and immediate.
         if (confirm.retryable) {
           setLastConfirm({ orderId: order.id, txHash: hash, chainId: selectedChain.chain.id, sender: address });
+        } else {
+          // Definitive failure (e.g. the tx reverted on-chain) — reflect it.
+          updateReceipt(order.id, { status: "failed" });
         }
         setBusy(null);
         setError(confirm.error);
         return;
       }
+      updateReceipt(order.id, { status: "delivered", token: confirm.token, message: confirm.message });
       setLastConfirm(null);
       router.push(`/success?orderId=${order.id}`);
     } catch (e) {
@@ -215,6 +243,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     try {
       const confirm = await confirmUsdcPayment(lastConfirm);
       if (!confirm.ok) throw new Error(confirm.error);
+      updateReceipt(lastConfirm.orderId, { status: "delivered", token: confirm.token, message: confirm.message });
       setLastConfirm(null);
       router.push(`/success?orderId=${lastConfirm.orderId}`);
     } catch (e) {
