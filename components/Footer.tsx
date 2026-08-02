@@ -39,26 +39,26 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
 
 export function Footer() {
   return (
-    <footer className="bg-ink-950 text-ink-300">
+    <footer className="bg-night text-white/70">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div className="max-w-xs">
             <Logo light />
-            <p className="mt-4 text-sm leading-relaxed text-ink-400">
+            <p className="mt-4 text-sm leading-relaxed text-white/55">
               Airtime, data and prepaid electricity for Nigeria, Ghana, Kenya and
               South Africa — paid in USDC, delivered in seconds.
             </p>
-            <div className="mt-5 flex items-center gap-2 rounded-2xl bg-ink-900/70 px-3.5 py-2.5 text-xs text-ink-400 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)]">
+            <div className="mt-5 flex items-center gap-2 rounded-2xl bg-white/10 px-3.5 py-2.5 text-xs text-white/60">
               <svg viewBox="0 0 24 24" className="size-4 text-sun-400" fill="currentColor" aria-hidden="true">
                 <path d="M12 2a5 5 0 0 0-5 5v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7h6v2H9V9Zm3-5a3 3 0 0 1 3 3v2H9V7a3 3 0 0 1 3-3Z" />
               </svg>
-              Payments secured by <span className="font-semibold text-ink-200">Circle · USDC</span>
+              Payments secured by <span className="font-semibold text-white/85">Circle · USDC</span>
             </div>
           </div>
 
           {COLUMNS.map((col) => (
             <div key={col.title}>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-ink-200">{col.title}</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-white/85">{col.title}</h3>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((link) => (
                   <li key={link.label}>
@@ -67,7 +67,7 @@ export function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-sun-300"
+                        className="inline-flex items-center gap-1.5 text-sm text-white/55 transition-colors hover:text-sun-300"
                       >
                         {link.label}
                         <svg viewBox="0 0 24 24" className="size-3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -77,7 +77,7 @@ export function Footer() {
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-sm text-ink-400 transition-colors hover:text-sun-300"
+                        className="text-sm text-white/55 transition-colors hover:text-sun-300"
                       >
                         {link.label}
                       </Link>
@@ -89,17 +89,17 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 pt-8 text-xs text-ink-500 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 pt-8 text-xs text-white/40 sm:flex-row">
           <p>© {new Date().getFullYear()} Afritop. All rights reserved.</p>
           <p className="text-center sm:text-right">
-            Airtime via <span className="text-ink-300">Africa&apos;s Talking</span> · Settlement in{" "}
-            <span className="text-ink-300">USDC</span> via Circle
+            Airtime via <span className="text-white/70">Africa&apos;s Talking</span> · Settlement in{" "}
+            <span className="text-white/70">USDC</span> via Circle
           </p>
           <a
             href="https://x.com/siribraheem33"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 rounded-full bg-ink-900/70 px-4 py-2 font-bold text-ink-200 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:text-white"
+            className="group inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 font-bold text-white/85 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-all hover:-translate-y-0.5 hover:bg-white/15 hover:text-white"
           >
             <svg viewBox="0 0 24 24" className="size-3.5 text-sun-400" fill="currentColor" aria-hidden="true">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z" />

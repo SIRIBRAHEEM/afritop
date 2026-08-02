@@ -320,8 +320,8 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         )}
 
         {/* Order summary */}
-        <div className="animate-fade-up overflow-hidden rounded-3xl bg-white shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
-          <div className="bg-ink-950 px-7 py-6 text-white">
+        <div className="animate-fade-up overflow-hidden rounded-3xl bg-surface shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
+          <div className="bg-night px-7 py-6 text-white">
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-400">
                 Order {order.id}
@@ -347,7 +347,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         </div>
 
         {/* Wallet payment */}
-        <div className="mt-6 rounded-3xl bg-white p-6 sm:p-7 shadow-[0_24px_60px_-32px_rgba(22,20,14,0.35)]">
+        <div className="mt-6 rounded-3xl bg-surface p-6 sm:p-7 shadow-[0_24px_60px_-32px_rgba(22,20,14,0.35)]">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-bold tracking-tight text-ink-900">
               Pay with your wallet
@@ -376,7 +376,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                     "relative rounded-xl px-2.5 py-2.5 text-center shadow-sm transition-all duration-200",
                     active
                       ? "bg-brand-50 ring-2 ring-brand-600"
-                      : "bg-white hover:shadow-md",
+                      : "bg-surface hover:shadow-md",
                     locked && "cursor-not-allowed opacity-50",
                   )}
                 >
@@ -442,7 +442,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                           href={w.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-xl bg-white px-3 py-2.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                          className="flex items-center gap-2 rounded-xl bg-surface px-3 py-2.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                         >
                           <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={24} />
                           <span className="text-xs">{w.name}</span>
@@ -563,7 +563,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   href={confirmChain?.explorerTx(lastConfirm.txHash)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-white px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
+                  className="rounded-full bg-surface px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
                 >
                   View on {confirmChain?.short ?? "explorer"} ↗
                 </a>
@@ -596,7 +596,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               type="button"
               onClick={() => void payWithCircle()}
               disabled={busy === "circle"}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-extrabold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:cursor-wait disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-surface px-6 py-3.5 text-sm font-extrabold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:cursor-wait disabled:opacity-70"
             >
               {busy === "circle" ? <Spinner /> : null}
               {busy === "circle" ? "Preparing Circle checkout…" : "Or pay with Circle (hosted checkout)"}

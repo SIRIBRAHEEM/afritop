@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { WalletLogin } from "@/components/WalletLogin";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -57,10 +59,12 @@ export function Navbar() {
           })}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          <ThemeToggle />
+          <WalletLogin />
           <Link
             href="/buy"
-            className="hidden rounded-full bg-ink-900 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-ink-900/15 transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-xl sm:inline-flex"
+            className="hidden rounded-full bg-ink-900 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-ink-900/15 transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-xl dark:bg-sun-400 dark:text-ink-950 dark:hover:bg-sun-300 sm:inline-flex"
           >
             Top up now
           </Link>
@@ -104,7 +108,7 @@ export function Navbar() {
           <Link
             href="/buy"
             onClick={() => setOpen(false)}
-            className="mt-2 block rounded-xl bg-ink-900 px-4 py-3 text-center text-sm font-bold text-white"
+            className="mt-2 block rounded-xl bg-ink-900 px-4 py-3 text-center text-sm font-bold text-white dark:bg-sun-400 dark:text-ink-950"
           >
             Top up now
           </Link>

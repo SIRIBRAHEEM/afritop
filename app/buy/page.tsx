@@ -322,7 +322,7 @@ function BuyFlow() {
                     type="button"
                     onClick={() => selectService(s.id)}
                     className={cn(
-                      "flex items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                      "flex items-center gap-3 rounded-2xl bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       service === s.id
                         ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
                         : "hover:shadow-lg",
@@ -355,7 +355,7 @@ function BuyFlow() {
                     type="button"
                     onClick={() => selectCountry(c.code)}
                     className={cn(
-                      "rounded-2xl bg-white p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                      "rounded-2xl bg-surface p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       countryCode === c.code
                         ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
                         : "hover:shadow-lg",
@@ -385,7 +385,7 @@ function BuyFlow() {
                       type="button"
                       onClick={() => setProviderId(p.id)}
                       className={cn(
-                        "flex items-center gap-2.5 rounded-full bg-white py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
+                        "flex items-center gap-2.5 rounded-full bg-surface py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
                         active
                           ? "bg-brand-50 text-brand-800 ring-2 ring-brand-500 shadow-md shadow-brand-600/10"
                           : "hover:shadow-md",
@@ -405,7 +405,7 @@ function BuyFlow() {
               <div className="mt-4">
                 <div
                   className={cn(
-                    "flex items-stretch overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200",
+                    "flex items-stretch overflow-hidden rounded-2xl bg-surface shadow-sm transition-all duration-200",
                     recipientValid
                       ? "ring-2 ring-brand-400 shadow-md"
                       : recipient
@@ -462,7 +462,7 @@ function BuyFlow() {
                         type="button"
                         onClick={() => setBundleId(b.id)}
                         className={cn(
-                          "flex items-center justify-between rounded-2xl bg-white p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                          "flex items-center justify-between rounded-2xl bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                           active
                             ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
                             : "hover:shadow-lg",
@@ -491,7 +491,7 @@ function BuyFlow() {
                           "rounded-full px-4 py-2 font-mono text-sm font-bold shadow-sm transition-all duration-200",
                           quick === v
                             ? "bg-brand-50 text-brand-800 ring-2 ring-brand-500 shadow-md shadow-brand-600/10"
-                            : "bg-white text-ink-600 hover:shadow-md",
+                            : "bg-surface text-ink-600 hover:shadow-md",
                         )}
                       >
                         {formatLocal(v, country.currency)}
@@ -509,7 +509,7 @@ function BuyFlow() {
                         setQuick(undefined);
                       }}
                       placeholder="Custom amount"
-                      className="w-full max-w-xs rounded-2xl bg-white px-4 py-3 text-base font-bold text-ink-900 shadow-sm outline-none transition-all placeholder:font-semibold placeholder:text-ink-300 focus:ring-2 focus:ring-brand-400 focus:shadow-md"
+                      className="w-full max-w-xs rounded-2xl bg-surface px-4 py-3 text-base font-bold text-ink-900 shadow-sm outline-none transition-all placeholder:font-semibold placeholder:text-ink-300 focus:ring-2 focus:ring-brand-400 focus:shadow-md"
                     />
                   </div>
                   {!Number.isFinite(amountLocal) && amount.length > 0 && (
@@ -529,7 +529,7 @@ function BuyFlow() {
 
           {/* ── Summary ── */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-3xl bg-white p-6 shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
+            <div className="rounded-3xl bg-surface p-6 shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
               <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">Order summary</h2>
 
               <div className="mt-4 space-y-3 text-sm">
@@ -593,7 +593,7 @@ function BuyFlow() {
                       href={`https://testnet.arcscan.app/tx/${txRef.txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full bg-white px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
+                      className="rounded-full bg-surface px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
                     >
                       View on ArcScan ↗
                     </a>
@@ -630,7 +630,7 @@ function BuyFlow() {
                         href={w.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={22} />
                         <span className="text-[11px]">{w.name}</span>
@@ -647,7 +647,7 @@ function BuyFlow() {
                 className={cn(
                   "mt-5 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-extrabold transition-all duration-300",
                   ready && !loading && !txRef
-                    ? "bg-ink-900 text-white shadow-xl shadow-ink-900/20 hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-2xl active:translate-y-0"
+                    ? "bg-ink-900 text-white shadow-xl shadow-ink-900/20 hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-2xl active:translate-y-0 dark:bg-sun-400 dark:text-ink-950 dark:hover:bg-sun-300"
                     : "cursor-not-allowed bg-ink-100 text-ink-400",
                 )}
               >
@@ -689,11 +689,11 @@ function BuyFlow() {
       {/* Wallet chooser — shown when several wallets are installed */}
       {walletModalOpen && (
         <div
-          className="fixed inset-0 z-50 grid place-items-center bg-ink-950/60 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 backdrop-blur-sm"
           onClick={() => setWalletModalOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl animate-pop"
+            className="w-full max-w-sm rounded-3xl bg-surface p-6 shadow-2xl animate-pop"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -721,7 +721,7 @@ function BuyFlow() {
                     setWalletModalOpen(false);
                     void runWalletPayment(w);
                   }}
-                  className="flex w-full items-center gap-3 rounded-2xl bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  className="flex w-full items-center gap-3 rounded-2xl bg-surface px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <BrandMark logo={w.icon} name={w.name} short={w.name} color="#E7E5DF" size={32} />
                   <span className="text-sm font-extrabold text-ink-900">{w.name}</span>

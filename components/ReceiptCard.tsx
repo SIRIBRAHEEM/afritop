@@ -20,7 +20,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
   return (
     <div className="flex-1 bg-paper">
       <div className="mx-auto max-w-xl px-4 py-14 sm:py-20">
-        <div className="animate-pop overflow-hidden rounded-3xl bg-white shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
+        <div className="animate-pop overflow-hidden rounded-3xl bg-surface shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
           {/* Header */}
           <div
             className={
@@ -39,7 +39,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
                     : "absolute inset-0 rounded-full bg-white/20"
                 }
               />
-              <span className="relative grid size-16 place-items-center rounded-full bg-white text-3xl shadow-lg">
+              <span className="relative grid size-16 place-items-center rounded-full bg-surface text-3xl shadow-lg">
                 {delivered ? (
                   <svg viewBox="0 0 24 24" className="size-8 text-brand-600" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5" />
@@ -90,7 +90,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
 
             {/* Electricity token */}
             {entry.token && (
-              <div className="mt-5 rounded-2xl bg-ink-950 p-5 text-center">
+              <div className="mt-5 rounded-2xl bg-night p-5 text-center">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
                   Recharge token · 20 digits
                 </p>

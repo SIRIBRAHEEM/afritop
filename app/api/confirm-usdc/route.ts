@@ -75,8 +75,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: result.reason }, { status: 422 });
     }
 
-    // Record the on-chain proof, then mark paid + deliver.
-    await updateOrder(orderId, { txHash, chainId: chain.chain.id });
+    // Record the on-chain proof + the payer's wallet (cloud history key), then mark paid + deliver.
+    await updateOrder(orderId, {
+      txHash,
+      chainId: chain.chain.id,
+      wallet: typeof sender === "string" ? sender.toLowerCase() : undefined,
+    });
     const fresh = await fulfillOrder(orderId);
     return NextResponse.json({ ok: true, order: fresh });
   } catch (err) {

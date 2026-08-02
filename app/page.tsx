@@ -50,7 +50,7 @@ export default function Home() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-white">
+      <section className="relative overflow-hidden bg-surface">
         <div className="bg-grid-light absolute inset-0" aria-hidden="true" />
         <div
           className="absolute inset-0"
@@ -85,7 +85,7 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/buy"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-ink-950 px-7 py-3.5 text-base font-bold text-white shadow-xl shadow-ink-950/20 transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-2xl"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-ink-950 px-7 py-3.5 text-base font-bold text-white shadow-xl shadow-ink-950/20 transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-2xl dark:bg-sun-400 dark:text-ink-950 dark:hover:bg-sun-300"
               >
                 Top up now
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -115,7 +115,7 @@ export default function Home() {
             <div className="animate-float">
               {/* floating token card */}
               <div
-                className="absolute -left-4 -top-7 z-10 w-44 -rotate-6 rounded-2xl bg-white p-4 shadow-[0_24px_50px_-20px_rgba(39,35,28,0.35)] sm:-left-8"
+                className="absolute -left-4 -top-7 z-10 w-44 -rotate-6 rounded-2xl bg-surface p-4 shadow-[0_24px_50px_-20px_rgba(39,35,28,0.35)] sm:-left-8"
                 style={{ animationDelay: "0.8s" }}
               >
                 <p className="text-[10px] font-bold uppercase tracking-widest text-ink-400">Electricity · ECG</p>
@@ -124,7 +124,7 @@ export default function Home() {
               </div>
               {/* floating data card */}
               <div
-                className="absolute -right-3 top-12 z-10 w-44 rotate-6 rounded-2xl bg-white p-4 shadow-[0_24px_50px_-20px_rgba(39,35,28,0.35)] sm:-right-6"
+                className="absolute -right-3 top-12 z-10 w-44 rotate-6 rounded-2xl bg-surface p-4 shadow-[0_24px_50px_-20px_rgba(39,35,28,0.35)] sm:-right-6"
                 style={{ animationDelay: "1.6s" }}
               >
                 <p className="text-[10px] font-bold uppercase tracking-widest text-ink-400">Data · Safaricom</p>
@@ -133,7 +133,7 @@ export default function Home() {
               </div>
 
               {/* main phone card */}
-              <div className="relative rounded-[2rem] bg-white p-6 shadow-[0_50px_100px_-45px_rgba(39,35,28,0.45)] sm:p-7">
+              <div className="relative rounded-[2rem] bg-surface p-6 shadow-[0_50px_100px_-45px_rgba(39,35,28,0.45)] sm:p-7">
                 <div className="flex items-center justify-between">
                   <span className="grid size-11 place-items-center rounded-2xl bg-brand-50 text-xl">📱</span>
                   <span className="rounded-full bg-ink-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-ink-600">
@@ -187,7 +187,7 @@ export default function Home() {
       </section>
 
       {/* ── Services ─────────────────────────────────────────── */}
-      <section id="services" className="bg-white py-20 sm:py-24">
+      <section id="services" className="bg-surface py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
@@ -206,12 +206,12 @@ export default function Home() {
               <Link
                 key={s.id}
                 href="/buy"
-                className="group relative overflow-hidden rounded-3xl bg-paper p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:bg-white hover:shadow-[0_40px_80px_-40px_rgba(43,74,47,0.4)]"
+                className="group relative overflow-hidden rounded-3xl bg-paper p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:bg-surface hover:shadow-[0_40px_80px_-40px_rgba(43,74,47,0.4)]"
               >
                 <span className="absolute right-6 top-5 font-display text-3xl italic text-ink-200 transition-colors group-hover:text-brand-300">
                   0{i + 1}
                 </span>
-                <span className="grid size-14 place-items-center rounded-2xl bg-white text-3xl shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <span className="grid size-14 place-items-center rounded-2xl bg-surface text-3xl shadow-sm transition-transform duration-300 group-hover:scale-110">
                   {s.icon}
                 </span>
                 <h3 className="mt-6 font-display text-2xl font-bold text-ink-950">{s.label}</h3>
@@ -255,7 +255,7 @@ export default function Home() {
             />
             {STEPS.map((step, i) => (
               <div key={step.title} className="relative text-center">
-                <span className="relative z-10 mx-auto grid size-14 place-items-center rounded-full bg-white font-display text-xl font-bold text-brand-700 shadow-lg shadow-ink-900/10">
+                <span className="relative z-10 mx-auto grid size-14 place-items-center rounded-full bg-surface font-display text-xl font-bold text-brand-700 shadow-lg shadow-ink-900/10">
                   {i + 1}
                 </span>
                 <h3 className="mt-6 font-display text-xl font-bold text-ink-950">{step.title}</h3>
@@ -267,7 +267,7 @@ export default function Home() {
       </section>
 
       {/* ── Countries ────────────────────────────────────────── */}
-      <section id="countries" className="bg-white py-20 sm:py-24">
+      <section id="countries" className="bg-surface py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl">
@@ -286,18 +286,18 @@ export default function Home() {
               <Link
                 key={c.code}
                 href="/buy"
-                className="group rounded-3xl bg-paper p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:bg-white hover:shadow-xl hover:shadow-brand-900/10"
+                className="group rounded-3xl bg-paper p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:bg-surface hover:shadow-xl hover:shadow-brand-900/10"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-4xl transition-transform duration-300 group-hover:scale-110">{c.flag}</span>
-                  <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-600 shadow-sm">
+                  <span className="rounded-full bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-600 shadow-sm">
                     {c.currency}
                   </span>
                 </div>
                 <h3 className="mt-5 font-display text-xl font-bold text-ink-950">{c.name}</h3>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {c.networks.map((n) => (
-                    <span key={n.id} className="rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-ink-600 shadow-sm">
+                    <span key={n.id} className="rounded-full bg-surface px-2.5 py-1 text-[11px] font-semibold text-ink-600 shadow-sm">
                       {n.short}
                     </span>
                   ))}
@@ -325,7 +325,7 @@ export default function Home() {
             {FEATURES.map((f) => (
               <div
                 key={f.title}
-                className="rounded-3xl bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-900/10"
+                className="rounded-3xl bg-surface p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-900/10"
               >
                 <span className="grid size-11 place-items-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-900/20">
                   <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -339,7 +339,7 @@ export default function Home() {
           </div>
 
           {/* FX transparency */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-6 rounded-3xl bg-white p-8 shadow-sm sm:flex-row">
+          <div className="mt-10 flex flex-col items-center justify-between gap-6 rounded-3xl bg-surface p-8 shadow-sm sm:flex-row">
             <div>
               <h3 className="font-display text-xl font-bold text-ink-950">Indicative exchange rates</h3>
               <p className="mt-1 text-sm text-ink-500">
@@ -363,7 +363,7 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────── */}
-      <section id="faq" className="bg-white py-20 sm:py-24">
+      <section id="faq" className="bg-surface py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-widest text-brand-600">FAQ</p>
