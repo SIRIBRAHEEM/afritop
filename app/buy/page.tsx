@@ -1,11 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { COUNTRIES, SERVICES, getCountry, findBundle, type ServiceId } from "@/lib/catalog";
 import { toUsd, platformFee, round2, formatLocal, formatUsd, FX_RATES } from "@/lib/fx";
 import { cn, isValidPhone, isValidMeter } from "@/lib/utils";
+import { USDC_CHAINS } from "@/lib/chains";
+import {
+  connectWith,
+  ensureChain,
+  getDetectedWallets,
+  getInjectedProvider,
+  humanizeWalletError,
+  onWalletsChange,
+  sendUsdcPayment,
+  WALLET_INSTALLS,
+  type DetectedWallet,
+} from "@/lib/web3";
 
 function BuyFlow() {
   const searchParams = useSearchParams();
@@ -20,6 +32,15 @@ function BuyFlow() {
   const [bundleId, setBundleId] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [payStage, setPayStage] = useState<string | null>(null);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [walletHelp, setWalletHelp] = useState(false);
+
+  // EIP-6963 wallet discovery — re-renders when a wallet extension announces itself.
+  const wallets = useSyncExternalStore(onWalletsChange, getDetectedWallets);
+
+  // Arc Testnet — the only payment network in the testnet-only phase.
+  const payChain = USDC_CHAINS[0];
 
   const country = useMemo(() => getCountry(countryCode)!, [countryCode]);
   const providers = useMemo(
@@ -81,11 +102,43 @@ function BuyFlow() {
     setAmount(String(v));
   }
 
+  /** Click handler — the wallet popup fires immediately, then payment completes inline. */
   async function handlePay() {
     if (!ready) return;
+    setError(null);
+    setWalletHelp(false);
+    // Several wallets installed? Let the user pick one — the modal opens
+    // synchronously on this click, so there's no popup-blocker delay.
+    if (getDetectedWallets().length > 1) {
+      setLoading(false);
+      setPayStage(null);
+      setWalletModalOpen(true);
+      return;
+    }
+    await runWalletPayment();
+  }
+
+  async function runWalletPayment(chosen?: DetectedWallet) {
     setLoading(true);
+    setPayStage("Connecting your wallet…");
     setError(null);
     try {
+      // 1) Wallet popup immediately — before any network request.
+      const eth = chosen?.provider ?? getDetectedWallets()[0]?.provider ?? getInjectedProvider();
+      if (!eth) {
+        setLoading(false);
+        setPayStage(null);
+        setWalletHelp(true);
+        return;
+      }
+      const conn = await connectWith(eth);
+
+      // 2) Make sure we're on Arc Testnet (adds the chain to the wallet if needed).
+      setPayStage("Switching to Arc Testnet…");
+      await ensureChain(eth, payChain.chain);
+
+      // 3) Create the order server-side.
+      setPayStage("Creating your order…");
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -100,14 +153,41 @@ function BuyFlow() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Something went wrong. Please try again.");
-        setLoading(false);
-        return;
+        throw new Error(data.error ?? "Something went wrong. Please try again.");
       }
-      window.location.assign(data.checkoutUrl);
-    } catch {
-      setError("Network error. Please try again.");
+
+      // 4) Send the exact USDC amount on-chain.
+      setPayStage("Sending USDC…");
+      const { txHash } = await sendUsdcPayment({
+        provider: eth,
+        chain: payChain.chain,
+        token: payChain.usdc,
+        to: data.receiver,
+        amountUsd: usdTotal,
+        address: conn.address,
+      });
+
+      // 5) Server-side on-chain verification + fulfillment.
+      setPayStage("Confirming on-chain…");
+      const confirm = await fetch("/api/confirm-usdc", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: data.orderId,
+          txHash,
+          chainId: payChain.chain.id,
+          sender: conn.address,
+        }),
+      });
+      const confirmData = await confirm.json();
+      if (!confirm.ok) {
+        throw new Error(confirmData.error ?? "The payment couldn't be confirmed. Please try again.");
+      }
+      window.location.assign(`/success?orderId=${data.orderId}`);
+    } catch (e) {
+      setError(humanizeWalletError(e));
       setLoading(false);
+      setPayStage(null);
     }
   }
 
@@ -433,6 +513,29 @@ function BuyFlow() {
                 </div>
               )}
 
+              {walletHelp && (
+                <div className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 animate-fade-in">
+                  <p className="font-bold">No wallet extension detected.</p>
+                  <p className="mt-1">
+                    Install a browser wallet to pay USDC on-chain — then click pay again:
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap gap-2">
+                    {WALLET_INSTALLS.map((w) => (
+                      <a
+                        key={w.name}
+                        href={w.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-ink-100 bg-white px-3 py-1.5 font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
+                      >
+                        <span className="text-sm">{w.icon}</span>
+                        <span className="text-[11px]">{w.name}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <button
                 type="button"
                 disabled={!ready || loading}
@@ -446,7 +549,7 @@ function BuyFlow() {
               >
                 {loading ? (
                   <>
-                    <Spinner /> Preparing checkout…
+                    <Spinner /> {payStage ?? "Preparing checkout…"}
                   </>
                 ) : ready ? (
                   <>
@@ -476,6 +579,59 @@ function BuyFlow() {
           </aside>
         </div>
       </div>
+
+      {/* Wallet chooser — shown when several wallets are installed */}
+      {walletModalOpen && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-ink-950/60 p-4 backdrop-blur-sm"
+          onClick={() => setWalletModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl border border-ink-100 bg-white p-6 shadow-2xl animate-pop"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg font-bold text-ink-900">Choose a wallet</h3>
+              <button
+                type="button"
+                onClick={() => setWalletModalOpen(false)}
+                className="grid size-8 place-items-center rounded-full text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-700"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="mt-4 space-y-2">
+              {wallets.length === 0 && (
+                <p className="rounded-xl bg-ink-50 px-4 py-3 text-xs text-ink-500">
+                  No wallets detected yet — open your wallet extension and try again.
+                </p>
+              )}
+              {wallets.map((w) => (
+                <button
+                  key={w.uuid}
+                  type="button"
+                  onClick={() => {
+                    setWalletModalOpen(false);
+                    void runWalletPayment(w);
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl border border-ink-100 bg-white px-4 py-3 text-left transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
+                >
+                  {w.icon ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={w.icon} alt="" className="size-8 rounded-full" />
+                  ) : (
+                    <span className="grid size-8 place-items-center rounded-full bg-ink-100 text-sm font-extrabold text-ink-600">
+                      {w.name.charAt(0)}
+                    </span>
+                  )}
+                  <span className="text-sm font-extrabold text-ink-900">{w.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

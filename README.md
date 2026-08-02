@@ -18,14 +18,15 @@ npm run dev                        # → http://localhost:3000
 ## How payments work
 
 1. Build a top-up in the **Buy** flow.
-2. You land on `/pay/[order]` — click **Connect wallet** (MetaMask, Coinbase
-   Wallet, Trust Wallet, Rabby, …). No wallet installed? The page shows you
+2. Click **Pay with USDC** — your wallet pops up **instantly** (no redirect, no
+   delay). Several wallets installed? A picker appears so you can choose one
+   (EIP-6963 multi-wallet discovery). No wallet installed? The page tells you
    where to get one.
-3. Pay on **Arc Testnet** — Circle's stablecoin L1, gas in USDC (testnet-only
-   phase; Arc mainnet isn't live yet).
-4. Your wallet sends the exact USDC amount to the **receiver** address shown.
-5. We verify the transfer **on-chain** (`/api/confirm-usdc`) — recipient, amount and
-   sender are checked against public RPCs — then deliver the top-up.
+3. Your wallet switches to **Arc Testnet** (added automatically if missing),
+   then sends the exact USDC amount to the receiver.
+4. We verify the transfer **on-chain** (`/api/confirm-usdc`) — recipient, amount
+   and sender are checked against public RPCs — then deliver the top-up.
+5. Done — you land on the receipt page.
 
 - **Testnet-only phase:** all payments run on Arc Testnet. Without `USDC_RECEIVER`,
   payments go to a burn address (grab free testnet USDC from

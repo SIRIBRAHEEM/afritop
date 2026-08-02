@@ -12,6 +12,7 @@ import {
   type EIP1193Provider,
 } from "viem";
 import { USDC_CHAINS, ERC20_TRANSFER_ABI, type UsdcChain } from "@/lib/chains";
+import { WALLET_INSTALLS } from "@/lib/web3";
 import { formatLocal, formatUsd } from "@/lib/fx";
 import { cn, shortenAddress } from "@/lib/utils";
 
@@ -383,7 +384,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                       <strong>Connect wallet</strong> again:
                     </p>
                     <div className="mt-3 grid grid-cols-2 gap-2">
-                      {WALLETS.map((w) => (
+                      {WALLET_INSTALLS.map((w) => (
                         <a
                           key={w.name}
                           href={w.url}
@@ -538,13 +539,6 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     </div>
   );
 }
-
-const WALLETS = [
-  { name: "MetaMask", icon: "🦊", url: "https://metamask.io/download/" },
-  { name: "Coinbase Wallet", icon: "🔵", url: "https://www.coinbase.com/wallet" },
-  { name: "Trust Wallet", icon: "🔷", url: "https://trustwallet.com/download" },
-  { name: "Rabby", icon: "🐰", url: "https://rabby.io" },
-] as const;
 
 function Spinner() {
   return (

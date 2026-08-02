@@ -13,6 +13,17 @@ function json(status: number, body: unknown) {
 }
 
 /**
+ * Derive the public origin from the incoming request so redirect URLs work on
+ * any host (Vercel, a custom domain, localhost…) without env configuration.
+ */
+function requestOrigin(request: Request): string {
+  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const proto = request.headers.get("x-forwarded-proto") ?? "http";
+  if (host) return `${proto}://${host}`;
+  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+}
+
+/**
  * POST /api/checkout
  * Body: {
  *   service, countryCode, providerId, recipient, amount?, bundleId?,
@@ -29,7 +40,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { service, countryCode, providerId, recipient, amount, bundleId } = body;
     const paymentMethod: "wallet" | "circle" = body.paymentMethod === "circle" ? "circle" : "wallet";
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const origin = requestOrigin(request);
 
     // Reuse an existing pending order when asked (e.g. switching payment method).
     if (body.orderId) {
@@ -42,8 +53,8 @@ export async function POST(request: Request) {
           const checkoutUrl = await createCheckoutSession({
             amountUsd: existing.usdTotal,
             orderId: existing.id,
-            successUrl: `${appUrl}/success?orderId=${existing.id}`,
-            cancelUrl: `${appUrl}/pay/${existing.id}?cancelled=1`,
+            successUrl: `${origin}/success?orderId=${existing.id}`,
+            cancelUrl: `${origin}/pay/${existing.id}?cancelled=1`,
           });
           if (!checkoutUrl) {
             return json(502, { error: "The payment provider is unavailable. Please try again shortly." });
@@ -51,7 +62,7 @@ export async function POST(request: Request) {
           await updateOrder(existing.id, { paymentMethod: "circle" });
           return json(200, { mode: "circle", checkoutUrl, orderId: existing.id });
         }
-        return json(200, { mode: "wallet", checkoutUrl: `${appUrl}/pay/${existing.id}`, orderId: existing.id });
+        return json(200, { mode: "wallet", checkoutUrl: `/pay/${existing.id}`, orderId: existing.id });
       }
     }
 
@@ -133,7 +144,7 @@ export async function POST(request: Request) {
     if (paymentMethod === "wallet") {
       return json(200, {
         mode: "wallet",
-        checkoutUrl: `${appUrl}/pay/${orderId}`,
+        checkoutUrl: `/pay/${orderId}`,
         orderId,
         receiver: paymentReceiver(),
         demo: receiverIsDemo(),
@@ -147,8 +158,8 @@ export async function POST(request: Request) {
     const checkoutUrl = await createCheckoutSession({
       amountUsd: usdTotal,
       orderId,
-      successUrl: `${appUrl}/success?orderId=${orderId}`,
-      cancelUrl: `${appUrl}/buy?cancelled=1`,
+      successUrl: `${origin}/success?orderId=${orderId}`,
+      cancelUrl: `${origin}/buy?cancelled=1`,
     });
     if (!checkoutUrl) {
       return json(502, { error: "The payment provider is unavailable. Please try again shortly." });
