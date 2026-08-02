@@ -41,7 +41,7 @@ export async function verifyUsdcPayment(opts: {
   attempts?: number;
 }): Promise<VerifyResult> {
   const rpcs = opts.chain.chain.rpcUrls.public.http;
-  const attempts = opts.attempts ?? 3;
+  const attempts = opts.attempts ?? 4;
 
   for (const rpc of rpcs) {
     for (let i = 0; i < attempts; i++) {
@@ -83,8 +83,8 @@ export async function verifyUsdcPayment(opts: {
         return { ok: true, value, from, to };
       } catch {
         // Transaction not indexed yet — wait briefly and retry. Arc finalizes
-        // in under a second, so a short backoff is enough.
-        await new Promise((r) => setTimeout(r, 250));
+        // in under a second, but public RPCs can lag a moment on indexing.
+        await new Promise((r) => setTimeout(r, 350));
       }
     }
   }

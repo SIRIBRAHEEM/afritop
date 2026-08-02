@@ -4,7 +4,8 @@ export interface Network {
   id: string;
   name: string;
   short: string;
-  color: string; // brand color used for avatars
+  color: string; // brand color used for avatar fallbacks
+  logo?: string; // official brand logo URL (falls back to the colored initial)
 }
 
 export interface Bundle {
@@ -54,18 +55,18 @@ export const COUNTRIES: Country[] = [
     phonePrefix: "+234",
     phoneDigits: 10,
     networks: [
-      { id: "mtn", name: "MTN Nigeria", short: "MTN", color: "#FFCC00" },
-      { id: "glo", name: "Glo", short: "GLO", color: "#00A651" },
-      { id: "airtel", name: "Airtel Nigeria", short: "AIRTEL", color: "#E4002B" },
-      { id: "9mobile", name: "9mobile", short: "9MOBILE", color: "#0AA089" },
+      { id: "mtn", name: "MTN Nigeria", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
+      { id: "glo", name: "Glo", short: "GLO", color: "#00A651", logo: "https://upload.wikimedia.org/wikipedia/commons/8/86/GloLogo.png" },
+      { id: "airtel", name: "Airtel Nigeria", short: "AIRTEL", color: "#E4002B", logo: "https://upload.wikimedia.org/wikipedia/commons/d/da/Airtel_Africa_logo.svg" },
+      { id: "9mobile", name: "9mobile", short: "9MOBILE", color: "#0AA089", logo: "https://www.google.com/s2/favicons?domain=9mobile.com.ng&sz=128" },
     ],
     distributors: [
-      { id: "ikeja", name: "Ikeja Electric", short: "IKEDC", color: "#1F7F5C" },
-      { id: "eko", name: "Eko Electric", short: "EKEDC", color: "#F98F07" },
+      { id: "ikeja", name: "Ikeja Electric", short: "IKEDC", color: "#1F7F5C", logo: "https://www.google.com/s2/favicons?domain=ikejaelectric.com&sz=128" },
+      { id: "eko", name: "Eko Electric", short: "EKEDC", color: "#F98F07", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Eko_Distribution_Company.jpg" },
       { id: "abuja", name: "Abuja Electric", short: "AEDC", color: "#3B82F6" },
-      { id: "ph", name: "Port Harcourt Electric", short: "PHEDC", color: "#8B5CF6" },
-      { id: "ibadan", name: "Ibadan Electric", short: "IBEDC", color: "#EC4899" },
-      { id: "enugu", name: "Enugu Electric", short: "EEDC", color: "#14B8A6" },
+      { id: "ph", name: "Port Harcourt Electric", short: "PHEDC", color: "#8B5CF6", logo: "https://upload.wikimedia.org/wikipedia/en/a/aa/PHED.PNG" },
+      { id: "ibadan", name: "Ibadan Electric", short: "IBEDC", color: "#EC4899", logo: "https://www.google.com/s2/favicons?domain=ibedc.com&sz=128" },
+      { id: "enugu", name: "Enugu Electric", short: "EEDC", color: "#14B8A6", logo: "https://www.google.com/s2/favicons?domain=enugudisco.com&sz=128" },
     ],
     minAirtime: 50,
     maxAirtime: 50000,
@@ -105,13 +106,13 @@ export const COUNTRIES: Country[] = [
     phonePrefix: "+233",
     phoneDigits: 9,
     networks: [
-      { id: "mtn-gh", name: "MTN Ghana", short: "MTN", color: "#FFCC00" },
+      { id: "mtn-gh", name: "MTN Ghana", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
       { id: "telecel", name: "Telecel (Vodafone)", short: "TELECEL", color: "#ED1C24" },
-      { id: "airteltigo", name: "AirtelTigo", short: "AIRTELTIGO", color: "#0047AB" },
+      { id: "airteltigo", name: "AirtelTigo", short: "AIRTELTIGO", color: "#0047AB", logo: "https://www.google.com/s2/favicons?domain=airteltigo.com&sz=128" },
     ],
     distributors: [
-      { id: "ecg", name: "Electricity Co. of Ghana", short: "ECG", color: "#2563EB" },
-      { id: "nedco", name: "Northern Electricity Co.", short: "NEDCo", color: "#F59E0B" },
+      { id: "ecg", name: "Electricity Co. of Ghana", short: "ECG", color: "#2563EB", logo: "https://www.google.com/s2/favicons?domain=ecg.com.gh&sz=128" },
+      { id: "nedco", name: "Northern Electricity Co.", short: "NEDCo", color: "#F59E0B", logo: "https://www.google.com/s2/favicons?domain=nedco.com&sz=128" },
     ],
     minAirtime: 1,
     maxAirtime: 2000,
@@ -147,12 +148,12 @@ export const COUNTRIES: Country[] = [
     phonePrefix: "+254",
     phoneDigits: 9,
     networks: [
-      { id: "safaricom", name: "Safaricom", short: "SAFARICOM", color: "#1F9D55" },
-      { id: "airtel-ke", name: "Airtel Kenya", short: "AIRTEL", color: "#E4002B" },
-      { id: "telkom-ke", name: "Telkom Kenya", short: "TELKOM", color: "#B3126E" },
+      { id: "safaricom", name: "Safaricom", short: "SAFARICOM", color: "#1F9D55", logo: "https://upload.wikimedia.org/wikipedia/en/e/eb/Safaricom_logo.svg" },
+      { id: "airtel-ke", name: "Airtel Kenya", short: "AIRTEL", color: "#E4002B", logo: "https://upload.wikimedia.org/wikipedia/commons/d/da/Airtel_Africa_logo.svg" },
+      { id: "telkom-ke", name: "Telkom Kenya", short: "TELKOM", color: "#B3126E", logo: "https://www.google.com/s2/favicons?domain=telkom.co.ke&sz=128" },
     ],
     distributors: [
-      { id: "kplc", name: "Kenya Power", short: "KPLC", color: "#1F7F5C" },
+      { id: "kplc", name: "Kenya Power", short: "KPLC", color: "#1F7F5C", logo: "https://www.google.com/s2/favicons?domain=kplc.co.ke&sz=128" },
     ],
     minAirtime: 10,
     maxAirtime: 10000,
@@ -187,13 +188,13 @@ export const COUNTRIES: Country[] = [
     phonePrefix: "+27",
     phoneDigits: 9,
     networks: [
-      { id: "vodacom", name: "Vodacom", short: "VODACOM", color: "#E60000" },
-      { id: "mtn-za", name: "MTN South Africa", short: "MTN", color: "#FFCC00" },
-      { id: "cellc", name: "Cell C", short: "CELL C", color: "#0033A0" },
-      { id: "telkom-za", name: "Telkom Mobile", short: "TELKOM", color: "#C8102E" },
+      { id: "vodacom", name: "Vodacom", short: "VODACOM", color: "#E60000", logo: "https://upload.wikimedia.org/wikipedia/en/8/8c/Vodacom_Logo_2017.svg" },
+      { id: "mtn-za", name: "MTN South Africa", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
+      { id: "cellc", name: "Cell C", short: "CELL C", color: "#0033A0", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b6/Cell_C_New_2024_logo.svg" },
+      { id: "telkom-za", name: "Telkom Mobile", short: "TELKOM", color: "#C8102E", logo: "https://www.google.com/s2/favicons?domain=telkom.co.za&sz=128" },
     ],
     distributors: [
-      { id: "eskom", name: "Eskom", short: "ESKOM", color: "#1F7F5C" },
+      { id: "eskom", name: "Eskom", short: "ESKOM", color: "#1F7F5C", logo: "https://upload.wikimedia.org/wikipedia/en/a/a3/Eskom_%28logo%29.svg" },
       { id: "citypower", name: "City Power (JHB)", short: "CITY POWER", color: "#F59E0B" },
     ],
     minAirtime: 5,

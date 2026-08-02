@@ -6,8 +6,10 @@ import { Suspense } from "react";
 import { COUNTRIES, SERVICES, getCountry, findBundle, type ServiceId } from "@/lib/catalog";
 import { toUsd, platformFee, round2, formatLocal, formatUsd, FX_RATES } from "@/lib/fx";
 import { cn, isValidPhone, isValidMeter } from "@/lib/utils";
+import { BrandMark } from "@/components/BrandMark";
 import { USDC_CHAINS } from "@/lib/chains";
 import {
+  confirmUsdcPayment,
   connectWith,
   ensureChain,
   getDetectedWallets,
@@ -34,6 +36,14 @@ function BuyFlow() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [payStage, setPayStage] = useState<string | null>(null);
+  // Set once the wallet has broadcast a USDC transfer that the server hasn't
+  // confirmed yet — powers the "payment sent, still confirming" recovery UI.
+  const [txRef, setTxRef] = useState<{
+    orderId: string;
+    txHash: string;
+    chainId: number;
+    sender: string;
+  } | null>(null);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [walletHelp, setWalletHelp] = useState(false);
 
@@ -168,25 +178,48 @@ function BuyFlow() {
         address: conn.address,
       });
 
-      // 5) Server-side on-chain verification + fulfillment.
+      // 5) Server-side on-chain verification + fulfillment (authoritative).
       setPayStage("Confirming on-chain…");
-      const confirm = await fetch("/api/confirm-usdc", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: data.orderId,
-          txHash,
-          chainId: payChain.chain.id,
-          sender: conn.address,
-        }),
+      const confirm = await confirmUsdcPayment({
+        orderId: data.orderId,
+        txHash,
+        chainId: payChain.chain.id,
+        sender: conn.address,
       });
-      const confirmData = await confirm.json();
       if (!confirm.ok) {
-        throw new Error(confirmData.error ?? "The payment couldn't be confirmed. Please try again.");
+        // Broadcast-but-unconfirmed → recovery panel with Check again (never pay
+        // twice). Definitive failures (tx reverted, wrong receiver…) show as a
+        // plain error instead, so re-paying is safe and immediate.
+        if (confirm.retryable) {
+          setTxRef({ orderId: data.orderId, txHash, chainId: payChain.chain.id, sender: conn.address });
+        }
+        setError(confirm.error);
+        setLoading(false);
+        setPayStage(null);
+        return;
       }
+      setTxRef(null);
       router.push(`/success?orderId=${data.orderId}`);
     } catch (e) {
       setError(humanizeWalletError(e));
+      setLoading(false);
+      setPayStage(null);
+    }
+  }
+
+  /** Re-run server-side confirmation for a payment that was already broadcast. */
+  async function retryConfirm() {
+    if (!txRef) return;
+    setLoading(true);
+    setPayStage("Confirming on-chain…");
+    setError(null);
+    try {
+      const confirm = await confirmUsdcPayment(txRef);
+      if (!confirm.ok) throw new Error(confirm.error);
+      setTxRef(null);
+      router.push(`/success?orderId=${txRef.orderId}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Couldn't confirm the payment yet.");
       setLoading(false);
       setPayStage(null);
     }
@@ -331,12 +364,7 @@ function BuyFlow() {
                           : "border-ink-100 hover:border-ink-300",
                       )}
                     >
-                      <span
-                        className="grid size-7 place-items-center rounded-full text-[10px] font-extrabold text-ink-900"
-                        style={{ backgroundColor: p.color }}
-                      >
-                        {p.short.charAt(0)}
-                      </span>
+                      <BrandMark logo={p.logo} name={p.name} short={p.short} color={p.color} size={28} />
                       {p.short}
                     </button>
                   );
@@ -508,7 +536,55 @@ function BuyFlow() {
                 </p>
               </div>
 
-              {error && (
+              {txRef && (
+                <div className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+                  <p className="flex items-center gap-2 font-bold text-sun-900">
+                    <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8v4M12 16h.01" />
+                    </svg>
+                    Payment sent — confirming…
+                  </p>
+                  <p className="mt-1.5 leading-relaxed">
+                    Your USDC transfer was broadcast, but we haven&apos;t confirmed it on-chain yet. If
+                    it shows as successful on the explorer, tap <strong>Check again</strong> and
+                    we&apos;ll finish your top-up. If it failed on-chain, start a new payment instead —
+                    a failed transfer sends nothing.
+                  </p>
+                  {error && <p className="mt-2 text-xs font-semibold text-sun-900/80">{error}</p>}
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void retryConfirm()}
+                      disabled={loading}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-sun-600 px-4 py-2 text-xs font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-sun-700 disabled:cursor-wait disabled:opacity-70"
+                    >
+                      {loading ? <Spinner /> : null}
+                      {loading ? "Checking…" : "Check again"}
+                    </button>
+                    <a
+                      href={`https://testnet.arcscan.app/tx/${txRef.txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-bold text-ink-700 transition-colors hover:border-ink-300"
+                    >
+                      View on ArcScan ↗
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTxRef(null);
+                        setError(null);
+                      }}
+                      className="px-2 py-2 text-xs font-bold text-ink-500 underline-offset-2 transition-colors hover:text-ink-700 hover:underline"
+                    >
+                      New payment instead
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {error && !txRef && (
                 <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
                   {error}
                 </div>
@@ -529,7 +605,7 @@ function BuyFlow() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 rounded-full border border-ink-100 bg-white px-3 py-1.5 font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
                       >
-                        <span className="text-sm">{w.icon}</span>
+                        <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={22} />
                         <span className="text-[11px]">{w.name}</span>
                       </a>
                     ))}
@@ -539,11 +615,11 @@ function BuyFlow() {
 
               <button
                 type="button"
-                disabled={!ready || loading}
+                disabled={!ready || loading || Boolean(txRef)}
                 onClick={handlePay}
                 className={cn(
                   "mt-5 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-extrabold transition-all duration-300",
-                  ready && !loading
+                  ready && !loading && !txRef
                     ? "bg-ink-900 text-white shadow-xl shadow-ink-900/20 hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-2xl active:translate-y-0"
                     : "cursor-not-allowed bg-ink-100 text-ink-400",
                 )}
@@ -552,10 +628,12 @@ function BuyFlow() {
                   <>
                     <Spinner /> {payStage ?? "Preparing checkout…"}
                   </>
-                ) : ready ? (
+                ) : ready && !txRef ? (
                   <>
                     Pay {formatUsd(usdTotal)} with USDC
                   </>
+                ) : txRef ? (
+                  "Payment sent — check again above"
                 ) : (
                   "Complete the details to pay"
                 )}
@@ -618,14 +696,7 @@ function BuyFlow() {
                   }}
                   className="flex w-full items-center gap-3 rounded-2xl border border-ink-100 bg-white px-4 py-3 text-left transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
                 >
-                  {w.icon ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={w.icon} alt="" className="size-8 rounded-full" />
-                  ) : (
-                    <span className="grid size-8 place-items-center rounded-full bg-ink-100 text-sm font-extrabold text-ink-600">
-                      {w.name.charAt(0)}
-                    </span>
-                  )}
+                  <BrandMark logo={w.icon} name={w.name} short={w.name} color="#E7E5DF" size={32} />
                   <span className="text-sm font-extrabold text-ink-900">{w.name}</span>
                 </button>
               ))}

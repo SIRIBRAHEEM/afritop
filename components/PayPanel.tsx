@@ -2,17 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  createPublicClient,
-  createWalletClient,
-  custom,
-  getAddress,
-  http,
-  parseUnits,
-  type EIP1193Provider,
-} from "viem";
-import { USDC_CHAINS, ERC20_TRANSFER_ABI, type UsdcChain } from "@/lib/chains";
-import { WALLET_INSTALLS } from "@/lib/web3";
+import { createWalletClient, custom, getAddress, parseUnits, type EIP1193Provider } from "viem";
+import { USDC_CHAINS, ERC20_TRANSFER_ABI, getUsdcChain, type UsdcChain } from "@/lib/chains";
+import { confirmUsdcPayment, WALLET_INSTALLS, withTimeout } from "@/lib/web3";
+import { BrandMark } from "@/components/BrandMark";
 import { formatLocal, formatUsd } from "@/lib/fx";
 import { cn, shortenAddress } from "@/lib/utils";
 
@@ -66,6 +59,14 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
   const [busy, setBusy] = useState<Busy>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Set once the wallet has broadcast a USDC transfer the server hasn't
+  // confirmed yet — powers the "payment sent, still confirming" recovery UI.
+  const [lastConfirm, setLastConfirm] = useState<{
+    orderId: string;
+    txHash: string;
+    chainId: number;
+    sender: string;
+  } | null>(null);
   const [copied, setCopied] = useState(false);
   const [showInstallHelp, setShowInstallHelp] = useState(false);
 
@@ -78,7 +79,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
   const connected = Boolean(wallet);
   // Never allow paying on a mainnet chain while the receiver is still the demo burn address.
   const lockedSelected = demoMode && !selectedChain.testnet;
-  const ready = connected && walletMatchesChain && !busy && !lockedSelected;
+  const ready = connected && walletMatchesChain && !busy && !lockedSelected && !lastConfirm;
+  // Chain the broadcast tx actually happened on (user may have switched networks since).
+  const confirmChain = lastConfirm ? getUsdcChain(lastConfirm.chainId) ?? selectedChain : null;
 
   async function connect() {
     setBusy("connecting");
@@ -154,49 +157,69 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     setBusy("sending");
     setError(null);
     setTxHash(null);
+    setLastConfirm(null);
     try {
       const ethereum = (window as unknown as { ethereum: EIP1193Provider }).ethereum;
       const walletClient = createWalletClient({ chain: selectedChain.chain, transport: custom(ethereum) });
       const [address] = await walletClient.getAddresses();
-      const hash = await walletClient.writeContract({
-        address: selectedChain.usdc,
-        abi: ERC20_TRANSFER_ABI,
-        functionName: "transfer",
-        args: [order.receiver as `0x${string}`, parseUnits(order.usdTotal.toFixed(2), 6)],
-        account: address,
-      });
+      // Hard cap on the wallet popup so a stuck wallet (e.g. one whose Arc RPC
+      // is unreachable) can never leave the UI frozen on "Sending USDC…".
+      const hash = await withTimeout(
+        walletClient.writeContract({
+          address: selectedChain.usdc,
+          abi: ERC20_TRANSFER_ABI,
+          functionName: "transfer",
+          args: [order.receiver as `0x${string}`, parseUnits(order.usdTotal.toFixed(2), 6)],
+          account: address,
+        }),
+        60_000,
+        "Your wallet is taking too long to send the payment. If you already approved it, check testnet.arcscan.app before trying again.",
+      );
       setTxHash(hash);
       setBusy("confirming");
 
-      // Wait for the receipt via the chain's public RPC (more reliable than
-      // polling an injected wallet provider).
-      const chainPublic = createPublicClient({
-        chain: selectedChain.chain,
-        transport: http(selectedChain.chain.rpcUrls.public.http[0]),
+      // No client-side receipt wait: the browser's link to a public RPC is the
+      // most failure-prone hop (CORS, rate limits), and viem's default wait is
+      // 180 seconds. The server verifies on-chain with multi-RPC failover.
+      // Server-side on-chain verification + fulfillment (authoritative).
+      const confirm = await confirmUsdcPayment({
+        orderId: order.id,
+        txHash: hash,
+        chainId: selectedChain.chain.id,
+        sender: address,
       });
-      await chainPublic.waitForTransactionReceipt({ hash });
-
-      // Server-side on-chain verification + fulfillment.
-      const res = await fetch("/api/confirm-usdc", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: order.id,
-          txHash: hash,
-          chainId: selectedChain.chain.id,
-          sender: address,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
+      if (!confirm.ok) {
+        // Broadcast-but-unconfirmed → recovery panel with Check again (never pay
+        // twice). Definitive failures (tx reverted, wrong receiver…) show as a
+        // plain error instead, so re-paying is safe and immediate.
+        if (confirm.retryable) {
+          setLastConfirm({ orderId: order.id, txHash: hash, chainId: selectedChain.chain.id, sender: address });
+        }
         setBusy(null);
-        setError(data.error ?? "The payment couldn't be confirmed. Please try again.");
+        setError(confirm.error);
         return;
       }
+      setLastConfirm(null);
       router.push(`/success?orderId=${order.id}`);
     } catch (e) {
       setBusy(null);
       setError(humanizeError(e));
+    }
+  }
+
+  /** Re-run server-side confirmation for a payment that was already broadcast. */
+  async function retryConfirm() {
+    if (!lastConfirm) return;
+    setBusy("confirming");
+    setError(null);
+    try {
+      const confirm = await confirmUsdcPayment(lastConfirm);
+      if (!confirm.ok) throw new Error(confirm.error);
+      setLastConfirm(null);
+      router.push(`/success?orderId=${lastConfirm.orderId}`);
+    } catch (e) {
+      setBusy(null);
+      setError(e instanceof Error ? e.message : "Couldn't confirm the payment yet.");
     }
   }
 
@@ -392,7 +415,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 rounded-xl border border-ink-100 bg-white px-3 py-2.5 font-bold text-ink-700 transition-all hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-md"
                         >
-                          <span className="text-lg">{w.icon}</span>
+                          <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={24} />
                           <span className="text-xs">{w.name}</span>
                         </a>
                       ))}
@@ -448,7 +471,8 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   {busy === "sending" || busy === "confirming" ? <Spinner /> : null}
                   {busy === "sending" && "Waiting for your approval…"}
                   {busy === "confirming" && "Confirming on-chain…"}
-                  {!busy && `Pay ${formatUsd(order.usdTotal)} USDC`}
+                  {!busy && !lastConfirm && `Pay ${formatUsd(order.usdTotal)} USDC`}
+                  {!busy && lastConfirm && "Payment sent — check again above"}
                 </button>
               </>
             )}
@@ -477,6 +501,44 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           {error && (
             <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
               {error}
+            </div>
+          )}
+
+          {lastConfirm && (
+            <div className="mt-4 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+              <p className="flex items-center gap-2 font-bold text-sun-900">
+                <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 8v4M12 16h.01" />
+                </svg>
+                Payment sent — confirming…
+              </p>
+              <p className="mt-1.5 leading-relaxed">
+                Your USDC transfer was broadcast, but on-chain confirmation is taking longer than
+                usual. If it shows as successful on the explorer, tap <strong>Check again</strong>
+                and we&apos;ll finish your top-up. If it failed on-chain, start a new payment instead —
+                a failed transfer sends nothing.
+              </p>
+              {error && <p className="mt-2 text-xs font-semibold text-sun-900/80">{error}</p>}
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => void retryConfirm()}
+                  disabled={busy === "confirming"}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-sun-600 px-4 py-2 text-xs font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-sun-700 disabled:cursor-wait disabled:opacity-70"
+                >
+                  {busy === "confirming" ? <Spinner /> : null}
+                  {busy === "confirming" ? "Checking…" : "Check again"}
+                </button>
+                <a
+                  href={confirmChain?.explorerTx(lastConfirm.txHash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-bold text-ink-700 transition-colors hover:border-ink-300"
+                >
+                  View on {confirmChain?.short ?? "explorer"} ↗
+                </a>
+              </div>
             </div>
           )}
 

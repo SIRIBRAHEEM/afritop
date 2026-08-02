@@ -1,9 +1,7 @@
 import {
-  createPublicClient,
   createWalletClient,
   custom,
   getAddress,
-  http,
   parseUnits,
   type Chain,
   type EIP1193Provider,
@@ -38,10 +36,30 @@ export interface WalletConnection {
 }
 
 export const WALLET_INSTALLS = [
-  { name: "MetaMask", icon: "🦊", url: "https://metamask.io/download/" },
-  { name: "Coinbase Wallet", icon: "🔵", url: "https://www.coinbase.com/wallet" },
-  { name: "Trust Wallet", icon: "🔷", url: "https://trustwallet.com/download" },
-  { name: "Rabby", icon: "🐰", url: "https://rabby.io" },
+  {
+    name: "MetaMask",
+    color: "#F6851B",
+    iconUrl: "https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg",
+    url: "https://metamask.io/download/",
+  },
+  {
+    name: "Coinbase Wallet",
+    color: "#0052FF",
+    iconUrl: "https://www.google.com/s2/favicons?domain=coinbase.com&sz=128",
+    url: "https://www.coinbase.com/wallet",
+  },
+  {
+    name: "Trust Wallet",
+    color: "#0500FF",
+    iconUrl: "https://www.google.com/s2/favicons?domain=trustwallet.com&sz=128",
+    url: "https://trustwallet.com/download",
+  },
+  {
+    name: "Rabby",
+    color: "#8697FF",
+    iconUrl: "https://www.google.com/s2/favicons?domain=rabby.io&sz=128",
+    url: "https://rabby.io",
+  },
 ] as const;
 
 /* ── EIP-6963 discovery ─────────────────────────────────────── */
@@ -92,7 +110,12 @@ export function getInjectedProvider(): EIP1193Provider | null {
 
 /** Ask the wallet to reveal accounts (this is what pops the wallet UI). */
 export async function connectWith(provider: EIP1193Provider): Promise<WalletConnection> {
-  const accounts = (await provider.request({ method: "eth_requestAccounts" })) as string[];
+  // Hard cap so a stuck wallet can't freeze the "Connecting your wallet…" stage.
+  const accounts = (await withTimeout(
+    provider.request({ method: "eth_requestAccounts" }),
+    60_000,
+    "Your wallet is taking too long to connect. Make sure it's unlocked, then try again.",
+  )) as string[];
   if (!accounts?.length) throw new Error("No accounts returned by the wallet.");
   const address = getAddress(accounts[0]);
   const chainId = Number(await provider.request({ method: "eth_chainId" }));
@@ -102,32 +125,70 @@ export async function connectWith(provider: EIP1193Provider): Promise<WalletConn
 /** Switch the wallet to `chain`; adds it first when the wallet doesn't know it (4902). */
 export async function ensureChain(provider: EIP1193Provider, chain: Chain): Promise<void> {
   try {
-    await provider.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: `0x${chain.id.toString(16)}` }],
-    });
+    await withTimeout(
+      provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: `0x${chain.id.toString(16)}` }],
+      }),
+      45_000,
+      "Your wallet is taking too long to switch to Arc Testnet. Try again.",
+    );
   } catch (err) {
     const e = err as { code?: number };
     if (e?.code === 4902) {
-      await provider.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: `0x${chain.id.toString(16)}`,
-            chainName: chain.name,
-            nativeCurrency: chain.nativeCurrency,
-            rpcUrls: [...(chain.rpcUrls.default?.http ?? [])],
-            blockExplorerUrls: chain.blockExplorers ? [chain.blockExplorers.default.url] : [],
-          },
-        ],
-      });
+      await withTimeout(
+        provider.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: `0x${chain.id.toString(16)}`,
+              chainName: chain.name,
+              nativeCurrency: chain.nativeCurrency,
+              rpcUrls: [...(chain.rpcUrls.default?.http ?? [])],
+              blockExplorerUrls: chain.blockExplorers ? [chain.blockExplorers.default.url] : [],
+            },
+          ],
+        }),
+        45_000,
+        "Your wallet is taking too long to add Arc Testnet. Try again.",
+      );
     } else {
       throw err;
     }
   }
 }
 
-/** Send the exact USDC amount to `to` and wait for the on-chain receipt. */
+/**
+ * Reject `p` if it hasn't settled within `ms` — the UI must never hang forever
+ * waiting on an external party (e.g. a wallet that can't reach its RPC).
+ */
+export function withTimeout<T>(p: Promise<T>, ms: number, message: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(message)), ms);
+    p.then(
+      (v) => {
+        clearTimeout(timer);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(timer);
+        reject(e);
+      },
+    );
+  });
+}
+
+/**
+ * Send the exact USDC amount to `to` and broadcast the transaction.
+ *
+ * Only the wallet popup is awaited here, with a hard cap so a stuck wallet
+ * (e.g. one whose configured Arc RPC is unreachable) can never leave the UI
+ * frozen on "Sending USDC…". We deliberately do NOT wait for the on-chain
+ * receipt client-side: the browser's link to a public RPC is the most
+ * failure-prone hop in the flow (CORS, rate limits, flaky endpoints), and
+ * viem's default wait is 180 seconds. Instead, the server verifies the
+ * transfer on-chain via /api/confirm-usdc with multi-RPC failover.
+ */
 export async function sendUsdcPayment(opts: {
   provider: EIP1193Provider;
   chain: Chain;
@@ -137,22 +198,66 @@ export async function sendUsdcPayment(opts: {
   address: `0x${string}`;
 }): Promise<{ txHash: `0x${string}` }> {
   const walletClient = createWalletClient({ chain: opts.chain, transport: custom(opts.provider) });
-  const hash = await walletClient.writeContract({
-    address: opts.token,
-    abi: ERC20_TRANSFER_ABI,
-    functionName: "transfer",
-    args: [opts.to, parseUnits(opts.amountUsd.toFixed(2), 6)],
-    account: opts.address,
-  });
-
-  const publicClient = createPublicClient({
-    chain: opts.chain,
-    transport: http(opts.chain.rpcUrls.public.http[0]),
-  });
-  // Arc finalizes in under a second — poll fast so delivery isn't gated on the
-  // default 4s RPC polling interval.
-  await publicClient.waitForTransactionReceipt({ hash, pollingInterval: 400 });
+  const hash = await withTimeout(
+    walletClient.writeContract({
+      address: opts.token,
+      abi: ERC20_TRANSFER_ABI,
+      functionName: "transfer",
+      args: [opts.to, parseUnits(opts.amountUsd.toFixed(2), 6)],
+      account: opts.address,
+    }),
+    60_000,
+    "Your wallet is taking too long to send the payment. If you already approved it, check testnet.arcscan.app before trying again.",
+  );
   return { txHash: hash };
+}
+
+/** Error text the server returns when the tx exists but hasn't surfaced yet. */
+const TRANSIENT_CONFIRM_RE = /still settling|not indexed|wait a moment/i;
+
+/**
+ * POST /api/confirm-usdc — server-side on-chain verification + fulfillment.
+ * Retries a few times on transient "still settling" errors, so a slow public
+ * RPC on Arc doesn't fail a payment that the wallet already broadcast.
+ */
+export async function confirmUsdcPayment(opts: {
+  orderId: string;
+  txHash: string;
+  chainId: number;
+  sender: string;
+  attempts?: number;
+}): Promise<{ ok: true } | { ok: false; error: string; retryable: boolean }> {
+  const attempts = opts.attempts ?? 3;
+  let lastError = "The payment couldn't be confirmed yet.";
+  let retryable = false;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch("/api/confirm-usdc", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: opts.orderId,
+          txHash: opts.txHash,
+          chainId: opts.chainId,
+          sender: opts.sender,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) return { ok: true };
+      lastError = data?.error ?? "The payment couldn't be confirmed. Please try again.";
+      // Retryable = the tx was likely broadcast but hasn't surfaced on-chain yet
+      // (still settling / not indexed). Anything else (failed on-chain, wrong
+      // receiver, replay…) is definitive and won't fix itself.
+      retryable = TRANSIENT_CONFIRM_RE.test(lastError);
+      if (!retryable) return { ok: false, error: lastError, retryable: false };
+    } catch {
+      // Network hiccup — the payment may well have gone through; retry.
+      lastError = "Network error while confirming the payment. Please try again.";
+      retryable = true;
+    }
+    await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
+  }
+  return { ok: false, error: lastError, retryable };
 }
 
 export function humanizeWalletError(err: unknown): string {
