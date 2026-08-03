@@ -32,8 +32,8 @@ export function Navbar() {
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-paper/90 shadow-[0_12px_40px_-24px_rgba(23,20,9,0.4)] backdrop-blur-xl"
-          : "bg-transparent backdrop-blur-md",
+          ? "border-b-2 border-ink-950 bg-paper shadow-hard-sm"
+          : "border-b-2 border-transparent bg-paper/80 backdrop-blur-md",
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -49,8 +49,8 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm font-semibold text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-900",
-                  active && "bg-brand-50 text-brand-700 hover:bg-brand-50 hover:text-brand-700",
+                  "border-2 border-transparent px-4 py-2 text-sm font-bold text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-950",
+                  active && "border-ink-950 bg-brand-50 text-ink-950 hover:bg-brand-50 hover:text-ink-950",
                 )}
               >
                 {link.label}
@@ -64,7 +64,7 @@ export function Navbar() {
           <WalletLogin />
           <Link
             href="/buy"
-            className="hidden rounded-full bg-ink-900 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-ink-900/15 transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-xl dark:bg-sun-400 dark:text-ink-950 dark:hover:bg-sun-300 sm:inline-flex"
+            className="hidden border-2 border-ink-950 bg-night px-5 py-2.5 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard sm:inline-flex"
           >
             Top up now
           </Link>
@@ -74,7 +74,7 @@ export function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid size-10 place-items-center rounded-full text-ink-700 transition-colors hover:bg-ink-100 md:hidden"
+            className="grid size-10 place-items-center border-2 border-ink-950 text-ink-700 transition-colors hover:bg-ink-100 md:hidden"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               {open ? (
@@ -94,13 +94,13 @@ export function Navbar() {
           open ? "max-h-80 opacity-100" : "max-h-0 opacity-0",
         )}
       >
-        <div className="space-y-1 bg-paper/95 px-4 py-3 shadow-[0_20px_40px_-20px_rgba(23,20,9,0.3)] backdrop-blur-xl">
+        <div className="space-y-1 border-b-2 border-ink-950 bg-paper px-4 py-3 shadow-hard-sm">
           {LINKS.map((link) => (
           <Link
             key={link.href}
             href={link.href}
             onClick={() => setOpen(false)}
-            className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-ink-700 transition-colors hover:bg-ink-100"
+            className="block border-2 border-ink-950 px-4 py-2.5 text-sm font-bold text-ink-700 transition-colors hover:bg-ink-100"
           >
               {link.label}
             </Link>
@@ -108,7 +108,7 @@ export function Navbar() {
           <Link
             href="/buy"
             onClick={() => setOpen(false)}
-            className="mt-2 block rounded-xl bg-ink-900 px-4 py-3 text-center text-sm font-bold text-white dark:bg-sun-400 dark:text-ink-950"
+            className="mt-2 block border-2 border-ink-950 bg-night px-4 py-3 text-center text-sm font-bold text-[#d4ff3f]"
           >
             Top up now
           </Link>

@@ -269,7 +269,7 @@ function BuyFlow() {
         </div>
 
         {cancelled && (
-          <div className="mt-6 flex items-start gap-3 rounded-2xl bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+          <div className="mt-6 flex items-start gap-3 border-2 border-ink-950 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 shadow-hard-sm animate-fade-in">
             <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="12" cy="12" r="9" />
               <path d="M12 8v4M12 16h.01" />
@@ -288,18 +288,17 @@ function BuyFlow() {
             <li key={s.n} className="flex items-center gap-2 sm:gap-3">
               <span
                 className={cn(
-                  "grid size-8 place-items-center rounded-full text-xs font-extrabold transition-all duration-300",
-                  step >= s.n
-                    ? "bg-brand-600 text-white shadow-lg shadow-brand-600/30"
-                    : "bg-ink-100 text-ink-400",
+                  "grid size-8 place-items-center rounded-full text-xs font-extrabold transition-all duration-300",                    step >= s.n
+                      ? "border-2 border-ink-950 bg-night text-[#d4ff3f] shadow-hard-sm"
+                      : "border-2 border-ink-950 bg-ink-100 text-ink-400",
                 )}
               >
-                {step > s.n ? "✓" : s.n}
+                {step > s.n ? <svg viewBox="0 0 24 24" className="size-3" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg> : s.n}
               </span>
               <span
                 className={cn(
                   "hidden text-sm font-bold sm:block",
-                  step >= s.n ? "text-ink-900" : "text-ink-400",
+                  step >= s.n ? "text-ink-950" : "text-ink-400",
                 )}
               >
                 {s.label}
@@ -324,14 +323,14 @@ function BuyFlow() {
                     className={cn(
                       "flex items-center gap-3 rounded-2xl bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       service === s.id
-                        ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
-                        : "hover:shadow-lg",
+                        ? "bg-brand-50 border-2 border-ink-950 shadow-hard"
+                        : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                     )}
                   >
                     <span
                       className={cn(
                         "grid size-11 shrink-0 place-items-center rounded-xl text-xl transition-colors",
-                        service === s.id ? "bg-brand-50" : "bg-ink-100",
+                        service === s.id ? "bg-brand-50 border-2 border-ink-950" : "bg-ink-100 border-2 border-ink-950",
                       )}
                     >
                       {s.icon}
@@ -357,8 +356,8 @@ function BuyFlow() {
                     className={cn(
                       "rounded-2xl bg-surface p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       countryCode === c.code
-                        ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
-                        : "hover:shadow-lg",
+                        ? "bg-brand-50 border-2 border-ink-950 shadow-hard"
+                        : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                     )}
                   >
                     <span className="block text-2xl">{c.flag}</span>
@@ -387,8 +386,8 @@ function BuyFlow() {
                       className={cn(
                         "flex items-center gap-2.5 rounded-full bg-surface py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
                         active
-                          ? "bg-brand-50 text-brand-800 ring-2 ring-brand-500 shadow-md shadow-brand-600/10"
-                          : "hover:shadow-md",
+                          ? "bg-brand-50 text-ink-950 border-2 border-ink-950 shadow-hard"
+                          : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                       )}
                     >
                       <BrandMark logo={p.logo} name={p.name} short={p.short} color={p.color} size={28} />
@@ -464,8 +463,8 @@ function BuyFlow() {
                         className={cn(
                           "flex items-center justify-between rounded-2xl bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                           active
-                            ? "bg-brand-50 ring-2 ring-brand-500 shadow-lg shadow-brand-600/10"
-                            : "hover:shadow-lg",
+                            ? "bg-brand-50 border-2 border-ink-950 shadow-hard"
+                            : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                         )}
                       >
                         <span>
@@ -490,8 +489,8 @@ function BuyFlow() {
                         className={cn(
                           "rounded-full px-4 py-2 font-mono text-sm font-bold shadow-sm transition-all duration-200",
                           quick === v
-                            ? "bg-brand-50 text-brand-800 ring-2 ring-brand-500 shadow-md shadow-brand-600/10"
-                            : "bg-surface text-ink-600 hover:shadow-md",
+                            ? "bg-brand-50 text-ink-950 border-2 border-ink-950 shadow-hard"
+                            : "border-2 border-ink-950 bg-surface text-ink-600 shadow-hard-sm hover:shadow-hard",
                         )}
                       >
                         {formatLocal(v, country.currency)}
@@ -529,7 +528,7 @@ function BuyFlow() {
 
           {/* ── Summary ── */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-3xl bg-surface p-6 shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
+            <div className="border-2 border-ink-950 bg-surface p-6 shadow-hard">
               <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">Order summary</h2>
 
               <div className="mt-4 space-y-3 text-sm">
@@ -564,7 +563,7 @@ function BuyFlow() {
               </div>
 
               {txRef && (
-                <div className="mt-4 rounded-2xl bg-sun-50 px-4 py-3.5 text-sm text-sun-800 animate-fade-in">
+                <div className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3.5 text-sm text-sun-800 shadow-hard-sm animate-fade-in">
                   <p className="flex items-center gap-2 font-bold text-sun-900">
                     <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                       <circle cx="12" cy="12" r="9" />
@@ -612,13 +611,13 @@ function BuyFlow() {
               )}
 
               {error && !txRef && (
-                <div className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 animate-fade-in">
+                <div className="mt-4 border-2 border-ink-950 bg-red-50 px-4 py-3 text-sm font-bold text-red-600 shadow-hard-sm animate-fade-in">
                   {error}
                 </div>
               )}
 
               {walletHelp && (
-                <div className="mt-4 rounded-2xl bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 animate-fade-in">
+                <div className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 shadow-hard-sm animate-fade-in">
                   <p className="font-bold">No wallet extension detected.</p>
                   <p className="mt-1">
                     Install a browser wallet to pay USDC on-chain — then click pay again:
@@ -647,8 +646,8 @@ function BuyFlow() {
                 className={cn(
                   "mt-5 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-extrabold transition-all duration-300",
                   ready && !loading && !txRef
-                    ? "bg-ink-900 text-white shadow-xl shadow-ink-900/20 hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-2xl active:translate-y-0 dark:bg-sun-400 dark:text-ink-950 dark:hover:bg-sun-300"
-                    : "cursor-not-allowed bg-ink-100 text-ink-400",
+                    ? "border-2 border-ink-950 bg-night text-[#d4ff3f] shadow-hard hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard-lg active:translate-y-0"
+                    : "cursor-not-allowed border-2 border-ink-950 bg-ink-100 text-ink-400",
                 )}
               >
                 {loading ? (
@@ -676,10 +675,10 @@ function BuyFlow() {
             </div>
 
             {!ready && (
-              <p className="mt-4 rounded-2xl bg-ink-50 px-4 py-3 text-xs leading-relaxed text-ink-400">
+              <p className="mt-4 border-2 border-ink-950 bg-ink-50 px-4 py-3 text-xs leading-relaxed text-ink-400 shadow-hard-sm">
                 {step === 1
-                  ? "👉 Tell us what to top up and the amount above — your total appears here."
-                  : "👉 Finish the recipient and amount fields above to unlock checkout."}
+                  ? "Tell us what to top up and the amount above — your total appears here."
+                  : "Finish the recipient and amount fields above to unlock checkout."}
               </p>
             )}
           </aside>
@@ -693,7 +692,7 @@ function BuyFlow() {
           onClick={() => setWalletModalOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-surface p-6 shadow-2xl animate-pop"
+            className="w-full max-w-sm border-2 border-ink-950 bg-surface p-6 shadow-hard animate-pop"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -701,10 +700,12 @@ function BuyFlow() {
               <button
                 type="button"
                 onClick={() => setWalletModalOpen(false)}
-                className="grid size-8 place-items-center rounded-full text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-700"
+                className="grid size-8 place-items-center border-2 border-ink-950 text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-950"
                 aria-label="Close"
               >
-                ✕
+                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
               </button>
             </div>
             <div className="mt-4 space-y-2">
@@ -721,10 +722,10 @@ function BuyFlow() {
                     setWalletModalOpen(false);
                     void runWalletPayment(w);
                   }}
-                  className="flex w-full items-center gap-3 rounded-2xl bg-surface px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  className="flex w-full items-center gap-3 border-2 border-ink-950 bg-surface px-4 py-3 text-left shadow-hard-sm transition-all hover:-translate-y-0.5 hover:shadow-hard"
                 >
                   <BrandMark logo={w.icon} name={w.name} short={w.name} color="#E7E5DF" size={32} />
-                  <span className="text-sm font-extrabold text-ink-900">{w.name}</span>
+                  <span className="text-sm font-extrabold text-ink-950">{w.name}</span>
                 </button>
               ))}
             </div>
@@ -743,8 +744,7 @@ function SectionTitle({ n, title, done }: { n: number; title: string; done?: boo
           "grid size-7 place-items-center rounded-full text-xs font-extrabold",
           done ? "bg-brand-600 text-white" : "bg-ink-100 text-ink-400",
         )}
-      >
-        {done ? "✓" : n}
+      >                {done ? <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg> : n}
       </span>
       <h2 className="font-display text-xl font-bold tracking-tight text-ink-900">{title}</h2>
     </div>

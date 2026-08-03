@@ -137,7 +137,7 @@ export default function TransactionsPage() {
           <button
             type="button"
             onClick={() => setReload((r) => r + 1)}
-            className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-sm font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            className="inline-flex items-center gap-2 border-2 border-ink-950 bg-surface px-5 py-2.5 text-sm font-bold text-ink-950 shadow-hard-sm transition-all hover:-translate-y-0.5 hover:shadow-hard"
           >
             <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6" />
@@ -148,10 +148,10 @@ export default function TransactionsPage() {
 
         {/* Wallet sign-in panel */}
         {session.status === "loading" ? null : !signedIn ? (
-          <div className="mt-8 rounded-3xl bg-surface p-6 shadow-sm sm:p-8">
+          <div className="mt-8 border-2 border-ink-950 bg-surface p-6 shadow-hard sm:p-8">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
               <div className="max-w-md text-center sm:text-left">
-                <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-bold text-brand-700">
+                <span className="inline-flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3 py-1 text-xs font-bold text-ink-950 shadow-hard-sm">
                   <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" />
                   </svg>
@@ -175,7 +175,7 @@ export default function TransactionsPage() {
         ) : null}
 
         {error && (
-          <div className="mt-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+          <div className="mt-6 border-2 border-ink-950 bg-red-50 px-4 py-3 text-sm font-bold text-red-600 shadow-hard-sm">
             {error}
           </div>
         )}
@@ -187,7 +187,7 @@ export default function TransactionsPage() {
             </svg>
           </div>
         ) : rows.length === 0 ? (
-          <div className="mt-12 rounded-3xl bg-ink-50/50 px-6 py-20 text-center">
+          <div className="mt-12 border-2 border-ink-950 bg-ink-50/50 px-6 py-20 text-center shadow-hard">
             <span className="text-5xl">🧾</span>
             <h2 className="mt-5 text-xl font-extrabold text-ink-900">No transactions yet</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">
@@ -197,7 +197,7 @@ export default function TransactionsPage() {
             </p>
             <Link
               href="/buy"
-              className="mt-6 inline-flex rounded-full bg-gradient-to-r from-brand-600 to-brand-700 px-7 py-3 text-sm font-extrabold text-white shadow-lg shadow-brand-600/25 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+              className="mt-6 inline-flex border-2 border-ink-950 bg-night px-7 py-3 text-sm font-extrabold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard"
             >
               Make your first top-up
             </Link>
@@ -205,10 +205,10 @@ export default function TransactionsPage() {
         ) : (
           <>
             {/* Desktop table */}
-            <div className="mt-8 hidden overflow-hidden rounded-3xl bg-surface shadow-[0_30px_70px_-40px_rgba(22,20,14,0.35)] md:block">
+            <div className="mt-8 hidden overflow-hidden border-2 border-ink-950 bg-surface shadow-hard md:block">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-ink-50/70 text-xs font-bold uppercase tracking-wider text-ink-400">
+                  <tr className="border-b-2 border-ink-950 bg-ink-50/70 text-xs font-bold uppercase tracking-wider text-ink-400">
                     <th className="px-6 py-4">Order</th>
                     <th className="px-6 py-4">Service</th>
                     <th className="px-6 py-4">Details</th>
@@ -221,7 +221,7 @@ export default function TransactionsPage() {
                   {rows.map((o) => {
                     const mark = providerMark(o);
                     return (
-                      <tr key={o.id} className="transition-colors even:bg-ink-50/40 hover:bg-brand-50/40">
+                      <tr key={o.id} className="transition-colors border-b-2 border-ink-950 even:bg-ink-50/40 hover:bg-brand-50/40">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Link
@@ -233,8 +233,8 @@ export default function TransactionsPage() {
                             <span
                               className={
                                 o.source === "cloud"
-                                  ? "rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700"
-                                  : "rounded-full bg-ink-100 px-2 py-0.5 text-[10px] font-bold text-ink-500"
+                                  ? "border-2 border-ink-950 bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-ink-950 shadow-hard-sm"
+                                  : "border-2 border-ink-950 bg-ink-100 px-2 py-0.5 text-[10px] font-bold text-ink-500 shadow-hard-sm"
                               }
                             >
                               {o.source === "cloud" ? "Cloud" : "Device"}
@@ -281,7 +281,7 @@ export default function TransactionsPage() {
                   <Link
                     key={o.id}
                     href={`/success?orderId=${o.id}`}
-                    className="block rounded-3xl bg-surface p-5 shadow-sm transition-all hover:shadow-md"
+                    className="block border-2 border-ink-950 bg-surface p-5 shadow-hard-sm transition-all hover:shadow-hard"
                   >
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -289,8 +289,8 @@ export default function TransactionsPage() {
                         <span
                           className={
                             o.source === "cloud"
-                              ? "rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700"
-                              : "rounded-full bg-ink-100 px-2 py-0.5 text-[10px] font-bold text-ink-500"
+                              ? "border-2 border-ink-950 bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-ink-950 shadow-hard-sm"
+                              : "border-2 border-ink-950 bg-ink-100 px-2 py-0.5 text-[10px] font-bold text-ink-500 shadow-hard-sm"
                           }
                         >
                           {o.source === "cloud" ? "Cloud" : "Device"}

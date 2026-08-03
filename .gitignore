@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local runtime data
 /data
+
+# Freebuff desktop local database
+.freebuff/

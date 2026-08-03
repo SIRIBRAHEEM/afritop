@@ -66,7 +66,7 @@ export function WalletLogin({ className }: { className?: string }) {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="flex items-center gap-2 rounded-full bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-700 transition-all hover:bg-brand-100"
+          className="flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-700 shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-brand-100"
         >
           <span className="relative flex size-2">
             <span className="animate-ping-slow absolute inline-flex size-2 rounded-full bg-brand-500" />
@@ -81,7 +81,7 @@ export function WalletLogin({ className }: { className?: string }) {
         {open && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} aria-hidden="true" />
-            <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-2xl bg-surface p-2 shadow-[0_30px_60px_-25px_rgba(23,20,9,0.45)]">
+            <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden border-2 border-ink-950 bg-surface p-2 shadow-hard">
               <p className="px-3 py-2 font-mono text-xs text-ink-400">{session.address}</p>
               <Link
                 href="/transactions"
@@ -116,7 +116,7 @@ export function WalletLogin({ className }: { className?: string }) {
         type="button"
         onClick={() => (pickable ? setOpen((v) => !v) : void signIn())}
         disabled={busy || session.status === "loading"}
-        className="flex items-center gap-2 rounded-full bg-ink-900 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-ink-900/15 transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60 dark:bg-white dark:text-ink-950 dark:hover:bg-sun-100"
+        className="flex items-center gap-2 border-2 border-ink-950 bg-night px-4 py-2 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60"
       >
         {busy ? (
           <svg viewBox="0 0 24 24" className="size-4 animate-spin" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
@@ -141,7 +141,7 @@ export function WalletLogin({ className }: { className?: string }) {
             }}
             aria-hidden="true"
           />
-          <div className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-2xl bg-surface p-2 shadow-[0_30px_60px_-25px_rgba(23,20,9,0.45)]">
+          <div className="absolute right-0 z-50 mt-2 w-60 overflow-hidden border-2 border-ink-950 bg-surface p-2 shadow-hard">
             {pickable && (
               <>
                 <p className="px-3 pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider text-ink-400">

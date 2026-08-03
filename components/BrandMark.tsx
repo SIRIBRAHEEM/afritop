@@ -31,7 +31,7 @@ export function BrandMark({
     return (
       <span
         className={cn(
-          "grid shrink-0 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-ink-100",
+          "grid shrink-0 place-items-center overflow-hidden border-2 border-ink-950 bg-white",
           className,
         )}
         style={{ width: size, height: size }}
@@ -50,7 +50,7 @@ export function BrandMark({
 
   return (
     <span
-      className={cn("grid shrink-0 place-items-center rounded-full font-extrabold text-ink-900", className)}
+      className={cn("grid shrink-0 place-items-center font-extrabold text-ink-950", className)}
       style={{ backgroundColor: color, width: size, height: size, fontSize: size * 0.36 }}
     >
       {short.charAt(0)}

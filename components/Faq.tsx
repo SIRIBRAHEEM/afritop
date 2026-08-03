@@ -34,18 +34,21 @@ export function Faq() {
       {FAQS.map((f, i) => {
         const isOpen = open === i;
         return (
-          <div key={f.q} className="py-1.5">
+          <div key={f.q} className="py-2">
             <button
               type="button"
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between gap-4 rounded-3xl px-5 py-5 text-left transition-colors hover:bg-ink-50/60 sm:px-6"
+              className={cn(
+                "flex w-full items-center justify-between gap-4 border-2 border-ink-950 bg-surface px-5 py-5 text-left shadow-hard-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hard sm:px-6",
+                isOpen && "bg-brand-50",
+              )}
             >
               <span className="font-display text-lg font-bold text-ink-900 sm:text-xl">{f.q}</span>
               <span
                 className={cn(
-                  "grid size-9 shrink-0 place-items-center rounded-full bg-ink-100 text-ink-600 transition-all duration-300",
-                  isOpen && "rotate-45 bg-brand-600 text-white",
+                  "grid size-9 shrink-0 place-items-center border-2 border-ink-950 text-ink-950 transition-all duration-300",
+                  isOpen ? "rotate-45 bg-night text-[#d4ff3f]" : "bg-surface",
                 )}
               >
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

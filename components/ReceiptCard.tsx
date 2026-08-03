@@ -20,15 +20,15 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
   return (
     <div className="flex-1 bg-paper">
       <div className="mx-auto max-w-xl px-4 py-14 sm:py-20">
-        <div className="animate-pop overflow-hidden rounded-3xl bg-surface shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
+        <div className="animate-pop overflow-hidden border-2 border-ink-950 bg-surface shadow-hard">
           {/* Header */}
           <div
             className={
               delivered
-                ? "bg-gradient-to-br from-brand-600 to-brand-800 px-7 py-10 text-center text-white"
+                ? "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-[#d4ff3f]"
                 : failed
-                  ? "bg-gradient-to-br from-red-500 to-red-700 px-7 py-10 text-center text-white"
-                  : "bg-gradient-to-br from-ink-700 to-ink-900 px-7 py-10 text-center text-white"
+                  ? "border-b-2 border-ink-950 bg-red-600 px-7 py-10 text-center text-white"
+                  : "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-[#d4ff3f]"
             }
           >
             <span className="relative mx-auto grid size-16 place-items-center">
@@ -39,15 +39,15 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
                     : "absolute inset-0 rounded-full bg-white/20"
                 }
               />
-              <span className="relative grid size-16 place-items-center rounded-full bg-surface text-3xl shadow-lg">
+              <span className="relative grid size-16 place-items-center border-2 border-ink-950 bg-surface text-3xl shadow-hard">
                 {delivered ? (
-                  <svg viewBox="0 0 24 24" className="size-8 text-brand-600" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
                 ) : failed ? (
                   <span className="text-3xl">⚠️</span>
                 ) : (
-                  <svg viewBox="0 0 24 24" className="size-8 text-ink-600" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="9" />
                     <path d="M12 7v5l3 3" />
                   </svg>
@@ -70,7 +70,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
 
           {/* Body */}
           <div className="px-7 py-7">
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-bold">
               <Detail label="Order" value={entry.id} mono />
               <Detail label="Status" value={<StatusChip status={entry.status} />} />
               <Detail label="Service" value={entry.service} capitalize />
@@ -80,7 +80,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             </dl>
 
             {entry.bundle && (
-              <div className="mt-5 flex items-center justify-between rounded-2xl bg-ink-50 px-4 py-3 text-sm">
+              <div className="mt-5 flex items-center justify-between border-2 border-ink-950 bg-ink-50 px-4 py-3 text-sm shadow-hard-sm">
                 <span className="font-semibold text-ink-500">Bundle</span>
                 <span className="font-bold text-ink-900">
                   {entry.bundle.size} · {entry.bundle.validity}
@@ -90,7 +90,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
 
             {/* Electricity token */}
             {entry.token && (
-              <div className="mt-5 rounded-2xl bg-night p-5 text-center">
+              <div className="mt-5 border-2 border-ink-950 bg-night p-5 text-center shadow-hard">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
                   Recharge token · 20 digits
                 </p>
@@ -107,12 +107,12 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             )}
 
             {entry.message && delivered && (
-              <p className="mt-5 rounded-2xl bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
+              <p className="mt-5 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 shadow-hard-sm">
                 ℹ️ {entry.message}
               </p>
             )}
 
-            <div className="mt-5 flex items-center justify-between rounded-2xl bg-ink-50/70 px-4 py-3 text-sm">
+            <div className="mt-5 flex items-center justify-between border-2 border-ink-950 bg-ink-50/70 px-4 py-3 text-sm shadow-hard-sm">
               <span className="font-bold text-ink-900">Paid</span>
               <span className="font-mono text-base font-extrabold text-brand-700">
                 {formatUsd(entry.usdTotal)}
@@ -123,7 +123,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             </div>
 
             {entry.txHash && entry.chainId && (
-              <div className="mt-4 flex items-center justify-between rounded-2xl bg-ink-50 px-4 py-3 text-sm">
+              <div className="mt-4 flex items-center justify-between border-2 border-ink-950 bg-ink-50 px-4 py-3 text-sm shadow-hard-sm">
                 <span className="font-semibold text-ink-500">On-chain receipt</span>
                 <a
                   href={txExplorerLink(entry.txHash, entry.chainId)}
@@ -142,13 +142,13 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/buy"
-                className="flex-1 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 px-6 py-3.5 text-center text-sm font-extrabold text-white shadow-lg shadow-brand-600/25 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                className="flex-1 border-2 border-ink-950 bg-night px-6 py-3.5 text-center text-sm font-extrabold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard"
               >
                 Buy another top-up
               </Link>
               <Link
                 href="/transactions"
-                className="flex-1 rounded-2xl bg-ink-50 px-6 py-3.5 text-center text-sm font-extrabold text-ink-700 transition-colors hover:bg-ink-100"
+                className="flex-1 border-2 border-ink-950 bg-ink-50 px-6 py-3.5 text-center text-sm font-extrabold text-ink-950 shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-brand-50 hover:shadow-hard"
               >
                 View transactions
               </Link>

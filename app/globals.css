@@ -4,62 +4,70 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: var(--font-space), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-pixel), var(--font-space), ui-monospace, monospace;
+  --font-mono: var(--font-vt323), var(--font-space), ui-monospace, monospace;
 
-  /* Warm paper — the page canvas */
-  --color-paper: #faf7f0;
+  /* ── Cypherpunk palette ─────────────────────────────────────
+   * Electric-lime canvas, near-black ink, beige raised surfaces.
+   * Strict rules: 2px near-black borders, crisp 2px corners, hard
+   * offset shadows, no soft gradients, no pill shapes.
+   */
 
-  /* Card surface — `bg-surface` for cards/chips on the canvas (theme-aware). */
-  --color-surface: #ffffff;
+  /* Electric lime — the page canvas every section sits on. */
+  --color-paper: #d4ff3f;
 
-  /* Always-dark surfaces (footer, pay-panel header, token tiles) — never inverts. */
-  --color-night: #171409;
+  /* Beige — cards, inputs, buttons and secondary controls. */
+  --color-surface: #ece4d3;
 
-  /* Brand — deep forest green (growth, grounded, African green) */
-  --color-brand-50: #eef3ec;
-  --color-brand-100: #d9e5d6;
-  --color-brand-200: #b4ccb0;
-  --color-brand-300: #89ab86;
-  --color-brand-400: #5f8a60;
-  --color-brand-500: #446f48;
-  --color-brand-600: #345938;
-  --color-brand-700: #2b4a2f;
-  --color-brand-800: #233c27;
-  --color-brand-900: #1b2f1f;
-  --color-brand-950: #0e1b11;
+  /* Near-black — always-dark surfaces (footer, pay header, CTA block). */
+  --color-night: #0a0a0a;
 
-  /* Sun — warm amber (energy / power) */
-  --color-sun-50: #fdf8eb;
-  --color-sun-100: #f9edc8;
-  --color-sun-200: #f2d98f;
-  --color-sun-300: #eabf57;
-  --color-sun-400: #e2a532;
-  --color-sun-500: #d18a1e;
-  --color-sun-600: #b36b16;
-  --color-sun-700: #8f4e15;
-  --color-sun-800: #763f17;
-  --color-sun-900: #643516;
+  /* Brand — near-black ink (primary CTAs, emphasis). */
+  --color-brand-50: #f4efe2;
+  --color-brand-100: #e8e0c8;
+  --color-brand-200: #d8cbab;
+  --color-brand-300: #c2b18a;
+  --color-brand-400: #0a0a0a;
+  --color-brand-500: #0a0a0a;
+  --color-brand-600: #0a0a0a;
+  --color-brand-700: #0a0a0a;
+  --color-brand-800: #0a0a0a;
+  --color-brand-900: #0a0a0a;
+  --color-brand-950: #000000;
 
-  /* Ink — warm brown-tinted neutrals */
-  --color-ink-50: #f7f5ee;
-  --color-ink-100: #ece7da;
-  --color-ink-200: #d9d1bd;
-  --color-ink-300: #b9ae93;
-  --color-ink-400: #8d8270;
-  --color-ink-500: #756b5c;
-  --color-ink-600: #5d5447;
-  --color-ink-700: #4a4238;
-  --color-ink-800: #3a332b;
-  --color-ink-900: #27231c;
-  --color-ink-950: #171409;
+  /* Sun — lime accent on dark surfaces + black for legacy button bgs. */
+  --color-sun-50: #f4efe2;
+  --color-sun-100: #e9e1ca;
+  --color-sun-200: #d9ccae;
+  --color-sun-300: #d4ff3f;
+  --color-sun-400: #0a0a0a;
+  --color-sun-500: #0a0a0a;
+  --color-sun-600: #0a0a0a;
+  --color-sun-700: #0a0a0a;
+  --color-sun-800: #2b2617;
+  --color-sun-900: #0a0a0a;
+
+  /* Ink — near-black neutrals (reading text). */
+  --color-ink-50: #f4efe2;
+  --color-ink-100: #e7dfc9;
+  --color-ink-200: #0a0a0a;
+  --color-ink-300: #6f6856;
+  --color-ink-400: #4c4639;
+  --color-ink-500: #2e2a22;
+  --color-ink-600: #1d1a15;
+  --color-ink-700: #14120d;
+  --color-ink-800: #0d0b08;
+  --color-ink-900: #0a0a0a;
+  --color-ink-950: #0a0a0a;
 
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-fade-in: fade-in 0.6s ease-out both;
   --animate-pop: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   --animate-float: float 7s ease-in-out infinite;
   --animate-ping-slow: ping-slow 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-border-beam: border-beam 9s linear infinite;
 }
 
 @keyframes fade-up {
@@ -82,35 +90,116 @@
   0% { transform: scale(1); opacity: 0.6; }
   80%, 100% { transform: scale(1.9); opacity: 0; }
 }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes border-beam {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Shimmer sweep for primary CTAs (Magic UI ShimmerButton pattern). */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgb(212 255 63 / 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.btn-shimmer:hover::after {
+  transform: translateX(120%);
+}
+.btn-shimmer:focus-visible::after {
+  transform: translateX(120%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-shimmer::after { transition: none; transform: none; opacity: 0; }
+  .animate-marquee, .animate-border-beam { animation: none; }
+}
 
 /* ── Dark theme ────────────────────────────────────────────────
- * Override the warm-paper design tokens so every `bg-paper`, `bg-surface` and
- * `ink-*` utility (text, chips, muted panels) swaps automatically. The ink
- * scale is luminance-inverted: ink-950 becomes the lightest (headings/text),
- * ink-50 the darkest (soft panels). Brand + sun palettes are theme-neutral.
+ * Cypherpunk dark variant: black canvas, dark beige surfaces, lime
+ * accents on dark backgrounds. Inverted so the toggle actually
+ * changes the look while staying strictly Cypherpunk.
  */
 .dark {
   color-scheme: dark;
-  --color-paper: #14110b;
-  --color-surface: #1f1b13;
+  --color-paper: #0a0a0a;
+  --color-surface: #1c1c1c;
 
-  --color-ink-50: #2c2820;
-  --color-ink-100: #423c2f;
-  --color-ink-200: #57503f;
-  --color-ink-300: #6b6350;
-  --color-ink-400: #8a8168;
-  --color-ink-500: #948b71;
-  --color-ink-600: #aba38a;
-  --color-ink-700: #c4bda5;
-  --color-ink-800: #d9d3bf;
-  --color-ink-900: #e9e4d4;
-  --color-ink-950: #f4f0e4;
+  --color-brand-50: #2a2a2a;
+  --color-brand-100: #333333;
+  --color-brand-200: #444444;
+  --color-brand-300: #555555;
+  --color-brand-400: #d4ff3f;
+  --color-brand-500: #d4ff3f;
+  --color-brand-600: #d4ff3f;
+  --color-brand-700: #d4ff3f;
+  --color-brand-800: #d4ff3f;
+  --color-brand-900: #d4ff3f;
+  --color-brand-950: #000000;
+
+  --color-sun-50: #1a1a1a;
+  --color-sun-100: #2a2a2a;
+  --color-sun-200: #3a3a3a;
+  --color-sun-300: #d4ff3f;
+  --color-sun-400: #d4ff3f;
+  --color-sun-500: #d4ff3f;
+  --color-sun-600: #d4ff3f;
+  --color-sun-700: #d4ff3f;
+  --color-sun-800: #d4ff3f;
+  --color-sun-900: #d4ff3f;
+
+  --color-ink-50: #1a1a1a;
+  --color-ink-100: #2a2a2a;
+  --color-ink-200: #3a3a3a;
+  --color-ink-300: #8a8a8a;
+  --color-ink-400: #999999;
+  --color-ink-500: #bbbbbb;
+  --color-ink-600: #d4d4d4;
+  --color-ink-700: #e8e8e8;
+  --color-ink-800: #2a2a2a;
+  --color-ink-900: #fafafa;
+  --color-ink-950: #ffffff;
+
+  /* Re-skin the body text to lime-on-black */
+  body {
+    color: var(--color-ink-900);
+  }
+
+  ::selection {
+    background-color: #d4ff3f;
+    color: #0a0a0a;
+  }
 }
 
-/* Subtle grid lines for dark canvases. */
-.dark .bg-grid-light {
-  background-image: linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+/* ── Strict base rules ─────────────────────────────────────────
+ * Crisp 2px corners on layout containers — no pill shapes, no soft
+ * rounding on cards, buttons, inputs, panels. Tiny dots and ping
+ * animation elements keep their native rounding so they remain
+ * legible as visual indicators.
+ */
+@layer base {
+  * {
+    border-radius: 2px;
+  }
+  /* Restore native rounding on tiny decorative dots, ping animation
+   * elements, and size-1.5/2/3.5 spans that serve as indicators. */
+  .rounded-full {
+    border-radius: 9999px;
+  }
 }
 
 body {
@@ -118,39 +207,64 @@ body {
   color: var(--color-ink-900);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: "ss01", "cv01";
 }
 
 ::selection {
-  background-color: var(--color-sun-200);
-  color: var(--color-ink-950);
+  background-color: #0a0a0a;
+  color: #d4ff3f;
 }
 
-/* Decorative helper backgrounds */
+/* Retro hard offset shadows — the Cypherpunk replacement for soft
+ * glossy depth. */
+@utility shadow-hard-sm {
+  box-shadow: 3px 3px 0 0 var(--color-ink-950);
+}
+@utility shadow-hard {
+  box-shadow: 4px 4px 0 0 var(--color-ink-950);
+}
+@utility shadow-hard-lg {
+  box-shadow: 6px 6px 0 0 var(--color-ink-950);
+}
+
+/* Bold grid lines on lime and on black. */
 .bg-grid-light {
-  background-image: linear-gradient(to right, rgb(39 35 28 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(39 35 28 / 0.05) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgb(10 10 10 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(10 10 10 / 0.08) 1px, transparent 1px);
   background-size: 44px 44px;
 }
 .bg-grid-dark {
-  background-image: linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgb(212 255 63 / 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(212 255 63 / 0.12) 1px, transparent 1px);
   background-size: 44px 44px;
-}
-.bg-radial-sun {
-  background: radial-gradient(42rem 28rem at 78% -10%, rgb(226 165 50 / 0.14), transparent 60%),
-    radial-gradient(36rem 26rem at 10% 110%, rgb(68 111 72 / 0.25), transparent 60%);
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Thin elegant scrollbar */
+/* shadcn-style helper utilities (Tailwind v4 @utility) */
+@utility wrap-break-word {
+  overflow-wrap: anywhere;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-ink-950);
+  }
+  &::-webkit-scrollbar-thumb:hover { background: var(--color-ink-700); }
+}
+
+/* Blocky scrollbars */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-track { background: var(--color-paper); }
 *::-webkit-scrollbar-thumb {
-  background: var(--color-ink-200);
-  border-radius: 999px;
+  background: var(--color-ink-950);
   border: 2px solid var(--color-paper);
 }
-*::-webkit-scrollbar-thumb:hover { background: var(--color-ink-300); }
+*::-webkit-scrollbar-thumb:hover { background: var(--color-ink-700); }

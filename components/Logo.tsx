@@ -2,20 +2,22 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * Brand logo — the official mark image rendered in a soft white chip (no
- * border/ring) so it reads cleanly on both the light navbar and dark footer.
+ * Cypherpunk Afritop wordmark — pixel-style "AFRITOP" text in a night-black
+ * chip with lime text, 2px black border and hard offset shadow.
+ * In dark mode the chip stays black and the text turns lime.
  */
 export function Logo({ className, light }: { className?: string; light?: boolean }) {
   return (
     <Link href="/" className={cn("group inline-flex items-center", className)}>
       <span
         className={cn(
-          "grid h-11 items-center overflow-hidden rounded-2xl bg-white px-2.5 shadow-[0_12px_32px_-14px_rgba(23,20,9,0.45)] transition-transform duration-300 group-hover:-rotate-2 group-hover:scale-[1.03]",
-          light && "shadow-black/40",
+          "grid h-11 items-center border-2 border-ink-950 bg-night px-3 shadow-hard-sm transition-transform duration-300 group-hover:-translate-y-0.5",
+          light && "shadow-hard-sm",
         )}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.png" alt="Afritop" className="h-9 w-auto object-contain" />
+        <span className="font-display text-lg font-bold tracking-[0.3em] text-[#d4ff3f]">
+          AFRITOP
+        </span>
       </span>
     </Link>
   );

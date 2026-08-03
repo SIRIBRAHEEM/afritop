@@ -22,14 +22,19 @@ export default async function PayPage({
     return (
       <div className="grid flex-1 place-items-center bg-paper px-4 py-24">
         <div className="max-w-md rounded-3xl bg-surface p-8 text-center shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
-          <span className="text-4xl">🔍</span>
+          <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-paper text-ink-950 shadow-hard">
+            <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+          </span>
           <h1 className="mt-4 font-display text-2xl font-bold text-ink-900">Order not found</h1>
           <p className="mt-2 text-sm text-ink-500">
             We couldn&apos;t find that order. It may have expired or already been paid.
           </p>
           <a
             href="/buy"
-            className="mt-6 inline-flex rounded-full bg-ink-900 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-ink-800 dark:bg-sun-400 dark:text-ink-950 dark:hover:bg-sun-300"
+            className="mt-6 inline-flex rounded-full bg-ink-900 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-ink-800 dark:bg-sun-400 dark:text-night dark:hover:bg-sun-300"
           >
             Back to top-up
           </a>

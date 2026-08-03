@@ -48,7 +48,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-checked={dark}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={() => applyTheme(!dark)}
-      className={`grid size-10 place-items-center rounded-full text-ink-600 transition-all hover:bg-ink-100 hover:text-ink-900 ${className ?? ""}`}
+      className={`grid size-10 place-items-center border-2 border-ink-950 text-ink-600 shadow-hard-sm transition-all hover:bg-ink-100 hover:text-ink-950 ${className ?? ""}`}
     >
       {dark ? (
         <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

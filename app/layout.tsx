@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Fraunces, Geist_Mono } from "next/font/google";
+import { Pixelify_Sans, Space_Mono, VT323 } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { SupportChat } from "@/components/SupportChat";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+// Cypherpunk type stack: Pixelify Sans for pixel-display headings,
+// Space Mono for the technical mono body, VT323 for terminal-style labels.
+const pixel = Pixelify_Sans({
+  variable: "--font-pixel",
   subsets: ["latin"],
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const space = Space_Mono({
+  variable: "--font-space",
+  weight: ["400", "700"],
   subsets: ["latin"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const vt323 = VT323({
+  variable: "--font-vt323",
+  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
@@ -58,11 +63,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${jakarta.variable} ${fraunces.variable} ${geistMono.variable} h-full`}
+      className={`${pixel.variable} ${space.variable} ${vt323.variable} h-full`}
       suppressHydrationWarning
     >
       <head>
         {/* Apply the saved/system theme before paint so there's no flash. */}
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/logo.svg" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("afritop-theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})();`,
@@ -73,6 +80,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />
+        <SupportChat />
       </body>
     </html>
   );
