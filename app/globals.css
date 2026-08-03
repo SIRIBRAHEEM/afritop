@@ -52,8 +52,8 @@
   --color-ink-50: #f4efe2;
   --color-ink-100: #e7dfc9;
   --color-ink-200: #0a0a0a;
-  --color-ink-300: #6f6856;
-  --color-ink-400: #4c4639;
+  --color-ink-300: #56503f;
+  --color-ink-400: #4a4438;
   --color-ink-500: #2e2a22;
   --color-ink-600: #1d1a15;
   --color-ink-700: #14120d;
@@ -165,9 +165,9 @@
   --color-ink-50: #1a1a1a;
   --color-ink-100: #2a2a2a;
   --color-ink-200: #3a3a3a;
-  --color-ink-300: #8a8a8a;
-  --color-ink-400: #999999;
-  --color-ink-500: #bbbbbb;
+  --color-ink-300: #9c9c9c;
+  --color-ink-400: #a8a8a8;
+  --color-ink-500: #c2c2c2;
   --color-ink-600: #d4d4d4;
   --color-ink-700: #e8e8e8;
   --color-ink-800: #2a2a2a;
@@ -185,15 +185,24 @@
   }
 }
 
-/* ── Strict base rules ─────────────────────────────────────────
- * Crisp 2px corners on layout containers — no pill shapes, no soft
- * rounding on cards, buttons, inputs, panels. Tiny dots and ping
- * animation elements keep their native rounding so they remain
- * legible as visual indicators.
+/* ── Base corner rules ─────────────────────────────────────────
+ * A crisp, modern corner radius on every layout container, card,
+ * button, input and panel. Tiny dots and ping-animation elements
+ * keep their native rounding so they stay legible as indicators.
  */
 @layer base {
   * {
-    border-radius: 2px;
+    border-radius: 0.625rem; /* 10px — rounded but still technical */
+  }
+  /* Tailwind v4 preflight resets buttons/inputs to 0 — override those too
+   * so interactive controls share the same corner radius as cards. */
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"],
+  [role="switch"] {
+    border-radius: 0.625rem;
   }
   /* Restore native rounding on tiny decorative dots, ping animation
    * elements, and size-1.5/2/3.5 spans that serve as indicators. */

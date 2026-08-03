@@ -362,7 +362,7 @@ function BuyFlow() {
                   >
                     <span className="block text-2xl">{c.flag}</span>
                     <span className="mt-1.5 block text-sm font-extrabold text-ink-900">{c.name}</span>
-                    <span className="block text-[11px] font-semibold text-ink-400">{c.currency}</span>
+                    <span className="block text-xs font-bold text-ink-500">{c.currency}</span>
                   </button>
                 ))}
               </div>
@@ -554,7 +554,7 @@ function BuyFlow() {
                   <span className="font-display text-lg font-bold text-ink-900">Total</span>
                   <span className="font-mono text-xl font-extrabold text-brand-700">{formatUsd(usdTotal)}</span>
                 </div>
-                <p className="pt-1 text-[11px] leading-relaxed text-ink-400">
+                <p className="pt-1 text-xs font-medium leading-relaxed text-ink-500">
                   Charged in USDC · indicative rate: 1 USD ≈{" "}
                   <span className="font-mono font-bold text-ink-600">
                     {FX_RATES[country.currency]} {country.currency}
@@ -632,7 +632,7 @@ function BuyFlow() {
                         className="inline-flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 font-bold text-ink-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <BrandMark logo={w.iconUrl} name={w.name} short={w.name} color={w.color} size={22} />
-                        <span className="text-[11px]">{w.name}</span>
+                        <span className="text-xs font-bold">{w.name}</span>
                       </a>
                     ))}
                   </div>
@@ -665,7 +665,7 @@ function BuyFlow() {
                 )}
               </button>
 
-              <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-semibold text-ink-400">
+              <p className="mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-ink-500">
                 <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <rect x="4" y="10" width="16" height="11" rx="2" />
                   <path d="M8 10V7a4 4 0 0 1 8 0v3" />

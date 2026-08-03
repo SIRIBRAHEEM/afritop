@@ -130,18 +130,18 @@ export default function Home() {
                 className="absolute -left-4 -top-7 z-10 w-44 -rotate-6 border-2 border-ink-950 bg-surface p-4 shadow-hard sm:-left-8"
                 style={{ animationDelay: "0.8s" }}
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest text-ink-400">Electricity · ECG</p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-ink-500">Electricity · ECG</p>
                 <p className="mt-1 font-mono text-sm font-bold tracking-widest text-ink-950">4623-9182-…</p>
-                <p className="mt-1.5 text-[10px] text-ink-400">GH₵ 100 prepaid token</p>
+                <p className="mt-1.5 text-[11px] font-semibold text-ink-500">GH₵ 100 prepaid token</p>
               </div>
               {/* floating data card */}
               <div
                 className="absolute -right-3 top-12 z-10 w-44 rotate-6 border-2 border-ink-950 bg-surface p-4 shadow-hard sm:-right-6"
                 style={{ animationDelay: "1.6s" }}
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest text-ink-400">Data · Safaricom</p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-ink-500">Data · Safaricom</p>
                 <p className="mt-1 text-sm font-bold text-ink-950">5 GB · KSh 750</p>
-                <p className="mt-1.5 text-[10px] text-ink-400">30 days validity</p>
+                <p className="mt-1.5 text-[11px] font-semibold text-ink-500">30 days validity</p>
               </div>
 
               {/* main phone card */}
@@ -183,7 +183,7 @@ export default function Home() {
                   </span>
                 </div>
 
-                <p className="mt-4 text-center font-mono text-[11px] font-bold text-ink-400">
+                <p className="mt-4 text-center font-mono text-xs font-bold text-ink-500">
                   Paid in USDC · <span className="text-ink-950">$0.37</span>
                 </p>
               </div>

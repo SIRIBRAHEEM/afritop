@@ -65,7 +65,7 @@ export function PaymentNetworks() {
               <h3 className="font-display text-xl font-bold text-ink-950">
                 Works with your wallet
               </h3>
-              <span className="border-2 border-ink-950 bg-paper px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-950 shadow-hard-sm">
+              <span className="border-2 border-ink-950 bg-paper px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950 shadow-hard-sm">
                 EIP-6963
               </span>
             </div>
@@ -104,7 +104,7 @@ export function PaymentNetworks() {
                     <span className="block truncate text-sm font-extrabold text-ink-950">
                       {w.name}
                     </span>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-ink-400">
+                    <span className="block text-[11px] font-bold uppercase tracking-wider text-ink-500">
                       EVM wallet
                     </span>
                   </span>
@@ -121,7 +121,7 @@ export function PaymentNetworks() {
                 <h3 className="font-display text-xl font-bold text-[#d4ff3f]">
                   Arc by Circle
                 </h3>
-                <span className="border-2 border-ink-950 bg-surface px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-950 shadow-hard-sm">
+                <span className="border-2 border-ink-950 bg-surface px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950 shadow-hard-sm">
                   Testnet
                 </span>
               </div>
@@ -186,7 +186,7 @@ export function PaymentNetworks() {
                   <h4 className="mt-3 font-display text-sm font-bold text-ink-950">
                     {t.title}
                   </h4>
-                  <p className="mt-1 text-[11px] leading-relaxed text-ink-400">
+                  <p className="mt-1 text-xs font-medium leading-relaxed text-ink-500">
                     {t.text}
                   </p>
                 </div>

@@ -323,7 +323,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         <div className="animate-fade-up overflow-hidden border-2 border-ink-950 bg-surface shadow-hard">
           <div className="border-b-2 border-ink-950 bg-night px-7 py-6 text-[#d4ff3f]">
             <div className="flex items-center justify-between">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-400">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink-500">
                 Order {order.id}
               </p>
               <span className="border-2 border-ink-950 bg-surface px-3 py-1 text-[11px] font-bold text-ink-950 shadow-hard-sm">
@@ -382,7 +382,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   <span className={cn("block text-sm font-extrabold", active ? "text-brand-800" : "text-ink-400")}>
                     {c.short}
                   </span>
-                  <span className={cn("block text-[10px] font-semibold", active ? "text-brand-600" : "text-ink-400")}>
+                  <span className={cn("block text-[11px] font-bold", active ? "text-brand-600" : "text-ink-500")}>
                     {c.testnet ? "Testnet" : "Mainnet"}
                   </span>
                   {locked && (
@@ -573,13 +573,13 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           {/* Receiver */}
           <div className="mt-5 border-2 border-ink-950 bg-ink-50/70 px-4 py-3 shadow-hard-sm">
             <div className="flex items-center justify-between">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+              <p className="text-xs font-bold uppercase tracking-widest text-ink-500">
                 Paying to (receiver)
               </p>
               <button
                 type="button"
                 onClick={() => void copyReceiver()}
-                className="text-[11px] font-bold text-brand-700 hover:text-brand-600"
+                className="text-xs font-bold text-brand-700 hover:text-brand-600"
               >
                 {copied ? "Copied!" : "Copy"}
               </button>

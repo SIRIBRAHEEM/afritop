@@ -116,7 +116,7 @@ export function WalletLogin({ className }: { className?: string }) {
         type="button"
         onClick={() => (pickable ? setOpen((v) => !v) : void signIn())}
         disabled={busy || session.status === "loading"}
-        className="flex items-center gap-2 border-2 border-ink-950 bg-night px-4 py-2 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60"
+        className="flex items-center gap-2 border-2 border-ink-950 bg-night px-4 py-2 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60 dark:bg-surface"
       >
         {busy ? (
           <svg viewBox="0 0 24 24" className="size-4 animate-spin" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
@@ -144,7 +144,7 @@ export function WalletLogin({ className }: { className?: string }) {
           <div className="absolute right-0 z-50 mt-2 w-60 overflow-hidden border-2 border-ink-950 bg-surface p-2 shadow-hard">
             {pickable && (
               <>
-                <p className="px-3 pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider text-ink-400">
+                <p className="px-3 pb-1 pt-2 text-xs font-bold uppercase tracking-wider text-ink-500">
                   Connect a wallet
                 </p>
                 {wallets.map((w) => (
@@ -161,7 +161,7 @@ export function WalletLogin({ className }: { className?: string }) {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={w.icon} alt="" className="size-6 rounded-lg object-contain" />
                     ) : (
-                      <span className="grid size-6 place-items-center rounded-lg bg-ink-100 text-[10px] font-extrabold text-ink-600">
+                      <span className="grid size-6 place-items-center rounded-lg bg-ink-100 text-[11px] font-extrabold text-ink-700">
                         {w.name.slice(0, 2)}
                       </span>
                     )}

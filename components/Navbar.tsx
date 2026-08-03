@@ -64,7 +64,7 @@ export function Navbar() {
           <WalletLogin />
           <Link
             href="/buy"
-            className="hidden border-2 border-ink-950 bg-night px-5 py-2.5 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard sm:inline-flex"
+            className="hidden border-2 border-ink-950 bg-night px-5 py-2.5 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard sm:inline-flex dark:bg-surface"
           >
             Top up now
           </Link>
@@ -108,7 +108,7 @@ export function Navbar() {
           <Link
             href="/buy"
             onClick={() => setOpen(false)}
-            className="mt-2 block border-2 border-ink-950 bg-night px-4 py-3 text-center text-sm font-bold text-[#d4ff3f]"
+            className="mt-2 block border-2 border-ink-950 bg-night px-4 py-3 text-center text-sm font-bold text-[#d4ff3f] dark:bg-surface"
           >
             Top up now
           </Link>

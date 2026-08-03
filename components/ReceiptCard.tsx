@@ -91,7 +91,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             {/* Electricity token */}
             {entry.token && (
               <div className="mt-5 border-2 border-ink-950 bg-night p-5 text-center shadow-hard">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+                <p className="text-xs font-bold uppercase tracking-widest text-ink-500">
                   Recharge token · 20 digits
                 </p>
                 <p className="mt-3 font-mono text-2xl font-bold tracking-[0.15em] text-sun-300 sm:text-3xl">

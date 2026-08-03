@@ -397,7 +397,7 @@ export function SupportChat() {
               <Send className="size-4" />
             </button>
           </div>
-          <p className="mt-2 text-center text-[10px] font-bold text-ink-400">
+          <p className="mt-2 text-center text-[11px] font-bold text-ink-500">
             Support hours: 24/7 · Usually replies in under 2 minutes
           </p>
         </div>
