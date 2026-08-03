@@ -3,6 +3,7 @@ import { COUNTRIES, SERVICES } from "@/lib/catalog";
 import { formatLocal } from "@/lib/fx";
 import { Faq } from "@/components/Faq";
 import { LiveFxRates } from "@/components/LiveFxRates";
+import { PaymentNetworks } from "@/components/PaymentNetworks";
 import { NumberTicker } from "@/components/ui/NumberTicker";
 import { Marquee } from "@/components/ui/Marquee";
 import { BorderBeam } from "@/components/ui/BorderBeam";
@@ -341,6 +342,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Supported payment networks ─────────────────────── */}
+      <PaymentNetworks />
 
       {/* ── Why Afritop ──────────────────────────────────────── */}
       <section id="pricing" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
