@@ -11,6 +11,7 @@ import { subscribeReceipts, getReceiptsSnapshot, type ReceiptEntry } from "@/lib
 import {
   ensureSessionLoaded,
   getSessionSnapshot,
+  LOADING_SESSION,
   subscribeSession,
 } from "@/lib/wallet-session";
 import { getCountry } from "@/lib/catalog";
@@ -69,9 +70,7 @@ function shortAddress(address: string): string {
 }
 
 export default function TransactionsPage() {
-  const session = useSyncExternalStore(subscribeSession, getSessionSnapshot, () => ({
-    status: "loading" as const,
-  }));
+  const session = useSyncExternalStore(subscribeSession, getSessionSnapshot, () => LOADING_SESSION);
   const [serverOrders, setServerOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reload, setReload] = useState(0);
@@ -119,7 +118,7 @@ export default function TransactionsPage() {
         <div className="flex flex-wrap items-end justify-between gap-4 animate-fade-up">
           <div>
             <p className="text-sm font-bold uppercase tracking-widest text-brand-600">History</p>
-            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-ink-900 sm:text-5xl">
+            <h1 className="mt-2 font-display text-h2 font-bold text-ink-900">
               Transactions
             </h1>
             {signedIn ? (
@@ -175,7 +174,7 @@ export default function TransactionsPage() {
         ) : null}
 
         {error && (
-          <div className="mt-6 border-2 border-ink-950 bg-red-50 px-4 py-3 text-sm font-bold text-red-600 shadow-hard-sm">
+          <div className="mt-6 border-2 border-ink-950 bg-red-50 px-4 py-3 text-sm font-bold text-red-600 shadow-hard-sm dark:bg-red-500/15 dark:text-red-400">
             {error}
           </div>
         )}
@@ -188,7 +187,12 @@ export default function TransactionsPage() {
           </div>
         ) : rows.length === 0 ? (
           <div className="mt-12 border-2 border-ink-950 bg-ink-50/50 px-6 py-20 text-center shadow-hard">
-            <span className="text-5xl">🧾</span>
+            <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-surface text-ink-950">
+              <svg viewBox="0 0 24 24" className="size-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+            </span>
             <h2 className="mt-5 text-xl font-extrabold text-ink-900">No transactions yet</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">
               {signedIn
@@ -197,7 +201,7 @@ export default function TransactionsPage() {
             </p>
             <Link
               href="/buy"
-              className="mt-6 inline-flex border-2 border-ink-950 bg-night px-7 py-3 text-sm font-extrabold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard"
+              className="btn-cta mt-6 inline-flex border-2 border-ink-950 bg-night px-7 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800"
             >
               Make your first top-up
             </Link>

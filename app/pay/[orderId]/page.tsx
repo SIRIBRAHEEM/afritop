@@ -21,8 +21,8 @@ export default async function PayPage({
   if (!order) {
     return (
       <div className="grid flex-1 place-items-center bg-paper px-4 py-24">
-        <div className="max-w-md rounded-3xl bg-surface p-8 text-center shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
-          <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-paper text-ink-950 shadow-hard">
+        <div className="max-w-md border-2 border-ink-950 bg-surface p-8 text-center">
+          <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-paper text-ink-950">
             <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
@@ -34,7 +34,7 @@ export default async function PayPage({
           </p>
           <a
             href="/buy"
-            className="mt-6 inline-flex rounded-full bg-ink-900 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-ink-800 dark:bg-sun-400 dark:text-night dark:hover:bg-sun-300"
+            className="btn-cta mt-6 inline-flex border-2 border-ink-950 bg-night px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-ink-800"
           >
             Back to top-up
           </a>

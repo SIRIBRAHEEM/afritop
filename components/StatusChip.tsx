@@ -33,7 +33,7 @@ export function StatusChip({ status }: { status: OrderStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-2.5 py-1 text-xs font-bold text-ink-950 shadow-hard-sm",
+        "inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-2.5 py-1 text-xs font-bold text-ink-950",
       )}
     >
       <span className={cn("size-1.5", s.dot)} />

@@ -40,7 +40,7 @@ export function Faq() {
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
               className={cn(
-                "flex w-full items-center justify-between gap-4 border-2 border-ink-950 bg-surface px-5 py-5 text-left shadow-hard-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hard sm:px-6",
+                "flex w-full items-center justify-between gap-4 border-2 border-ink-950 bg-surface px-5 py-5 text-left transition-all duration-200 hover:-translate-y-0.5 sm:px-6",
                 isOpen && "bg-brand-50",
               )}
             >
@@ -48,7 +48,7 @@ export function Faq() {
               <span
                 className={cn(
                   "grid size-9 shrink-0 place-items-center border-2 border-ink-950 transition-all duration-300",
-                  isOpen ? "rotate-45 bg-night text-[#d4ff3f]" : "bg-surface text-ink-950",
+                  isOpen ? "btn-cta rotate-45 bg-night text-[#d4ff3f]" : "bg-surface text-ink-950",
                 )}
               >
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

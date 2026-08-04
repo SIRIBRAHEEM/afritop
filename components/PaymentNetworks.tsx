@@ -45,14 +45,14 @@ export function PaymentNetworks() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-widest text-ink-400">
+            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">
               How you pay
             </p>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">
+            <h2 className="mt-3 font-display text-4xl font-bold text-ink-950 sm:text-5xl">
               Supported payment networks
             </h2>
           </div>
-          <p className="max-w-xs text-sm text-ink-400">
+          <p className="max-w-xs text-sm text-ink-500">
             Connect any of these wallets — we detect what&apos;s installed and
             settle in USDC on Arc.
           </p>
@@ -60,16 +60,16 @@ export function PaymentNetworks() {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
           {/* ── Wallets ── */}
-          <div className="border-2 border-ink-950 bg-surface p-7 shadow-hard-sm sm:p-8">
+          <div className="border-2 border-ink-950 bg-surface p-7 sm:p-8">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-xl font-bold text-ink-950">
                 Works with your wallet
               </h3>
-              <span className="border-2 border-ink-950 bg-paper px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950 shadow-hard-sm">
+              <span className="border-2 border-ink-950 bg-paper px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950">
                 EIP-6963
               </span>
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-ink-400">
+            <p className="mt-2 text-sm leading-relaxed text-ink-500">
               Install any of these and we&apos;ll detect it automatically when you
               check out — no accounts, no sign-ups.
             </p>
@@ -81,7 +81,7 @@ export function PaymentNetworks() {
                   href={w.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 border-2 border-ink-950 bg-paper px-3.5 py-3 shadow-hard-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50 hover:shadow-hard"
+                  className="group flex items-center gap-3 border-2 border-ink-950 bg-paper px-3.5 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
                 >
                   <BrandMark
                     logo={
@@ -116,21 +116,21 @@ export function PaymentNetworks() {
           {/* ── Network + trust points ── */}
           <div className="flex flex-col gap-6">
             {/* Network card */}
-            <div className="border-2 border-ink-950 bg-night p-7 text-white shadow-hard">
+            <div className="border-2 border-ink-950 bg-night p-7 text-white">
               <div className="flex items-center justify-between">
-                <h3 className="font-display text-xl font-bold text-[#d4ff3f]">
+                <h3 className="font-display text-xl font-bold text-white">
                   Arc by Circle
                 </h3>
-                <span className="border-2 border-ink-950 bg-surface px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950 shadow-hard-sm">
+                <span className="border-2 border-ink-950 bg-surface px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950">
                   Testnet
                 </span>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-white/60">
+              <p className="mt-2 text-sm leading-relaxed text-white/70">
                 A stablecoin-native L1 built by Circle — sub-second finality,
                 gas paid in USDC.
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-3 py-1.5 font-mono text-xs font-bold text-ink-950 shadow-hard-sm">
+                <span className="inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-3 py-1.5 font-mono text-xs font-bold text-ink-950">
                   <svg
                     viewBox="0 0 24 24"
                     className="size-3.5"
@@ -145,7 +145,7 @@ export function PaymentNetworks() {
                   </svg>
                   USDC
                 </span>
-                <span className="inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-3 py-1.5 font-mono text-xs font-bold text-ink-950 shadow-hard-sm">
+                <span className="inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-3 py-1.5 font-mono text-xs font-bold text-ink-950">
                   <svg
                     viewBox="0 0 24 24"
                     className="size-3.5"
@@ -168,9 +168,9 @@ export function PaymentNetworks() {
               {TRUST_POINTS.map((t) => (
                 <div
                   key={t.title}
-                  className="border-2 border-ink-950 bg-surface p-4 shadow-hard-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hard"
+                  className="border-2 border-ink-950 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5"
                 >
-                  <span className="grid size-9 place-items-center border-2 border-ink-950 bg-night text-[#d4ff3f] shadow-hard-sm">
+                  <span className="btn-cta grid size-9 place-items-center border-2 border-ink-950 bg-night text-white">
                     <svg
                       viewBox="0 0 24 24"
                       className="size-4"

@@ -13,7 +13,10 @@ export type SessionState =
   | { status: "signedOut" }
   | { status: "signedIn"; address: `0x${string}` };
 
-let state: SessionState = { status: "loading" };
+/** Stable module-level reference for the server snapshot (must be cached). */
+export const LOADING_SESSION: SessionState = { status: "loading" };
+
+let state: SessionState = LOADING_SESSION;
 let initialized = false;
 const listeners = new Set<() => void>();
 

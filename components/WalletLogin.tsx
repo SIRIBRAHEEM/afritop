@@ -6,12 +6,14 @@ import {
   connectWith,
   getDetectedWallets,
   getInjectedProvider,
+  NO_WALLETS,
   onWalletsChange,
   type DetectedWallet,
 } from "@/lib/web3";
 import {
   ensureSessionLoaded,
   getSessionSnapshot,
+  LOADING_SESSION,
   signInWithWallet,
   signOutSession,
   subscribeSession,
@@ -24,11 +26,9 @@ function shortAddress(address: string): string {
 }
 
 export function WalletLogin({ className }: { className?: string }) {
-  const session = useSyncExternalStore(subscribeSession, getSessionSnapshot, () => ({
-    status: "loading" as const,
-  }));
+  const session = useSyncExternalStore(subscribeSession, getSessionSnapshot, () => LOADING_SESSION);
   // EIP-6963 wallet discovery is external state — subscribe via the store hook.
-  const wallets = useSyncExternalStore(onWalletsChange, getDetectedWallets, () => [] as DetectedWallet[]);
+  const wallets = useSyncExternalStore(onWalletsChange, getDetectedWallets, () => NO_WALLETS);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +66,7 @@ export function WalletLogin({ className }: { className?: string }) {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-700 shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-brand-100"
+          className="flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3.5 py-2 text-sm font-medium text-brand-700 transition-all hover:-translate-y-0.5 hover:bg-brand-100"
         >
           <span className="relative flex size-2">
             <span className="animate-ping-slow absolute inline-flex size-2 rounded-full bg-brand-500" />
@@ -86,7 +86,7 @@ export function WalletLogin({ className }: { className?: string }) {
               <Link
                 href="/transactions"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold text-ink-700 transition-colors hover:bg-ink-50"
+                className="flex items-center gap-2.5 px-3 py-2.5 text-sm font-bold text-ink-700 transition-colors hover:bg-ink-50"
               >
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 3v18h18M7 15l4-4 3 3 5-6" />
@@ -96,7 +96,7 @@ export function WalletLogin({ className }: { className?: string }) {
               <button
                 type="button"
                 onClick={() => void signOutSession()}
-                className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold text-red-500 transition-colors hover:bg-red-50"
+                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm font-bold text-red-500 transition-colors hover:bg-red-50"
               >
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
@@ -116,7 +116,7 @@ export function WalletLogin({ className }: { className?: string }) {
         type="button"
         onClick={() => (pickable ? setOpen((v) => !v) : void signIn())}
         disabled={busy || session.status === "loading"}
-        className="flex items-center gap-2 border-2 border-ink-950 bg-night px-4 py-2 text-sm font-bold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60 dark:bg-surface"
+        className="btn-cta flex items-center gap-2 border-2 border-ink-950 bg-night px-4 py-2 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60"
       >
         {busy ? (
           <svg viewBox="0 0 24 24" className="size-4 animate-spin" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
@@ -155,13 +155,13 @@ export function WalletLogin({ className }: { className?: string }) {
                       setOpen(false);
                       void signIn(w);
                     }}
-                    className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold text-ink-700 transition-colors hover:bg-ink-50"
+                    className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm font-bold text-ink-700 transition-colors hover:bg-ink-50"
                   >
                     {w.icon ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={w.icon} alt="" className="size-6 rounded-lg object-contain" />
+                      <img src={w.icon} alt="" className="size-6 object-contain" />
                     ) : (
-                      <span className="grid size-6 place-items-center rounded-lg bg-ink-100 text-[11px] font-extrabold text-ink-700">
+                      <span className="grid size-6 place-items-center bg-ink-100 text-[11px] font-extrabold text-ink-700">
                         {w.name.slice(0, 2)}
                       </span>
                     )}

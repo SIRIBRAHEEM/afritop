@@ -20,32 +20,35 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
   return (
     <div className="flex-1 bg-paper">
       <div className="mx-auto max-w-xl px-4 py-14 sm:py-20">
-        <div className="animate-pop overflow-hidden border-2 border-ink-950 bg-surface shadow-hard">
+        <div className="animate-pop overflow-hidden border-2 border-ink-950 bg-surface">
           {/* Header */}
           <div
             className={
               delivered
-                ? "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-[#d4ff3f]"
+                ? "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
                 : failed
                   ? "border-b-2 border-ink-950 bg-red-600 px-7 py-10 text-center text-white"
-                  : "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-[#d4ff3f]"
+                  : "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
             }
           >
             <span className="relative mx-auto grid size-16 place-items-center">
               <span
                 className={
                   delivered
-                    ? "animate-ping-slow absolute inset-0 rounded-full bg-white/30"
-                    : "absolute inset-0 rounded-full bg-white/20"
+                    ? "animate-ping-slow absolute inset-0 bg-white/30"
+                    : "absolute inset-0 bg-white/20"
                 }
               />
-              <span className="relative grid size-16 place-items-center border-2 border-ink-950 bg-surface text-3xl shadow-hard">
+              <span className="relative grid size-16 place-items-center border-2 border-ink-950 bg-surface text-3xl">
                 {delivered ? (
                   <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
                 ) : failed ? (
-                  <span className="text-3xl">⚠️</span>
+                  <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+                    <path d="M12 9v4M12 17h.01" />
+                  </svg>
                 ) : (
                   <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="9" />
@@ -54,7 +57,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
                 )}
               </span>
             </span>
-            <h1 className="mt-5 font-display text-3xl font-bold tracking-tight">
+            <h1 className="mt-5 font-display text-3xl font-bold">
               {delivered ? "Delivered!" : failed ? "Delivery failed" : "Payment received"}
             </h1>
             <p className="mx-auto mt-2 max-w-sm text-sm text-white/80">
@@ -80,7 +83,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             </dl>
 
             {entry.bundle && (
-              <div className="mt-5 flex items-center justify-between border-2 border-ink-950 bg-ink-50 px-4 py-3 text-sm shadow-hard-sm">
+              <div className="mt-5 flex items-center justify-between border-2 border-ink-950 bg-ink-50 px-4 py-3 text-sm">
                 <span className="font-semibold text-ink-500">Bundle</span>
                 <span className="font-bold text-ink-900">
                   {entry.bundle.size} · {entry.bundle.validity}
@@ -90,7 +93,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
 
             {/* Electricity token */}
             {entry.token && (
-              <div className="mt-5 border-2 border-ink-950 bg-night p-5 text-center shadow-hard">
+              <div className="mt-5 border-2 border-ink-950 bg-night p-5 text-center">
                 <p className="text-xs font-bold uppercase tracking-widest text-ink-500">
                   Recharge token · 20 digits
                 </p>
@@ -107,12 +110,16 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             )}
 
             {entry.message && delivered && (
-              <p className="mt-5 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 shadow-hard-sm">
-                ℹ️ {entry.message}
+              <p className="mt-5 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
+                <svg viewBox="0 0 24 24" className="mr-1.5 inline size-3.5 -mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 8v4M12 16h.01" />
+                </svg>
+                {entry.message}
               </p>
             )}
 
-            <div className="mt-5 flex items-center justify-between border-2 border-ink-950 bg-ink-50/70 px-4 py-3 text-sm shadow-hard-sm">
+            <div className="mt-5 flex items-center justify-between border-2 border-ink-950 bg-ink-50/70 px-4 py-3 text-sm">
               <span className="font-bold text-ink-900">Paid</span>
               <span className="font-mono text-base font-extrabold text-brand-700">
                 {formatUsd(entry.usdTotal)}
@@ -123,7 +130,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             </div>
 
             {entry.txHash && entry.chainId && (
-              <div className="mt-4 flex items-center justify-between border-2 border-ink-950 bg-ink-50 px-4 py-3 text-sm shadow-hard-sm">
+              <div className="mt-4 flex items-center justify-between border-2 border-ink-950 bg-ink-50 px-4 py-3 text-sm">
                 <span className="font-semibold text-ink-500">On-chain receipt</span>
                 <a
                   href={txExplorerLink(entry.txHash, entry.chainId)}
@@ -142,13 +149,13 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/buy"
-                className="flex-1 border-2 border-ink-950 bg-night px-6 py-3.5 text-center text-sm font-extrabold text-[#d4ff3f] shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-ink-800 hover:shadow-hard"
+                className="btn-cta flex-1 border-2 border-ink-950 bg-night px-6 py-3.5 text-center text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800"
               >
                 Buy another top-up
               </Link>
               <Link
                 href="/transactions"
-                className="flex-1 border-2 border-ink-950 bg-ink-50 px-6 py-3.5 text-center text-sm font-extrabold text-ink-950 shadow-hard-sm transition-all hover:-translate-y-0.5 hover:bg-brand-50 hover:shadow-hard"
+                className="flex-1 border-2 border-ink-950 bg-ink-50 px-6 py-3.5 text-center text-sm font-bold text-ink-950 transition-all hover:-translate-y-0.5 hover:bg-brand-50"
               >
                 View transactions
               </Link>
@@ -203,7 +210,7 @@ function CopyButton({ token }: { token: string }) {
     <button
       type="button"
       onClick={() => void copy()}
-      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/20"
+      className="inline-flex items-center gap-2 border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/20"
     >
       {copied ? (
         <>

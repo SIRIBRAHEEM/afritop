@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Slot } from "@/components/ui/slot";
 
 const attachmentVariants = cva(
-  "group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap border-2 border-ink-950 bg-surface text-ink-900 shadow-hard-sm transition-colors focus-within:border-ink-800",
+  "group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap border-2 border-ink-950 bg-surface text-ink-900 transition-colors focus-within:border-ink-800",
   {
     variants: {
       size: {

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Pixelify_Sans, Space_Mono, VT323 } from "next/font/google";
+import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SupportChat } from "@/components/SupportChat";
 
-// Cypherpunk type stack: Pixelify Sans for pixel-display headings,
-// Space Mono for the technical mono body, VT323 for terminal-style labels.
-const pixel = Pixelify_Sans({
-  variable: "--font-pixel",
+// Retro-terminal type stack: Inter for body/nav/buttons, Space Mono for
+// the big monospace all-lowercase headlines and technical accents.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -16,13 +16,6 @@ const pixel = Pixelify_Sans({
 const space = Space_Mono({
   variable: "--font-space",
   weight: ["400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const vt323 = VT323({
-  variable: "--font-vt323",
-  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
@@ -63,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${pixel.variable} ${space.variable} ${vt323.variable} h-full`}
+      className={`${inter.variable} ${space.variable} h-full`}
       suppressHydrationWarning
     >
       <head>

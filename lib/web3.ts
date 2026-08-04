@@ -35,6 +35,9 @@ export interface WalletConnection {
   provider: EIP1193Provider;
 }
 
+/** Stable empty-wallet reference for server snapshots (must be cached). */
+export const NO_WALLETS: DetectedWallet[] = [];
+
 export const WALLET_INSTALLS = [
   {
     name: "MetaMask",

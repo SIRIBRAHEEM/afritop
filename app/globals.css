@@ -4,9 +4,38 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: var(--font-space), ui-monospace, "SF Mono", Menlo, monospace;
-  --font-display: var(--font-pixel), var(--font-space), ui-monospace, monospace;
-  --font-mono: var(--font-vt323), var(--font-space), ui-monospace, monospace;
+  /* Retro-terminal type stack: Inter for body/nav/buttons, Space Mono for
+   * the big monospace headlines and terminal accents. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-space), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono: var(--font-space), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Display type scale — raw mono headline sizes, fluid so they stay in the
+   * 60–80px band on desktop and scale down on small screens. Tight lines,
+   * no letter-spacing (the .font-display rule forces 0). Use as text-hero /
+   * text-h2 on headline elements. */
+  --text-hero: clamp(3rem, 8vw, 5rem);
+  --text-hero--line-height: 0.98;
+  --text-h2: clamp(2.25rem, 5vw, 3rem);
+  --text-h2--line-height: 1;
+
+  /* Flat design system — every shadow token is neutralized. Depth comes
+   * from crisp 2px near-black borders, never drop shadows. */
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-2xl: none;
+
+  /* Sharp, minimal corner radius — 6px max on cards and controls. */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.375rem;
+  --radius-3xl: 0.375rem;
+  --radius-4xl: 0.375rem;
 
   /* ── Cypherpunk palette ─────────────────────────────────────
    * Electric-lime canvas, near-black ink, beige raised surfaces.
@@ -67,7 +96,6 @@
   --animate-float: float 7s ease-in-out infinite;
   --animate-ping-slow: ping-slow 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
   --animate-marquee: marquee 40s linear infinite;
-  --animate-border-beam: border-beam 9s linear infinite;
 }
 
 @keyframes fade-up {
@@ -94,39 +122,14 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-@keyframes border-beam {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
 
-/* Shimmer sweep for primary CTAs (Magic UI ShimmerButton pattern). */
-.btn-shimmer {
-  position: relative;
-  overflow: hidden;
-}
+/* Legacy shimmer class kept as a no-op — the design system is flat,
+ * so primary CTAs no longer sweep a gradient across themselves. */
 .btn-shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    115deg,
-    transparent 30%,
-    rgb(212 255 63 / 0.28) 50%,
-    transparent 70%
-  );
-  transform: translateX(-120%);
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-.btn-shimmer:hover::after {
-  transform: translateX(120%);
-}
-.btn-shimmer:focus-visible::after {
-  transform: translateX(120%);
+  display: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn-shimmer::after { transition: none; transform: none; opacity: 0; }
-  .animate-marquee, .animate-border-beam { animation: none; }
+  .animate-marquee { animation: none; }
 }
 
 /* ── Dark theme ────────────────────────────────────────────────
@@ -183,16 +186,31 @@
     background-color: #d4ff3f;
     color: #0a0a0a;
   }
+
+  /* Primary CTAs: solid-black buttons would vanish into the near-black canvas,
+   * so in dark mode they flip to the lime accent with black ink + a black
+   * outline — the cypherpunk inversion of the light-mode black button.
+   * Light mode is untouched (btn-cta is a no-op without .dark). */
+  .btn-cta {
+    background-color: var(--color-brand-400);
+    border-color: #0a0a0a;
+    color: #0a0a0a;
+  }
+  .btn-cta:hover {
+    /* Fixed darker lime — color-mix() with a var gets statically resolved by
+     * LightningCSS at build time, which would bake in the light-theme value. */
+    background-color: #bbe037;
+  }
 }
 
 /* ── Base corner rules ─────────────────────────────────────────
- * A crisp, modern corner radius on every layout container, card,
- * button, input and panel. Tiny dots and ping-animation elements
- * keep their native rounding so they stay legible as indicators.
+ * Sharp, minimal corner radius (6px max) on every layout container,
+ * card, button, input and panel — the flat "printed" pixel-edged look.
+ * Pills (rounded-full) are reserved for tabs and tiny indicator dots.
  */
 @layer base {
   * {
-    border-radius: 0.625rem; /* 10px — rounded but still technical */
+    border-radius: 0.375rem; /* 6px — sharp but not harsh */
   }
   /* Tailwind v4 preflight resets buttons/inputs to 0 — override those too
    * so interactive controls share the same corner radius as cards. */
@@ -202,12 +220,18 @@
   textarea,
   [role="button"],
   [role="switch"] {
-    border-radius: 0.625rem;
+    border-radius: 0.375rem;
   }
   /* Restore native rounding on tiny decorative dots, ping animation
    * elements, and size-1.5/2/3.5 spans that serve as indicators. */
   .rounded-full {
     border-radius: 9999px;
+  }
+  /* Headline font is raw monospace, bold and all-lowercase — the
+   * terminal statement look. No letter-spacing tricks, tight lines. */
+  .font-display {
+    text-transform: lowercase;
+    letter-spacing: 0;
   }
 }
 
@@ -218,33 +242,32 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Full-bleed lime canvas wrapped in a thin black frame that hugs the
+ * viewport edges — like a hard 2px outline around the whole page. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  border: 2px solid var(--color-ink-950);
+  pointer-events: none;
+  z-index: 9999;
+}
+
 ::selection {
   background-color: #0a0a0a;
   color: #d4ff3f;
 }
 
-/* Retro hard offset shadows — the Cypherpunk replacement for soft
- * glossy depth. */
+/* Legacy hard-shadow utilities kept as no-ops — the flat design system
+ * relies on crisp 2px borders for depth, never drop shadows. */
 @utility shadow-hard-sm {
-  box-shadow: 3px 3px 0 0 var(--color-ink-950);
+  box-shadow: none;
 }
 @utility shadow-hard {
-  box-shadow: 4px 4px 0 0 var(--color-ink-950);
+  box-shadow: none;
 }
 @utility shadow-hard-lg {
-  box-shadow: 6px 6px 0 0 var(--color-ink-950);
-}
-
-/* Bold grid lines on lime and on black. */
-.bg-grid-light {
-  background-image: linear-gradient(to right, rgb(10 10 10 / 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(10 10 10 / 0.08) 1px, transparent 1px);
-  background-size: 44px 44px;
-}
-.bg-grid-dark {
-  background-image: linear-gradient(to right, rgb(212 255 63 / 0.12) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(212 255 63 / 0.12) 1px, transparent 1px);
-  background-size: 44px 44px;
+  box-shadow: none;
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }

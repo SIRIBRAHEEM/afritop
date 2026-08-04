@@ -2,22 +2,26 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * Cypherpunk Afritop wordmark — pixel-style "AFRITOP" text in a night-black
- * chip with lime text, 2px black border and hard offset shadow.
- * In dark mode the chip stays black and the text turns lime.
+ * Retro-terminal Afritop logo — a small solid-black square with a white bolt
+ * glyph, followed by a clean sans-serif "AFRITOP" wordmark. No fills except
+ * solid black and white. `light` switches the wordmark to white for dark
+ * surfaces (footer, CTA block).
  */
 export function Logo({ className, light }: { className?: string; light?: boolean }) {
   return (
-    <Link href="/" className={cn("group inline-flex items-center", className)}>
+    <Link href="/" className={cn("group inline-flex items-center gap-2.5", className)}>
+      <span className="grid size-9 place-items-center bg-night text-white transition-transform duration-200 group-hover:-translate-y-0.5">
+        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      </span>
       <span
         className={cn(
-          "grid h-11 items-center border-2 border-ink-950 bg-night px-3 shadow-hard-sm transition-transform duration-300 group-hover:-translate-y-0.5",
-          light && "shadow-hard-sm",
+          "font-sans text-lg font-bold tracking-tight",
+          light ? "text-white" : "text-ink-950",
         )}
       >
-        <span className="font-display text-lg font-bold tracking-[0.3em] text-[#d4ff3f]">
-          AFRITOP
-        </span>
+        AFRITOP
       </span>
     </Link>
   );

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Slot } from "@/components/ui/slot";
 
 const markerVariants = cva(
-  "group/marker relative flex min-h-4 w-full items-center gap-2 text-left text-sm text-ink-400 border-2 border-ink-950 bg-surface px-3 py-2 shadow-hard-sm [&_svg:not([class*='size-'])]:size-4",
+  "group/marker relative flex min-h-4 w-full items-center gap-2 text-left text-sm text-ink-400 border-2 border-ink-950 bg-surface px-3 py-2 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {

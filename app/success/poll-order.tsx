@@ -53,17 +53,17 @@ export function PollOrder({ orderId }: { orderId: string }) {
   }
 
   return (
-    <div className="grid flex-1 place-items-center bg-ink-50 px-4 py-24">
-      <div className="max-w-md rounded-3xl bg-surface p-8 text-center shadow-[0_30px_70px_-40px_rgba(22,20,14,0.45)]">
+    <div className="grid flex-1 place-items-center bg-paper px-4 py-24">
+      <div className="max-w-md border-2 border-ink-950 bg-surface p-8 text-center">
         <span className="relative mx-auto grid size-16 place-items-center">
-          <span className="animate-ping-slow absolute inset-0 rounded-full bg-brand-300/60" />
-          <span className="relative grid size-16 place-items-center rounded-full bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-lg">
+          <span className="animate-ping-slow absolute inset-0 bg-brand-300/60" />
+          <span className="relative grid size-16 place-items-center border-2 border-ink-950 bg-night text-white">
             <svg viewBox="0 0 24 24" className="size-7 animate-spin" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M12 2a10 10 0 0 1 10 10" />
             </svg>
           </span>
         </span>
-        <h1 className="mt-5 text-xl font-extrabold text-ink-900">Payment received</h1>
+        <h1 className="mt-5 font-display text-2xl font-bold text-ink-900">Payment received</h1>
         <p className="mt-2 text-sm leading-relaxed text-ink-500">
           Your order <span className="font-mono font-bold text-ink-700">{orderId}</span> is being
           fulfilled. We&apos;re waiting for Circle to confirm the settlement — this usually takes a

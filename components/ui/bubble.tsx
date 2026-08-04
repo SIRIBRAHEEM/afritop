@@ -15,12 +15,12 @@ function BubbleGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const bubbleVariants = cva(
-  "group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full border-2 border-ink-950 bg-surface shadow-hard-sm",
+  "group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full border-2 border-ink-950 bg-surface",
   {
     variants: {
       variant: {
         default:
-          "*:data-[slot=bubble-content]:bg-night *:data-[slot=bubble-content]:text-[#d4ff3f] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-ink-800",
+          "*:data-[slot=bubble-content]:bg-night *:data-[slot=bubble-content]:text-white [&>[data-slot=bubble-content]:is(button,a):hover]:bg-ink-800",
         secondary:
           "*:data-[slot=bubble-content]:bg-paper *:data-[slot=bubble-content]:text-ink-950 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--color-paper),var(--color-ink-950)_8%)]",
         muted:

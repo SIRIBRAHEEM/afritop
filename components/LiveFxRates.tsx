@@ -117,7 +117,7 @@ export function LiveFxRates() {
         CURRENCIES.map((c) => (
           <span
             key={c.code}
-            className="inline-flex items-center gap-1 border-2 border-ink-950 bg-paper px-4 py-2 font-mono text-sm text-ink-950 shadow-hard-sm"
+            className="inline-flex items-center gap-1 border-2 border-ink-950 bg-paper px-4 py-2 font-mono text-sm text-ink-950"
           >
             <span className="inline-block h-4 w-6 animate-pulse bg-ink-200" />
             <span className="text-ink-400">→ $</span>1 ·
@@ -129,7 +129,7 @@ export function LiveFxRates() {
           {rateEntries.map((entry) => (
             <span
               key={entry.code}
-              className="group relative border-2 border-ink-950 bg-paper px-4 py-2 font-mono text-sm text-ink-950 shadow-hard-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hard"
+              className="group relative border-2 border-ink-950 bg-paper px-4 py-2 font-mono text-sm text-ink-950 transition-all duration-200 hover:-translate-y-0.5"
             >
               {entry.code}{" "}
               <span className="text-ink-400">
