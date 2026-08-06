@@ -176,7 +176,7 @@ function MessageScrollerButton({
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}
       className={cn(
-        "absolute left-1/2 z-10 grid size-9 -translate-x-1/2 place-items-center border-2 border-ink-950 bg-surface text-ink-950 transition-all duration-300 hover:bg-ink-100",
+        "absolute left-1/2 z-10 grid size-9 -translate-x-1/2 place-items-center rounded-full border-2 border-ink-950 bg-surface text-ink-950 shadow-[0_8px_20px_-6px_rgba(10,10,10,0.4)] transition-all duration-300 hover:bg-ink-100",
         "bottom-4 data-[active=false]:pointer-events-none data-[active=false]:translate-y-3 data-[active=false]:scale-90 data-[active=false]:opacity-0",
         "data-[active=true]:translate-y-0 data-[active=true]:scale-100 data-[active=true]:opacity-100",
         direction === "start" && "top-4 bottom-auto [&_svg]:rotate-180",

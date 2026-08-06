@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CheckCheck, Headset, Loader2, Send, X } from "lucide-react";
+import { CheckCheck, Headset, Mail, Package, Send, UserRound, X, Zap } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -13,7 +13,6 @@ import {
   MessageHeader,
 } from "@/components/ui/message";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
-import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -35,6 +34,12 @@ interface ChatMsg {
 
 const CONV_KEY = "afritop-support-conv";
 const EMAIL_KEY = "afritop-support-email";
+
+const QUICK_REPLIES = [
+  { icon: Package, label: "Track my order" },
+  { icon: Zap, label: "Pay with USDC" },
+  { icon: UserRound, label: "Talk to a human" },
+];
 
 function convId(): string {
   try {
@@ -131,12 +136,40 @@ function autoReply(text: string, email: string): { reply: string; saveEmail?: bo
 
 function AgentAvatar({ online = true }: { online?: boolean }) {
   return (
-    <span className="relative grid size-8 shrink-0 place-items-center overflow-hidden border-2 border-ink-950 bg-night text-white">
-      <span className="font-display text-sm font-bold">A</span>
+    <span className="relative grid size-8 shrink-0 place-items-center rounded-full border-2 border-ink-950 bg-night text-white shadow-[0_2px_8px_-2px_rgba(10,10,10,0.45)]">
+      <svg
+        viewBox="0 0 24 24"
+        className="size-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
       {online && (
-        <span className="absolute bottom-0 right-0 size-2.5 bg-white border-2 border-ink-950" />
+        <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full border-2 border-surface bg-emerald-400" />
       )}
     </span>
+  );
+}
+
+function TypingDots() {
+  return (
+    <div className="flex w-fit items-center gap-2 rounded-[18px] rounded-bl-[6px] border-2 border-ink-950 bg-surface px-4 py-3 shadow-[0_1px_8px_-2px_rgba(10,10,10,0.12)]">
+      <span className="flex items-center gap-1" aria-label="Ada is typing">
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className="size-1.5 animate-bounce rounded-full bg-ink-400 motion-reduce:animate-none"
+            style={{ animationDelay: `${i * 0.15}s` }}
+          />
+        ))}
+      </span>
+      <span className="text-xs font-semibold text-ink-400">Ada is typing…</span>
+    </div>
   );
 }
 
@@ -312,6 +345,7 @@ export function SupportChat() {
   };
 
   const latestId = messages[messages.length - 1]?.id;
+  const showQuickReplies = open && messages.length === 1 && !typing;
 
   return (
     <>
@@ -327,8 +361,7 @@ export function SupportChat() {
           aria-expanded={open}
           aria-label={open ? "Close support chat" : "Open support chat"}
           className={cn(
-            "btn-cta group relative grid size-14 place-items-center border-2 border-ink-950 text-white transition-all duration-300 hover:-translate-y-1",
-            open ? "bg-night rotate-90" : "bg-night",
+            "btn-cta group relative grid size-14 place-items-center rounded-full border-2 border-ink-950 bg-night text-white shadow-[0_10px_30px_-8px_rgba(10,10,10,0.6)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_16px_40px_-8px_rgba(10,10,10,0.7)]",
           )}
         >
           {open ? (
@@ -339,13 +372,13 @@ export function SupportChat() {
 
           {/* unread dot */}
           {unread && !open && (
-            <span className="absolute -right-0.5 -top-0.5 flex size-5 items-center justify-center rounded-full bg-sun-400 text-[10px] font-extrabold text-paper ring-2 ring-paper">
+            <span className="absolute -right-0.5 -top-0.5 flex size-5 items-center justify-center rounded-full border-2 border-ink-950 bg-sun-400 text-[10px] font-extrabold text-paper">
               1
             </span>
           )}
 
           {/* hover label */}
-          <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap border-2 border-ink-950 bg-surface px-3.5 py-1.5 text-xs font-bold text-ink-950 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:block">
+          <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full border-2 border-ink-950 bg-surface px-3.5 py-1.5 text-xs font-semibold text-ink-950 opacity-0 shadow-[0_8px_20px_-8px_rgba(10,10,10,0.5)] transition-opacity duration-200 group-hover:opacity-100 sm:block">
             Chat with us
           </span>
         </button>
@@ -355,7 +388,7 @@ export function SupportChat() {
       <div
         className={cn(
           "fixed z-[59] flex flex-col overflow-hidden border-2 border-ink-950 bg-surface transition-all duration-300 ease-out",
-          "inset-x-0 bottom-0 h-[82dvh] max-h-[640px] sm:inset-x-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:w-[400px]",
+          "inset-x-0 bottom-0 h-[82dvh] max-h-[640px] rounded-t-[24px] sm:inset-x-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:w-[400px] sm:rounded-[24px] sm:shadow-[0_32px_80px_-16px_rgba(10,10,10,0.5)]",
           open
             ? "translate-y-0 opacity-100 sm:translate-y-0 sm:scale-100"
             : "pointer-events-none translate-y-8 opacity-0 sm:translate-y-4 sm:scale-[0.97]",
@@ -367,28 +400,48 @@ export function SupportChat() {
         inert={!open || undefined}
       >
         {/* Header */}
-        <div className="relative shrink-0 overflow-hidden border-b-2 border-ink-950 bg-night px-5 pb-5 pt-4 text-white">
+        <div className="relative shrink-0 overflow-hidden border-b-2 border-ink-950 bg-night px-5 pb-4 pt-4 text-white">
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+            style={{
+              background:
+                "radial-gradient(420px 150px at 12% -25%, rgba(212,255,63,0.16), transparent 70%)",
+            }}
+          />
           <div className="relative flex items-center gap-3">
-            <div className="relative">
-              <span className="grid size-11 place-items-center border-2 border-ink-950 bg-surface">
-                <svg viewBox="0 0 24 24" className="size-5 text-ink-950" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
+            <span className="relative grid size-11 shrink-0 place-items-center rounded-full border-2 border-ink-950 bg-surface text-ink-950 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.5)]">
+              <svg
+                viewBox="0 0 24 24"
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              <span className="absolute -bottom-0.5 -right-0.5 flex size-3.5">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                <span className="relative inline-flex size-3.5 rounded-full border-2 border-night bg-emerald-400" />
               </span>
-              <span className="absolute -bottom-1 -right-1 size-3.5 bg-white border-2 border-ink-950" />
-            </div>
+            </span>
             <div className="min-w-0 flex-1">
-              <p className="font-display text-base font-bold text-white">Afritop Support</p>
-              <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/70">
-                <span className="size-1.5 animate-pulse bg-white" />
-                AI replies instantly · team replies by email
+              <p className="font-display text-[15px] font-bold tracking-tight text-white">
+                Afritop Support
+              </p>
+              <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/60">
+                <span className="size-1.5 rounded-full bg-emerald-400" />
+                Online — replies in seconds
               </p>
             </div>
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close chat"
-              className="grid size-9 place-items-center border-2 border-ink-950 bg-surface text-ink-950 transition-colors hover:bg-brand-50"
+              className="grid size-9 shrink-0 place-items-center rounded-full border-2 border-ink-950 bg-surface text-ink-950 transition-all hover:-translate-y-0.5 hover:bg-brand-50"
             >
               <X className="size-4" />
             </button>
@@ -397,28 +450,35 @@ export function SupportChat() {
 
         {/* Conversation */}
         <MessageScrollerProvider>
-          <MessageScroller className="flex-1 bg-paper border-t-2 border-ink-950">
+          <MessageScroller className="flex-1 border-t-2 border-ink-950 bg-paper">
             <MessageScrollerViewport className="px-4 pb-4 pt-5">
-              <MessageScrollerContent className="gap-7">
+              <MessageScrollerContent className="gap-6">
                 {messages.map((m) => {
                   const mine = m.role === "user";
                   return (
                     <MessageScrollerItem key={m.id} scrollAnchor={m.id === latestId}>
                       <Message align={mine ? "end" : "start"}>
                         {!mine && (
-                          <MessageAvatar>
+                          <MessageAvatar className="rounded-full">
                             <AgentAvatar />
                           </MessageAvatar>
                         )}
                         <MessageContent>
-                          <MessageGroup className="gap-2">
+                          <MessageGroup className="gap-1.5">
                             {!mine && (
                               <MessageHeader>
                                 {m.from === "team" ? "Support team" : "Ada · Afritop Support"}
                               </MessageHeader>
                             )}
                             <Bubble variant={mine ? "default" : "secondary"}>
-                              <BubbleContent dangerouslySetInnerHTML={{ __html: safeHtml(m.text) }} />
+                              <BubbleContent
+                                className={cn(
+                                  mine
+                                    ? "rounded-[18px] rounded-br-[6px] shadow-[0_2px_12px_-4px_rgba(10,10,10,0.35)]"
+                                    : "rounded-[18px] rounded-bl-[6px] shadow-[0_1px_8px_-2px_rgba(10,10,10,0.12)]",
+                                )}
+                                dangerouslySetInnerHTML={{ __html: safeHtml(m.text) }}
+                              />
                             </Bubble>
                           </MessageGroup>
                           <MessageFooter>
@@ -437,16 +497,11 @@ export function SupportChat() {
                 {typing && (
                   <MessageScrollerItem>
                     <Message align="start">
-                      <MessageAvatar>
+                      <MessageAvatar className="rounded-full">
                         <AgentAvatar />
                       </MessageAvatar>
                       <MessageContent>
-                        <Marker role="status">
-                          <MarkerIcon>
-                            <Loader2 className="animate-spin text-brand-500" />
-                          </MarkerIcon>
-                          <MarkerContent>Ada is typing…</MarkerContent>
-                        </Marker>
+                        <TypingDots />
                       </MessageContent>
                     </Message>
                   </MessageScrollerItem>
@@ -457,15 +512,37 @@ export function SupportChat() {
           </MessageScroller>
         </MessageScrollerProvider>
 
+        {/* Quick replies — shown on the welcome message */}
+        {showQuickReplies && (
+          <div className="no-scrollbar flex shrink-0 gap-2 overflow-x-auto border-t-2 border-ink-950 bg-paper px-4 py-3">
+            {QUICK_REPLIES.map((q) => {
+              const Icon = q.icon;
+              return (
+                <button
+                  key={q.label}
+                  type="button"
+                  onClick={() => send(q.label)}
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border-2 border-ink-950 bg-surface px-3.5 py-1.5 text-xs font-semibold text-ink-700 transition-all hover:-translate-y-0.5 hover:bg-brand-50 hover:text-ink-950"
+                >
+                  <Icon className="size-3.5" aria-hidden="true" />
+                  {q.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Email capture */}
         {email ? (
-          <div className="flex shrink-0 items-center gap-2 border-t-2 border-ink-950 bg-paper px-4 py-2">
-            <svg viewBox="0 0 24 24" className="size-3.5 shrink-0 text-ink-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <path d="m3 7 9 6 9-6" />
-            </svg>
-            <span className="min-w-0 flex-1 truncate text-xs font-bold text-ink-700">
-              Replies go to {email}
+          <div
+            className={cn(
+              "flex shrink-0 items-center gap-2 bg-paper px-4 py-2.5",
+              !showQuickReplies && "border-t-2 border-ink-950",
+            )}
+          >
+            <Mail className="size-3.5 shrink-0 text-ink-500" aria-hidden="true" />
+            <span className="min-w-0 flex-1 truncate text-xs font-semibold text-ink-500">
+              Replies go to <span className="text-ink-900">{email}</span>
             </span>
             <button
               type="button"
@@ -478,13 +555,18 @@ export function SupportChat() {
                 }
               }}
               aria-label="Remove email"
-              className="grid size-6 shrink-0 place-items-center border-2 border-ink-950 text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-950"
+              className="grid size-6 shrink-0 place-items-center rounded-full border-2 border-ink-950 text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-950"
             >
               <X className="size-3" />
             </button>
           </div>
         ) : (
-          <div className="flex shrink-0 items-center gap-2 border-t-2 border-ink-950 bg-paper px-4 py-2">
+          <div
+            className={cn(
+              "flex shrink-0 items-center gap-2 bg-paper px-4 py-2.5",
+              !showQuickReplies && "border-t-2 border-ink-950",
+            )}
+          >
             <input
               ref={emailRef}
               value={emailDraft}
@@ -494,13 +576,13 @@ export function SupportChat() {
               }}
               placeholder="Your email — so the team can reply"
               aria-label="Your email address"
-              className="min-w-0 flex-1 border-2 border-ink-950 bg-surface px-3 py-2 text-xs font-semibold text-ink-950 outline-none placeholder:text-ink-400"
+              className="min-w-0 flex-1 rounded-full border-2 border-ink-950 bg-surface px-3.5 py-2 text-xs font-semibold text-ink-950 outline-none transition-colors placeholder:text-ink-400 focus:bg-paper"
             />
             <button
               type="button"
               onClick={saveEmail}
               disabled={!EMAIL_RE.test(emailDraft.trim())}
-              className="btn-cta shrink-0 border-2 border-ink-950 bg-night px-3 py-2 text-xs font-bold text-white transition-all hover:bg-ink-800 disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-cta shrink-0 rounded-full border-2 border-ink-950 bg-night px-4 py-2 text-xs font-bold text-white transition-all hover:bg-ink-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Save
             </button>
@@ -509,7 +591,7 @@ export function SupportChat() {
 
         {/* Composer */}
         <div className="shrink-0 border-t-2 border-ink-950 bg-surface px-4 py-3.5">
-          <div className="flex items-center gap-2 border-2 border-ink-950 bg-surface px-3.5 py-1 transition-colors">
+          <div className="flex items-center gap-2 rounded-full border-2 border-ink-950 bg-paper py-1.5 pl-4 pr-1.5 transition-shadow focus-within:shadow-[0_0_0_3px_rgba(212,255,63,0.4)]">
             <input
               ref={inputRef}
               value={draft}
@@ -517,19 +599,19 @@ export function SupportChat() {
               onKeyDown={onKeyDown}
               placeholder="Type your message…"
               aria-label="Message Ada"
-              className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-ink-950 outline-none placeholder:text-ink-400"
+              className="min-w-0 flex-1 bg-transparent py-2 text-sm text-ink-950 outline-none placeholder:text-ink-400"
             />
             <button
               type="button"
               onClick={() => send(draft)}
               disabled={!draft.trim() || typing}
               aria-label="Send message"
-              className="btn-cta grid size-9 shrink-0 place-items-center border-2 border-ink-950 bg-night text-white transition-all hover:bg-ink-800 disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-cta grid size-9 shrink-0 place-items-center rounded-full border-2 border-ink-950 bg-night text-white transition-all hover:bg-ink-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Send className="size-4" />
             </button>
           </div>
-          <p className="mt-2 text-center text-[11px] font-bold text-ink-500">
+          <p className="mt-2 text-center text-[11px] font-semibold text-ink-400">
             For anything urgent, the team also replies by email — just save yours above.
           </p>
         </div>

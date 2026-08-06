@@ -17,7 +17,7 @@ export function Logo({ className, light }: { className?: string; light?: boolean
       </span>
       <span
         className={cn(
-          "font-sans text-lg font-bold tracking-tight",
+          "font-display text-lg font-bold tracking-tight",
           light ? "text-white" : "text-ink-950",
         )}
       >

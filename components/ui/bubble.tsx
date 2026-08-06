@@ -15,14 +15,14 @@ function BubbleGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const bubbleVariants = cva(
-  "group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full border-2 border-ink-950 bg-surface",
+  "group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full",
   {
     variants: {
       variant: {
         default:
           "*:data-[slot=bubble-content]:bg-night *:data-[slot=bubble-content]:text-white [&>[data-slot=bubble-content]:is(button,a):hover]:bg-ink-800",
         secondary:
-          "*:data-[slot=bubble-content]:bg-paper *:data-[slot=bubble-content]:text-ink-950 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--color-paper),var(--color-ink-950)_8%)]",
+          "*:data-[slot=bubble-content]:bg-surface *:data-[slot=bubble-content]:text-ink-950 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--color-surface),var(--color-ink-950)_8%)]",
         muted:
           "*:data-[slot=bubble-content]:bg-ink-100/60",
         tinted:
@@ -74,7 +74,7 @@ function BubbleContent({
     <Comp
       data-slot="bubble-content"
       className={cn(
-        "w-fit max-w-full min-w-0 overflow-hidden border-2 border-ink-950 px-3.5 py-2.5 text-sm leading-relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-left [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ink-950 [button,a]:focus-visible:ring-ink-950",
+        "w-fit max-w-full min-w-0 overflow-hidden px-3.5 py-2.5 text-sm leading-relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-left [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ink-950 [button,a]:focus-visible:ring-ink-950",
         className
       )}
       {...props}

@@ -4,20 +4,19 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Retro-terminal type stack: Inter for body/nav/buttons, Space Mono for
-   * the big monospace headlines and terminal accents. */
+  /* Premium type stack: Inter for body/nav/buttons, Space Grotesk for
+   * headlines, Space Mono reserved for small technical accents. */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-space), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-display: var(--font-grotesk), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-space), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  /* Display type scale — raw mono headline sizes, fluid so they stay in the
-   * 60–80px band on desktop and scale down on small screens. Tight lines,
-   * no letter-spacing (the .font-display rule forces 0). Use as text-hero /
-   * text-h2 on headline elements. */
-  --text-hero: clamp(3rem, 8vw, 5rem);
-  --text-hero--line-height: 0.98;
-  --text-h2: clamp(2.25rem, 5vw, 3rem);
-  --text-h2--line-height: 1;
+  /* Display type scale — geometric headline sizes, fluid across breakpoints,
+   * calm line-heights. Tight negative tracking comes from the .font-display
+   * rule. Use as text-hero / text-h2 on headline elements. */
+  --text-hero: clamp(2.75rem, 6.5vw, 4.25rem);
+  --text-hero--line-height: 1.06;
+  --text-h2: clamp(2rem, 4.5vw, 2.75rem);
+  --text-h2--line-height: 1.12;
 
   /* Flat design system — every shadow token is neutralized. Depth comes
    * from crisp 2px near-black borders, never drop shadows. */
@@ -227,11 +226,11 @@
   .rounded-full {
     border-radius: 9999px;
   }
-  /* Headline font is raw monospace, bold and all-lowercase — the
-   * terminal statement look. No letter-spacing tricks, tight lines. */
+  /* Headline font — geometric display face, tight negative tracking and
+   * balanced wrapping so multi-line headings never leave a ragged word. */
   .font-display {
-    text-transform: lowercase;
-    letter-spacing: 0;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 }
 
