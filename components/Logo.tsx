@@ -1,20 +1,31 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { LogoMark } from "@/components/LogoMark";
 
 /**
- * Retro-terminal Afritop logo — a small solid-black square with a white bolt
- * glyph, followed by a clean sans-serif "AFRITOP" wordmark. No fills except
- * solid black and white. `light` switches the wordmark to white for dark
- * surfaces (footer, CTA block).
+ * Afritop logo — the animated flash-bolt mark followed by the AFRITOP
+ * wordmark in Space Grotesk. `light` switches the wordmark to white and adds
+ * a subtle outline to the mark for dark surfaces (footer, CTA block).
+ * `animate` pauses the flash (used on payment screens where a periodic
+ * flash could read as a system flicker).
  */
-export function Logo({ className, light }: { className?: string; light?: boolean }) {
+export function Logo({
+  className,
+  light,
+  animate = true,
+}: {
+  className?: string;
+  light?: boolean;
+  animate?: boolean;
+}) {
   return (
     <Link href="/" className={cn("group inline-flex items-center gap-2.5", className)}>
-      <span className="grid size-9 place-items-center bg-night text-white transition-transform duration-200 group-hover:-translate-y-0.5">
-        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
-      </span>
+      <LogoMark
+        size={36}
+        light={light}
+        animate={animate}
+        className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:scale-105"
+      />
       <span
         className={cn(
           "font-display text-lg font-bold tracking-tight",

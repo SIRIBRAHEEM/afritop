@@ -35,7 +35,8 @@ export function Navbar() {
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Logo />
+        {/* Pause the flash animation on payment screens. */}
+        <Logo animate={!pathname.startsWith("/pay")} />
 
         <div className="hidden items-center gap-1 md:flex">
           {LINKS.map((link) => {

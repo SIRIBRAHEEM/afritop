@@ -131,6 +131,61 @@
   .animate-marquee { animation: none; }
 }
 
+/* ── Animated flash-bolt logo mark ────────────────────────────
+ * The bolt rests with a soft lime glow; on a slow 6s cycle a flash ring
+ * expands and fades and the bolt brightens for a moment — a calm,
+ * premium "charge" pulse rather than a strobing effect.
+ */
+.afritop-mark-bolt {
+  filter: drop-shadow(0 0 3px rgba(212, 255, 63, 0.35));
+}
+.afritop-mark-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: afritop-flash 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.afritop-mark-bolt-flash {
+  animation: afritop-glow 6s ease-in-out infinite;
+}
+@keyframes afritop-flash {
+  0%, 94.5%, 100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  95.5% {
+    opacity: 0.9;
+    transform: scale(0.95);
+  }
+  97.5% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+@keyframes afritop-glow {
+  0%, 95%, 100% {
+    opacity: 0;
+  }
+  96% {
+    opacity: 1;
+  }
+  97.5% {
+    opacity: 0.25;
+  }
+  99% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .afritop-mark-ring,
+  .afritop-mark-bolt-flash {
+    animation: none;
+    opacity: 0;
+  }
+  .afritop-mark-bolt {
+    filter: none;
+  }
+}
+
 /* ── Dark theme ────────────────────────────────────────────────
  * Cypherpunk dark variant: black canvas, dark beige surfaces, lime
  * accents on dark backgrounds. Inverted so the toggle actually

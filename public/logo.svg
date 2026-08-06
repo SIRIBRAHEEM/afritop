@@ -1,127 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
-  <!-- ============================================================
-       Cypherpunk Afritop logo — icon only (compact square)
-       The "AFRITOP" text is rendered separately by the Logo component.
-       ============================================================ -->
-  <defs>
-    <!-- Adinkra-inspired diamond pattern tile -->
-    <pattern id="adinkra" patternUnits="userSpaceOnUse" width="24" height="24">
-      <rect width="24" height="24" fill="#d4ff3f"/>
-      <rect x="0" y="0" width="12" height="12" fill="#0a0a0a" opacity="0.15"/>
-      <rect x="12" y="12" width="12" height="12" fill="#0a0a0a" opacity="0.15"/>
-      <path d="M12 0v24M0 12h24" stroke="#0a0a0a" stroke-width="0.5" opacity="0.08"/>
-    </pattern>
-    <!-- Checkered tile -->
-    <pattern id="checker" patternUnits="userSpaceOnUse" width="8" height="8">
-      <rect width="8" height="8" fill="#ece4d3"/>
-      <rect x="0" y="0" width="4" height="4" fill="#0a0a0a" opacity="0.12"/>
-      <rect x="4" y="4" width="4" height="4" fill="#0a0a0a" opacity="0.12"/>
-    </pattern>
-  </defs>
-
-  <!-- Outer border -->
-  <rect x="2" y="2" width="176" height="176" rx="4" fill="none" stroke="#0a0a0a" stroke-width="4"/>
-
-  <!-- Background: lime base -->
-  <rect x="4" y="4" width="172" height="172" rx="3" fill="#d4ff3f"/>
-
-  <!-- ============================================================ -->
-  <!-- Geometric African patterns                                    -->
-  <!-- ============================================================ -->
-
-  <!-- Top-left: Adinkra-inspired "Gye Nyame" pattern -->
-  <g transform="translate(8,8)">
-    <path d="M0 40 Q20 0 40 40 Q20 80 0 40Z" fill="none" stroke="#0a0a0a" stroke-width="2.5" opacity="0.35"/>
-    <path d="M10 40 Q20 12 30 40 Q20 68 10 40Z" fill="none" stroke="#0a0a0a" stroke-width="1.8" opacity="0.25"/>
-    <polyline points="0,0 8,6 16,0 24,6 32,0 40,6 40,0 32,6 24,0 16,6 8,0 0,6 0,0"
-              fill="none" stroke="#0a0a0a" stroke-width="1.5" opacity="0.3"/>
-    <path d="M20 6 L24 10 L20 14 L16 10Z" fill="#0a0a0a" opacity="0.2"/>
-  </g>
-
-  <!-- Top-right: Checkered section -->
-  <rect x="120" y="8" width="52" height="52" rx="2" fill="url(#checker)" opacity="0.5"/>
-  <rect x="120" y="8" width="52" height="52" rx="2" fill="none" stroke="#0a0a0a" stroke-width="1" opacity="0.15"/>
-
-  <!-- Bottom-left: Striped pattern -->
-  <g transform="translate(8,120)">
-    <clipPath id="stripe-clip">
-      <rect x="0" y="0" width="52" height="52" rx="2"/>
-    </clipPath>
-    <rect x="0" y="0" width="52" height="52" rx="2" fill="#ece4d3" opacity="0.5"/>
-    <g clip-path="url(#stripe-clip)">
-      <line x1="0" y1="0" x2="60" y2="60" stroke="#0a0a0a" stroke-width="3" opacity="0.15"/>
-      <line x1="10" y1="0" x2="60" y2="50" stroke="#0a0a0a" stroke-width="2" opacity="0.1"/>
-      <line x1="0" y1="10" x2="50" y2="60" stroke="#0a0a0a" stroke-width="2" opacity="0.1"/>
-    </g>
-    <rect x="0" y="0" width="52" height="52" rx="2" fill="none" stroke="#0a0a0a" stroke-width="1" opacity="0.15"/>
-  </g>
-
-  <!-- Bottom-right: Adinkra-style crosses -->
-  <g transform="translate(120,120)" opacity="0.25">
-    <rect x="8" y="8" width="8" height="8" fill="#0a0a0a"/>
-    <rect x="32" y="8" width="8" height="8" fill="#0a0a0a"/>
-    <rect x="8" y="32" width="8" height="8" fill="#0a0a0a"/>
-    <rect x="32" y="32" width="8" height="8" fill="#0a0a0a"/>
-    <circle cx="28" cy="28" r="4" fill="none" stroke="#0a0a0a" stroke-width="1.5"/>
-    <circle cx="12" cy="12" r="3" fill="none" stroke="#0a0a0a" stroke-width="1.5"/>
-  </g>
-
-  <!-- ============================================================ -->
-  <!-- THE LETTER "A" — bold, geometric, blocky                      -->
-  <!-- ============================================================ -->
-  <!-- Outer A stroke -->
-  <path d="M50 136 L8 136 L50 8 L92 136Z" fill="#d4ff3f" stroke="#0a0a0a" stroke-width="5" stroke-linejoin="miter"/>
-  <!-- Inner A cutout -->
-  <path d="M50 44 L24 112 L76 112Z" fill="#0a0a0a"/>
-  <!-- A crossbar - thick black beam -->
-  <rect x="18" y="88" width="64" height="10" fill="#0a0a0a"/>
-
-  <!-- ============================================================ -->
-  <!-- SPEAR / STAFF — diagonal, textured, brown                     -->
-  <!-- ============================================================ -->
-  <g>
-    <!-- Spear shaft -->
-    <path d="M10 150 L100 10" stroke="#6b4423" stroke-width="6" stroke-linecap="round"/>
-    <path d="M10 150 L100 10" stroke="#8b5e3c" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
-    <!-- Spear head (top-right) -->
-    <path d="M100 10 L108 2 L104 14Z" fill="#0a0a0a"/>
-    <!-- Spear binding rings -->
-    <line x1="22" y1="137" x2="28" y2="131" stroke="#0a0a0a" stroke-width="2"/>
-    <line x1="34" y1="125" x2="40" y2="119" stroke="#0a0a0a" stroke-width="2"/>
-    <line x1="46" y1="113" x2="52" y2="107" stroke="#0a0a0a" stroke-width="2"/>
-    <!-- Shaft texture lines -->
-    <line x1="16" y1="145" x2="18" y2="143" stroke="#0a0a0a" stroke-width="1" opacity="0.3"/>
-    <line x1="28" y1="133" x2="30" y2="131" stroke="#0a0a0a" stroke-width="1" opacity="0.3"/>
-    <line x1="40" y1="121" x2="42" y2="119" stroke="#0a0a0a" stroke-width="1" opacity="0.3"/>
-    <line x1="52" y1="109" x2="54" y2="107" stroke="#0a0a0a" stroke-width="1" opacity="0.3"/>
-  </g>
-
-  <!-- ============================================================ -->
-  <!-- BAOBAB TREE — white silhouette near bottom center             -->
-  <!-- ============================================================ -->
-  <g>
-    <!-- Baobab trunk -->
-    <path d="M64 130 Q64 114 68 110 Q70 108 70 110 Q72 108 74 110 Q78 114 78 130Z"
-          fill="#ece4d3" stroke="#0a0a0a" stroke-width="1.5"/>
-    <!-- Baobab branches -->
-    <path d="M68 110 Q62 98 56 94" fill="none" stroke="#ece4d3" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M74 110 Q80 98 86 94" fill="none" stroke="#ece4d3" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Baobab canopy -->
-    <circle cx="56" cy="92" r="6" fill="#ece4d3" stroke="#0a0a0a" stroke-width="1"/>
-    <circle cx="70" cy="88" r="7" fill="#ece4d3" stroke="#0a0a0a" stroke-width="1"/>
-    <circle cx="86" cy="92" r="6" fill="#ece4d3" stroke="#0a0a0a" stroke-width="1"/>
-    <circle cx="62" cy="86" r="5" fill="#ece4d3" stroke="#0a0a0a" stroke-width="1"/>
-    <circle cx="78" cy="86" r="5" fill="#ece4d3" stroke="#0a0a0a" stroke-width="1"/>
-    <circle cx="70" cy="82" r="5" fill="#ece4d3" stroke="#0a0a0a" stroke-width="1"/>
-  </g>
-
-  <!-- ============================================================ -->
-  <!-- TECHNICAL CURVED LINE — arc across the bottom of the icon     -->
-  <!-- ============================================================ -->
-  <path d="M8 160 Q40 172 90 172 Q140 172 172 160"
-        fill="none" stroke="#0a0a0a" stroke-width="2.5" opacity="0.5"/>
-  <path d="M8 164 Q40 176 90 176 Q140 176 172 164"
-        fill="none" stroke="#0a0a0a" stroke-width="1.5" opacity="0.25"/>
-  <line x1="8" y1="160" x2="8" y2="166" stroke="#0a0a0a" stroke-width="2" opacity="0.5"/>
-  <line x1="172" y1="160" x2="172" y2="166" stroke="#0a0a0a" stroke-width="2" opacity="0.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Animated flash-bolt Afritop mark — self-contained so it also animates
+       as the browser-tab favicon (Chrome/Edge animate SVG favicons). -->
+  <style>
+    .bolt {
+      filter: drop-shadow(0 0 3px rgba(212, 255, 63, 0.35));
+    }
+    .ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: flash 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+    .flash {
+      animation: glow 6s ease-in-out infinite;
+    }
+    @keyframes flash {
+      0%, 94.5%, 100% { opacity: 0; transform: scale(0.7); }
+      95.5% { opacity: 0.9; transform: scale(0.95); }
+      97.5% { opacity: 0; transform: scale(1.55); }
+    }
+    @keyframes glow {
+      0%, 95%, 100% { opacity: 0; }
+      96% { opacity: 1; }
+      97.5% { opacity: 0.25; }
+      99% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ring, .flash { animation: none; opacity: 0; }
+      .bolt { filter: none; }
+    }
+  </style>
+  <rect x="2" y="2" width="44" height="44" rx="11" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2"/>
+  <circle class="ring" cx="24" cy="24" r="17" stroke="#d4ff3f" stroke-width="2.5" opacity="0"/>
+  <path class="bolt" d="M26 4 6 28h18l-2 16 20-24h-18l2-16z" fill="#d4ff3f"/>
+  <path class="flash" d="M26 4 6 28h18l-2 16 20-24h-18l2-16z" fill="#ffffff" opacity="0"/>
 </svg>

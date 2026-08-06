@@ -70,7 +70,8 @@ export default function RootLayout({
       <head>
         {/* Apply the saved/system theme before paint so there's no flash. */}
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/logo.svg" />
+        {/* iOS ignores SVG touch icons — point at the static PNG mark. */}
+        <link rel="apple-touch-icon" href="/icon.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("afritop-theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})();`,
