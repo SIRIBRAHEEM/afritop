@@ -62,7 +62,7 @@ export const COUNTRIES: Country[] = [
     distributors: [
       { id: "ikeja", name: "Ikeja Electric", short: "IKEDC", color: "#1F7F5C", logo: "https://www.google.com/s2/favicons?domain=ikejaelectric.com&sz=128" },
       { id: "eko", name: "Eko Electric", short: "EKEDC", color: "#F98F07", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Eko_Distribution_Company.jpg" },
-      { id: "abuja", name: "Abuja Electric", short: "AEDC", color: "#3B82F6" },
+      { id: "abuja", name: "Abuja Electric", short: "AEDC", color: "#3B82F6", logo: "https://www.abujaelectricity.com/wp-content/uploads/2024/01/aedc_logo_02.png" },
       { id: "ph", name: "Port Harcourt Electric", short: "PHEDC", color: "#8B5CF6", logo: "https://upload.wikimedia.org/wikipedia/en/a/aa/PHED.PNG" },
       { id: "ibadan", name: "Ibadan Electric", short: "IBEDC", color: "#EC4899", logo: "https://www.google.com/s2/favicons?domain=ibedc.com&sz=128" },
       { id: "enugu", name: "Enugu Electric", short: "EEDC", color: "#14B8A6", logo: "https://www.google.com/s2/favicons?domain=enugudisco.com&sz=128" },
