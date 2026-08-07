@@ -455,8 +455,20 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="bg-paper px-4 pb-20 sm:px-6">
+      {/* py-20 sm:py-24 — matches every other section so the night panel
+          floats with breathing room instead of butting into the section
+          divider above it (the "black line"). */}
+      <section className="bg-paper px-4 py-20 sm:px-6 sm:py-24">
         <div className="relative mx-auto max-w-6xl overflow-hidden border-2 border-ink-950 bg-night px-5 py-16 text-center text-white sm:px-12 sm:py-20">
+          {/* Lime top accent strip — crisp flat edge on the night panel. */}
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-sun-300" aria-hidden="true" />
+          {/* Corner bolts — echo the flash-bolt logo mark, on-brand in both themes. */}
+          <svg viewBox="0 0 24 24" className="absolute left-4 top-4 size-3.5 text-sun-300 sm:left-6 sm:top-6" fill="currentColor" aria-hidden="true">
+            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          <svg viewBox="0 0 24 24" className="absolute right-4 top-4 size-3.5 text-sun-300 sm:right-6 sm:top-6" fill="currentColor" aria-hidden="true">
+            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
           <div className="relative">
             <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-surface text-ink-950">
               <svg viewBox="0 0 24 24" className="size-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
