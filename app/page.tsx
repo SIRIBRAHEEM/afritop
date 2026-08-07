@@ -70,7 +70,7 @@ export default function Home() {
                 Now live in Nigeria · Ghana · Kenya · South Africa
               </span>
 
-              <h1 className="mt-7 font-display text-hero font-bold text-ink-950">
+              <h1 className="mt-7 font-display text-hero font-semibold text-ink-950">
                 The fastest way to top up Africa,{" "}
                 <span className="text-ink-700">in seconds.</span>
               </h1>
@@ -268,7 +268,7 @@ export default function Home() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
               <p className="text-sm font-medium uppercase tracking-widest text-ink-500">What you can buy</p>
-              <h2 className="mt-3 font-display text-h2 font-bold text-ink-950">
+              <h2 className="mt-3 font-display text-h2 font-semibold text-ink-950">
                 Everything your phone &amp; home need
               </h2>
             </div>
@@ -318,7 +318,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-ink-500">How it works</p>
-            <h2 className="mt-3 font-display text-4xl font-bold text-ink-950 sm:text-5xl">
+            <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-5xl">
               Top-up in three quick steps
             </h2>
             <p className="mt-4 text-lg text-ink-500">
@@ -350,7 +350,7 @@ export default function Home() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl">
               <p className="text-sm font-medium uppercase tracking-widest text-ink-500">Coverage</p>
-              <h2 className="mt-3 font-display text-h2 font-bold text-ink-950">
+              <h2 className="mt-3 font-display text-h2 font-semibold text-ink-950">
                 Four countries, one wallet
               </h2>
             </div>
@@ -401,7 +401,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="max-w-2xl">
             <p className="text-sm font-medium uppercase tracking-widest text-ink-500">Why Afritop</p>
-            <h2 className="mt-3 font-display text-4xl font-bold text-ink-950 sm:text-5xl">
+            <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-5xl">
               Honest pricing, zero surprises
             </h2>
           </div>
@@ -441,7 +441,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-ink-500">FAQ</p>
-            <h2 className="mt-3 font-display text-4xl font-bold text-ink-950 sm:text-5xl">
+            <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-5xl">
               Questions, answered
             </h2>
             <p className="mt-4 text-lg text-ink-500">
@@ -463,7 +463,7 @@ export default function Home() {
                 <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
               </svg>
             </span>
-            <h2 className="mx-auto mt-6 max-w-2xl font-display text-h2 font-bold">
+            <h2 className="mx-auto mt-6 max-w-2xl font-display text-h2 font-semibold">
               Your phone is low.{" "}
               <span className="text-sun-300">Your meter is running.</span>
             </h2>

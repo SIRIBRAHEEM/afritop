@@ -118,7 +118,7 @@ export default function TransactionsPage() {
         <div className="flex flex-wrap items-end justify-between gap-4 animate-fade-up">
           <div>
             <p className="text-sm font-bold uppercase tracking-widest text-brand-600">History</p>
-            <h1 className="mt-2 font-display text-h2 font-bold text-ink-900">
+            <h1 className="mt-2 font-display text-h2 font-semibold text-ink-900">
               Transactions
             </h1>
             {signedIn ? (

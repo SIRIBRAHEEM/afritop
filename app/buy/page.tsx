@@ -263,7 +263,7 @@ function BuyFlow() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="animate-fade-up">
           <p className="text-sm font-bold uppercase tracking-widest text-brand-600">Buy top-up</p>
-          <h1 className="mt-2 font-display text-h2 font-bold text-ink-900">
+          <h1 className="mt-2 font-display text-h2 font-semibold text-ink-900">
             What are we topping up?
           </h1>
           <p className="mt-2 text-ink-500">
@@ -454,7 +454,7 @@ function BuyFlow() {
                   <p className="mt-2 text-xs font-semibold text-red-500">
                     {service === "electricity"
                       ? "Enter a valid meter number (6–20 digits)."
-                      : `Enter a valid ${country.name} number — ${country.phoneDigits} digits after ${country.phonePrefix}.`}
+                      : `Enter a valid ${country.name} number — ${country.phoneDigits} digits after ${country.phonePrefix}, e.g. ${phonePlaceholder}.`}
                   </p>
                 )}
               </div>

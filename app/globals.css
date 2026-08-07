@@ -13,9 +13,11 @@
   /* Display type scale — geometric headline sizes, fluid across breakpoints,
    * calm line-heights. Tight negative tracking comes from the .font-display
    * rule. Use as text-hero / text-h2 on headline elements. */
-  --text-hero: clamp(2.75rem, 6.5vw, 4.25rem);
+  /* Mobile-first mins: H1 ≈ 34px / H2 ≈ 26px on phones (44px+ wraps badly on
+   * a 360–390px viewport), scaling up fluidly to the desktop sizes. */
+  --text-hero: clamp(2.125rem, 6.5vw, 4.25rem);
   --text-hero--line-height: 1.06;
-  --text-h2: clamp(2rem, 4.5vw, 2.75rem);
+  --text-h2: clamp(1.625rem, 4.8vw, 2.75rem);
   --text-h2--line-height: 1.12;
 
   /* Flat design system — every shadow token is neutralized. Depth comes
