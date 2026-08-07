@@ -7,6 +7,7 @@ import { formatLocal, formatUsd } from "@/lib/fx";
 import { StatusChip } from "@/components/StatusChip";
 import { BrandMark } from "@/components/BrandMark";
 import { WalletLogin } from "@/components/WalletLogin";
+import { Reveal } from "@/components/ui/Reveal";
 import { subscribeReceipts, getReceiptsSnapshot, type ReceiptEntry } from "@/lib/receipt-journal";
 import {
   ensureSessionLoaded,
@@ -117,7 +118,7 @@ export default function TransactionsPage() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="flex flex-wrap items-end justify-between gap-4 animate-fade-up">
           <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-brand-600">History</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-brand-600">📖 History</p>
             <h1 className="mt-2 font-display text-h2 font-semibold text-ink-900">
               Transactions
             </h1>
@@ -147,7 +148,7 @@ export default function TransactionsPage() {
 
         {/* Wallet sign-in panel */}
         {session.status === "loading" ? null : !signedIn ? (
-          <div className="mt-8 border-2 border-ink-950 bg-surface p-6 shadow-hard sm:p-8">
+          <Reveal className="mt-8 border-2 border-ink-950 bg-surface p-6 shadow-hard sm:p-8">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
               <div className="max-w-md text-center sm:text-left">
                 <span className="inline-flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3 py-1 text-xs font-bold text-ink-950 shadow-hard-sm">
@@ -170,7 +171,7 @@ export default function TransactionsPage() {
                 <p className="text-xs text-ink-400">Free · just a signature, no gas</p>
               </div>
             </div>
-          </div>
+          </Reveal>
         ) : null}
 
         {error && (

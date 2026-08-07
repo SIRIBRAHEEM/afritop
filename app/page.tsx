@@ -9,6 +9,16 @@ import { Marquee } from "@/components/ui/Marquee";
 import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 import { LiveDeliveriesChart } from "@/components/LiveDeliveriesChart";
+import { Reveal } from "@/components/ui/Reveal";
+import {
+  MousePointerClick,
+  Wallet,
+  Rocket,
+  Zap,
+  BadgePercent,
+  Coins,
+  Globe,
+} from "lucide-react";
 
 const STATS = [
   { v: 99, suffix: "%", l: "delivery success rate" },
@@ -21,14 +31,20 @@ const STEPS = [
   {
     title: "Choose your top-up",
     text: "Pick airtime, data or electricity — then your country, network and amount.",
+    Icon: MousePointerClick,
+    color: "#2f6bff",
   },
   {
     title: "Pay with USDC",
     text: "Connect any EVM wallet and pay in stable USDC on Arc — confirmed on-chain.",
+    Icon: Wallet,
+    color: "#10b981",
   },
   {
     title: "Delivered in seconds",
     text: "The moment payment settles, we credit the phone or meter. Receipt in your history.",
+    Icon: Rocket,
+    color: "#ffb020",
   },
 ];
 
@@ -36,18 +52,26 @@ const FEATURES = [
   {
     title: "Instant delivery",
     text: "Airtime credits hit the number in seconds. Electricity tokens are generated the moment payment settles.",
+    Icon: Zap,
+    color: "#ffb020",
   },
   {
     title: "Transparent pricing",
     text: "You pay face value plus a flat 1.5% platform fee — displayed before you pay. No hidden margins.",
+    Icon: BadgePercent,
+    color: "#2f6bff",
   },
   {
     title: "USDC-first payments",
     text: "Settle in stable, borderless USDC straight from your own wallet on Arc — Circle's stablecoin network.",
+    Icon: Coins,
+    color: "#10b981",
   },
   {
     title: "Built for Africa",
     text: "Local currencies, local networks and local power companies — from Nigeria to South Africa.",
+    Icon: Globe,
+    color: "#8b5cf6",
   },
 ];
 
@@ -120,7 +144,45 @@ export default function Home() {
           </div>
 
           {/* ── Product preview panel ────────────────────────── */}
-          <div className="mt-14 animate-fade-up lg:mt-20" style={{ animationDelay: "200ms" }}>
+          <div
+            className="relative mt-14 animate-fade-up lg:mt-20"
+            style={{ animationDelay: "200ms" }}
+          >
+            {/* Floating ambient chips — desktop only, drifting over the panel edges */}
+            <div
+              className="pointer-events-none absolute -left-5 top-20 z-10 hidden animate-float lg:block"
+              style={{ animationDelay: "0.8s" }}
+              aria-hidden="true"
+            >
+              <div className="flex items-center gap-2 border-2 border-ink-950 bg-surface px-3.5 py-2.5">
+                <span className="grid size-5 place-items-center border-2 border-ink-950 bg-night text-sun-300">
+                  <svg viewBox="0 0 24 24" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                </span>
+                <span className="text-xs font-bold text-ink-950">Delivered · 9 seconds</span>
+              </div>
+            </div>
+            <div
+              className="pointer-events-none absolute -right-5 bottom-16 z-10 hidden animate-float lg:block"
+              style={{ animationDelay: "2s" }}
+              aria-hidden="true"
+            >
+              <div className="flex items-center gap-2 border-2 border-ink-950 bg-surface px-3.5 py-2.5">
+                <span
+                  className="grid size-5 place-items-center border-2 border-ink-950 text-white"
+                  style={{ backgroundColor: "#10b981" }}
+                >
+                  <svg viewBox="0 0 24 24" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M14.5 9a2.5 2.5 0 0 0-2.5-2.5h-1.5v11h1.5A2.5 2.5 0 0 0 14.5 15v-1a2.5 2.5 0 0 0-2.5-2.5h-1.5" />
+                  </svg>
+                </span>
+                <span className="font-mono text-xs font-bold text-ink-950">
+                  ₦500 · <span className="text-brand-600">$0.37 USDC</span>
+                </span>
+              </div>
+            </div>
             <div className="overflow-hidden border-2 border-ink-950 bg-surface">
               {/* Browser chrome bar */}
               <div className="flex items-center gap-3 border-b-2 border-ink-950 bg-paper px-4 py-3">
@@ -244,20 +306,20 @@ export default function Home() {
       {/* ── Trust marquee ───────────────────────────────────── */}
       <section className="border-b-2 border-ink-950 bg-paper py-6">
         <Marquee speed={32} className="mx-auto max-w-6xl">
-          <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-ink-500">
-            <span className="size-2 bg-ink-950" /> Powered by Africa&apos;s Talking
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-widest text-ink-500">
+            ⚡️ Powered by Africa&apos;s Talking
           </span>
-          <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-ink-500">
-            <span className="size-2 bg-ink-950" /> USDC payments on Arc by Circle
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-widest text-ink-500">
+            💳 USDC payments on Arc by Circle
           </span>
-          <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-ink-500">
-            <span className="size-2 bg-ink-950" /> 4 countries &amp; growing
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-widest text-ink-500">
+            🌍 4 countries &amp; growing
           </span>
-          <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-ink-500">
-            <span className="size-2 bg-ink-950" /> On-chain verified
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-widest text-ink-500">
+            🔒 On-chain verified
           </span>
-          <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-ink-500">
-            <span className="size-2 bg-ink-950" /> 14 mobile networks
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-widest text-ink-500">
+            📱 14 mobile networks
           </span>
         </Marquee>
       </section>
@@ -267,7 +329,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
-              <p className="text-sm font-medium uppercase tracking-widest text-ink-500">What you can buy</p>
+              <p className="text-sm font-medium uppercase tracking-widest text-ink-500">🛒 What you can buy</p>
               <h2 className="mt-3 font-display text-h2 font-semibold text-ink-950">
                 Everything your phone &amp; home need
               </h2>
@@ -279,8 +341,8 @@ export default function Home() {
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {SERVICES.map((s, i) => (
+              <Reveal key={s.id} delay={i * 90} className="h-full">
               <Link
-                key={s.id}
                 href="/buy"
                 className="group relative block h-full border-2 border-ink-950 bg-surface p-7 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
               >
@@ -308,6 +370,7 @@ export default function Home() {
                   </span>
                 </div>
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -317,7 +380,7 @@ export default function Home() {
       <section id="how-it-works" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">How it works</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">⚡️ How it works</p>
             <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-5xl">
               Top-up in three quick steps
             </h2>
@@ -332,13 +395,23 @@ export default function Home() {
               aria-hidden="true"
             />
             {STEPS.map((step, i) => (
-              <div key={step.title} className="relative text-center">
-                <span className="relative z-10 mx-auto grid size-14 place-items-center border-2 border-ink-950 bg-surface font-display text-xl font-bold text-ink-950">
-                  {i + 1}
-                </span>
-                <h3 className="mt-6 font-display text-xl font-bold text-ink-950">{step.title}</h3>
-                <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-ink-500">{step.text}</p>
-              </div>
+              <Reveal key={step.title} delay={i * 110}>
+                <div className="relative text-center">
+                  <span
+                    className="relative z-10 mx-auto grid size-14 place-items-center border-2 border-ink-950 text-white"
+                    style={{ backgroundColor: step.color }}
+                  >
+                    <span className="animate-icon-bob">
+                      <step.Icon className="size-6" strokeWidth={2.2} />
+                    </span>
+                    <span className="absolute -right-2 -top-2 grid size-5 place-items-center border-2 border-ink-950 bg-night font-mono text-[10px] font-bold text-sun-300">
+                      0{i + 1}
+                    </span>
+                  </span>
+                  <h3 className="mt-6 font-display text-xl font-bold text-ink-950">{step.title}</h3>
+                  <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-ink-500">{step.text}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -349,7 +422,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl">
-              <p className="text-sm font-medium uppercase tracking-widest text-ink-500">Coverage</p>
+              <p className="text-sm font-medium uppercase tracking-widest text-ink-500">🌍 Coverage</p>
               <h2 className="mt-3 font-display text-h2 font-semibold text-ink-950">
                 Four countries, one wallet
               </h2>
@@ -360,11 +433,11 @@ export default function Home() {
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {COUNTRIES.map((c) => (
+            {COUNTRIES.map((c, i) => (
+              <Reveal key={c.code} delay={i * 80} className="h-full">
               <Link
-                key={c.code}
                 href="/buy"
-                className="group border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
+                className="group block h-full border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
               >
                 <div className="flex items-center justify-between">
                   <span className="block origin-left transition-transform duration-300 group-hover:-rotate-2 group-hover:scale-110">
@@ -388,6 +461,7 @@ export default function Home() {
                   {c.distributors.length} power utilities · {c.networks.length} networks
                 </p>
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -400,31 +474,33 @@ export default function Home() {
       <section id="pricing" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="max-w-2xl">
-            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">Why Afritop</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">⭐ Why Afritop</p>
             <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-5xl">
               Honest pricing, zero surprises
             </h2>
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className="border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
-              >
-                <span className="btn-cta grid size-11 place-items-center border-2 border-ink-950 bg-night text-white">
-                  <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                </span>
-                <h3 className="mt-5 font-display text-lg font-bold text-ink-950">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-500">{f.text}</p>
-              </div>
+            {FEATURES.map((f, i) => (
+              <Reveal key={f.title} delay={i * 90} className="h-full">
+                <div className="h-full border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50">
+                  <span
+                    className="grid size-11 place-items-center border-2 border-ink-950 text-white"
+                    style={{ backgroundColor: f.color }}
+                  >
+                    <span className="animate-icon-bob">
+                      <f.Icon className="size-5" strokeWidth={2.5} />
+                    </span>
+                  </span>
+                  <h3 className="mt-5 font-display text-lg font-bold text-ink-950">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-500">{f.text}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
 
           {/* FX transparency — live rates */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-6 border-2 border-ink-950 bg-surface p-8 sm:flex-row">
+          <Reveal className="mt-10 flex flex-col items-center justify-between gap-6 border-2 border-ink-950 bg-surface p-8 sm:flex-row">
             <div>
               <h3 className="font-display text-xl font-bold text-ink-950">Live exchange rates</h3>
               <p className="mt-1 text-sm text-ink-500">
@@ -432,7 +508,7 @@ export default function Home() {
               </p>
             </div>
             <LiveFxRates />
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -440,7 +516,7 @@ export default function Home() {
       <section id="faq" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">FAQ</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-ink-500">❓ FAQ</p>
             <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-5xl">
               Questions, answered
             </h2>
@@ -459,18 +535,24 @@ export default function Home() {
           floats with breathing room instead of butting into the section
           divider above it (the "black line"). */}
       <section className="bg-paper px-4 py-20 sm:px-6 sm:py-24">
-        <div className="relative mx-auto max-w-6xl overflow-hidden border-2 border-ink-950 bg-night px-5 py-16 text-center text-white sm:px-12 sm:py-20">
+        <Reveal className="relative mx-auto max-w-6xl overflow-hidden border-2 border-ink-950 bg-night px-5 py-16 text-center text-white sm:px-12 sm:py-20">
           {/* Lime top accent strip — crisp flat edge on the night panel. */}
           <div className="absolute inset-x-0 top-0 h-1.5 bg-sun-300" aria-hidden="true" />
-          {/* Corner bolts — echo the flash-bolt logo mark, on-brand in both themes. */}
-          <svg viewBox="0 0 24 24" className="absolute left-4 top-4 size-3.5 text-sun-300 sm:left-6 sm:top-6" fill="currentColor" aria-hidden="true">
+          {/* Corner bolts + sparkles — twinkling around the night panel. */}
+          <svg viewBox="0 0 24 24" className="animate-sparkle absolute left-4 top-4 size-3.5 text-sun-300 sm:left-6 sm:top-6" fill="currentColor" aria-hidden="true">
             <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
           </svg>
-          <svg viewBox="0 0 24 24" className="absolute right-4 top-4 size-3.5 text-sun-300 sm:right-6 sm:top-6" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" className="animate-sparkle absolute right-4 top-4 size-3.5 text-sun-300 sm:right-6 sm:top-6" fill="currentColor" aria-hidden="true" style={{ animationDelay: "1.1s" }}>
+            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          <svg viewBox="0 0 24 24" className="animate-sparkle absolute bottom-6 left-10 size-3 text-sun-300" fill="currentColor" aria-hidden="true" style={{ animationDelay: "0.6s" }}>
+            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          <svg viewBox="0 0 24 24" className="animate-sparkle absolute bottom-8 right-12 size-3 text-sun-300" fill="currentColor" aria-hidden="true" style={{ animationDelay: "1.6s" }}>
             <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
           </svg>
           <div className="relative">
-            <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-surface text-ink-950">
+            <span className="mx-auto grid size-16 animate-icon-bob place-items-center border-2 border-ink-950 bg-surface text-ink-950">
               <svg viewBox="0 0 24 24" className="size-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
               </svg>
@@ -492,7 +574,7 @@ export default function Home() {
               </svg>
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </>
   );
