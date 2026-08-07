@@ -7,7 +7,6 @@ const WHATSAPP_URL =
   "https://wa.me/2348168969816?text=Hi%20Afritop!%20I%20have%20a%20question%20about%20my%20top-up.";
 
 const STORE_KEY = "afritop-wa-pos";
-const SIZE = 56; // px — matches the size-14 FAB
 const EDGE = 12; // min distance from viewport edges
 const DRAG_THRESHOLD = 8; // px of movement before a touch counts as a drag
 
@@ -20,10 +19,12 @@ interface Pos {
   y: number;
 }
 
-function clamp(p: Pos): Pos {
+// The FAB is size-12 on phones and size-14 from sm up; clamping must use the
+// actual rendered size so the button can never be pushed off-screen.
+function clamp(p: Pos, size: number): Pos {
   return {
-    x: Math.min(Math.max(p.x, EDGE), Math.max(window.innerWidth - SIZE - EDGE, EDGE)),
-    y: Math.min(Math.max(p.y, EDGE), Math.max(window.innerHeight - SIZE - EDGE, EDGE)),
+    x: Math.min(Math.max(p.x, EDGE), Math.max(window.innerWidth - size - EDGE, EDGE)),
+    y: Math.min(Math.max(p.y, EDGE), Math.max(window.innerHeight - size - EDGE, EDGE)),
   };
 }
 
@@ -36,10 +37,27 @@ function clamp(p: Pos): Pos {
 export function WhatsAppButton() {
   const [pos, setPos] = React.useState<Pos | null>(null);
   const [dragging, setDragging] = React.useState(false);
-  const gesture = React.useRef<{ moved: boolean; startX: number; startY: number; offX: number; offY: number } | null>(null);
+  const btnRef = React.useRef<HTMLAnchorElement | null>(null);
+  const sizeRef = React.useRef(56);
+  const gesture = React.useRef<{
+    moved: boolean;
+    startX: number;
+    startY: number;
+    offX: number;
+    offY: number;
+    size: number;
+  } | null>(null);
   // click fires AFTER pointerup (which clears the gesture), so suppression
   // must live in its own ref to outlive the pointer-up handler.
   const suppressClick = React.useRef(false);
+
+  const readSize = () => {
+    const el = btnRef.current;
+    if (!el) return sizeRef.current;
+    const w = el.getBoundingClientRect().width;
+    if (w > 0) sizeRef.current = w;
+    return sizeRef.current;
+  };
 
   // Restore a saved position (deferred so SSR/hydration stay stable and no
   // setState runs synchronously inside the effect).
@@ -49,7 +67,7 @@ export function WhatsAppButton() {
       const raw = localStorage.getItem(STORE_KEY);
       if (raw) {
         const p = JSON.parse(raw) as Pos;
-        if (typeof p.x === "number" && typeof p.y === "number") saved = clamp(p);
+        if (typeof p.x === "number" && typeof p.y === "number") saved = clamp(p, readSize());
       }
     } catch {
       /* private mode / corrupt value — keep the default corner */
@@ -57,7 +75,7 @@ export function WhatsAppButton() {
     const t = window.setTimeout(() => {
       if (saved) setPos(saved);
     }, 0);
-    const onResize = () => setPos((prev) => (prev ? clamp(prev) : prev));
+    const onResize = () => setPos((prev) => (prev ? clamp(prev, readSize()) : prev));
     window.addEventListener("resize", onResize);
     return () => {
       clearTimeout(t);
@@ -67,12 +85,15 @@ export function WhatsAppButton() {
 
   const onPointerDown = (e: React.PointerEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
+    // Size captured once here — re-reading the rect on every pointermove would
+    // force a layout pass each frame and jank the drag on low-end phones.
     gesture.current = {
       moved: false,
       startX: e.clientX,
       startY: e.clientY,
       offX: e.clientX - rect.left,
       offY: e.clientY - rect.top,
+      size: rect.width,
     };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
@@ -85,7 +106,7 @@ export function WhatsAppButton() {
       setDragging(true);
     }
     if (g.moved) {
-      setPos(clamp({ x: e.clientX - g.offX, y: e.clientY - g.offY }));
+      setPos(clamp({ x: e.clientX - g.offX, y: e.clientY - g.offY }, g.size));
     }
   };
 
@@ -106,6 +127,7 @@ export function WhatsAppButton() {
 
   return (
     <a
+      ref={btnRef}
       href={WHATSAPP_URL}
       target="_blank"
       rel="noopener noreferrer"
@@ -124,7 +146,7 @@ export function WhatsAppButton() {
       }}
       aria-label="Chat with Afritop support on WhatsApp"
       className={cn(
-        "group fixed z-[60] grid size-14 select-none place-items-center rounded-full border-2 border-ink-950 touch-none",
+        "group fixed z-[60] grid size-12 select-none place-items-center rounded-full border-2 border-ink-950 touch-none sm:size-14",
         "transition-[transform,box-shadow] duration-200 ease-out motion-reduce:transition-none",
         dragging ? "cursor-grabbing scale-110" : "cursor-grab group-hover:-translate-y-0.5 group-hover:scale-105",
       )}
@@ -145,7 +167,7 @@ export function WhatsAppButton() {
       {/* Official WhatsApp glyph */}
       <svg
         viewBox="0 0 24 24"
-        className="relative size-7 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+        className="relative size-6 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)] sm:size-7"
         fill="currentColor"
         aria-hidden="true"
       >

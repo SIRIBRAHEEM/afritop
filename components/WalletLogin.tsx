@@ -62,18 +62,25 @@ export function WalletLogin({ className }: { className?: string }) {
   if (session.status === "signedIn") {
     return (
       <div className={cn("relative", className)}>
+        {/* Compact on phones: ping + wallet icon + chevron; the address text
+            only appears from 480px up so the navbar never crowds or wraps
+            when a wallet is connected on a small screen. */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3.5 py-2 text-sm font-medium text-brand-700 transition-all hover:-translate-y-0.5 hover:bg-brand-100"
+          className="flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-2.5 py-2 text-sm font-medium text-brand-700 transition-all hover:-translate-y-0.5 hover:bg-brand-100 sm:px-3.5"
         >
           <span className="relative flex size-2">
             <span className="animate-ping-slow absolute inline-flex size-2 rounded-full bg-brand-500" />
             <span className="relative inline-flex size-2 rounded-full bg-brand-500" />
           </span>
-          <span className="font-mono">{shortAddress(session.address)}</span>
-          <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <span className="hidden font-mono min-[480px]:inline">{shortAddress(session.address)}</span>
+          <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
             <path d="m6 9 6 6 6-6" />
           </svg>
         </button>
@@ -116,7 +123,7 @@ export function WalletLogin({ className }: { className?: string }) {
         type="button"
         onClick={() => (pickable ? setOpen((v) => !v) : void signIn())}
         disabled={busy || session.status === "loading"}
-        className="btn-cta flex items-center gap-2 border-2 border-ink-950 bg-night px-4 py-2 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60"
+        className="btn-cta flex items-center gap-2 border-2 border-ink-950 bg-night px-3 py-2 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60 sm:px-4"
       >
         {busy ? (
           <svg viewBox="0 0 24 24" className="size-4 animate-spin" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
