@@ -38,18 +38,17 @@ export const SERVICES: {
   id: ServiceId;
   label: string;
   tagline: string;
-  icon: string;
 }[] = [
-  { id: "airtime", label: "Airtime", tagline: "Instant top-up for any mobile number", icon: "📱" },
-  { id: "data", label: "Data bundles", tagline: "Surf fast with prepaid data packs", icon: "🌐" },
-  { id: "electricity", label: "Electricity", tagline: "Prepaid tokens for your home & business", icon: "⚡" },
+  { id: "airtime", label: "Airtime", tagline: "Instant top-up for any mobile number" },
+  { id: "data", label: "Data bundles", tagline: "Surf fast with prepaid data packs" },
+  { id: "electricity", label: "Electricity", tagline: "Prepaid tokens for your home & business" },
 ];
 
 export const COUNTRIES: Country[] = [
   {
     code: "NG",
     name: "Nigeria",
-    flag: "🇳🇬",
+    flag: "https://flagcdn.com/w160/ng.png",
     currency: "NGN",
     currencySymbol: "₦",
     phonePrefix: "+234",
@@ -100,7 +99,7 @@ export const COUNTRIES: Country[] = [
   {
     code: "GH",
     name: "Ghana",
-    flag: "🇬🇭",
+    flag: "https://flagcdn.com/w160/gh.png",
     currency: "GHS",
     currencySymbol: "GH₵",
     phonePrefix: "+233",
@@ -142,7 +141,7 @@ export const COUNTRIES: Country[] = [
   {
     code: "KE",
     name: "Kenya",
-    flag: "🇰🇪",
+    flag: "https://flagcdn.com/w160/ke.png",
     currency: "KES",
     currencySymbol: "KSh",
     phonePrefix: "+254",
@@ -182,7 +181,7 @@ export const COUNTRIES: Country[] = [
   {
     code: "ZA",
     name: "South Africa",
-    flag: "🇿🇦",
+    flag: "https://flagcdn.com/w160/za.png",
     currency: "ZAR",
     currencySymbol: "R",
     phonePrefix: "+27",

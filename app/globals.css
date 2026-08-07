@@ -95,6 +95,7 @@
   --animate-float: float 7s ease-in-out infinite;
   --animate-ping-slow: ping-slow 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
   --animate-marquee: marquee 40s linear infinite;
+  --animate-icon-bob: icon-bob 3.4s ease-in-out infinite;
 }
 
 @keyframes fade-up {
@@ -121,6 +122,18 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+/* Gentle idle bob for service icons — subtle lift, never distracting. */
+@keyframes icon-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+/* Flag wave on hover — a short, playful ripple. */
+@keyframes flag-wave {
+  0%, 100% { transform: rotate(0deg) skewY(0deg); }
+  25% { transform: rotate(-2deg) skewY(-1.5deg); }
+  50% { transform: rotate(1.5deg) skewY(1deg); }
+  75% { transform: rotate(-1deg) skewY(-0.5deg); }
+}
 
 /* Legacy shimmer class kept as a no-op — the design system is flat,
  * so primary CTAs no longer sweep a gradient across themselves. */
@@ -128,7 +141,10 @@
   display: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee { animation: none; }
+  .animate-marquee,
+  .animate-icon-bob {
+    animation: none;
+  }
 }
 
 /* ── Animated flash-bolt logo mark ────────────────────────────

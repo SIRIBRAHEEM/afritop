@@ -6,6 +6,8 @@ import { LiveFxRates } from "@/components/LiveFxRates";
 import { PaymentNetworks } from "@/components/PaymentNetworks";
 import { NumberTicker } from "@/components/ui/NumberTicker";
 import { Marquee } from "@/components/ui/Marquee";
+import { ServiceIcon } from "@/components/ui/ServiceIcon";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
 const STATS = [
   { v: 99, suffix: "%", l: "delivery success rate" },
@@ -312,8 +314,10 @@ export default function Home() {
                 <span className="absolute right-6 top-5 font-display text-3xl text-brand-500 transition-colors group-hover:text-brand-400">
                   0{i + 1}
                 </span>
-                <span className="grid size-14 place-items-center border-2 border-ink-950 bg-paper text-3xl transition-transform duration-200 group-hover:scale-105">
-                  {s.icon}
+                <span className="grid size-14 place-items-center border-2 border-ink-950 bg-paper text-ink-950 transition-all duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:shadow-[0_0_0_3px_rgba(212,255,63,0.45)]">
+                  <span className="animate-icon-bob">
+                    <ServiceIcon id={s.id} className="size-7" />
+                  </span>
                 </span>
                 <h3 className="mt-6 font-display text-2xl font-bold text-ink-950">{s.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-500">{s.tagline}</p>
@@ -390,7 +394,11 @@ export default function Home() {
                 className="group border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-4xl transition-transform duration-200 group-hover:scale-105">{c.flag}</span>
+                  <span className="block origin-left transition-transform duration-300 group-hover:-rotate-2 group-hover:scale-110">
+                    <span className="block origin-center group-hover:animate-[flag-wave_0.8s_ease-in-out]">
+                      <CountryFlag country={c} className="h-12 w-16 border-2 border-ink-950" />
+                    </span>
+                  </span>
                   <span className="border-2 border-ink-950 bg-paper px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950">
                     {c.currency}
                   </span>

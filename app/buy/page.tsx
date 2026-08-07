@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { COUNTRIES, SERVICES, getCountry, findBundle, type ServiceId } from "@/lib/catalog";
 import { toUsd, platformFee, round2, formatLocal, formatUsd, FX_RATES } from "@/lib/fx";
 import { cn, isValidPhone, isValidMeter } from "@/lib/utils";
 import { BrandMark } from "@/components/BrandMark";
+import { ServiceIcon } from "@/components/ui/ServiceIcon";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { USDC_CHAINS } from "@/lib/chains";
 import {
@@ -331,11 +333,11 @@ function BuyFlow() {
                   >
                     <span
                       className={cn(
-                        "grid size-11 shrink-0 place-items-center text-xl transition-colors",
+                        "grid size-11 shrink-0 place-items-center text-ink-950 transition-all duration-300",
                         service === s.id ? "bg-brand-50 border-2 border-ink-950" : "bg-ink-100 border-2 border-ink-950",
                       )}
                     >
-                      {s.icon}
+                      <ServiceIcon id={s.id} className="size-6" />
                     </span>
                     <span>
                       <span className="block text-sm font-extrabold text-ink-900">{s.label}</span>
@@ -362,7 +364,9 @@ function BuyFlow() {
                         : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                     )}
                   >
-                    <span className="block text-2xl">{c.flag}</span>
+                    <span className="mx-auto block w-fit origin-center transition-transform duration-300 group-hover:scale-110">
+                      <CountryFlag country={c} className="h-9 w-12 border-2 border-ink-950" />
+                    </span>
                     <span className="mt-1.5 block text-sm font-extrabold text-ink-900">{c.name}</span>
                     <span className="block text-xs font-bold text-ink-500">{c.currency}</span>
                   </button>
@@ -534,8 +538,16 @@ function BuyFlow() {
               <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">Order summary</h2>
 
               <div className="mt-4 space-y-3 text-sm">
-                <Row label="Service" value={`${SERVICES.find((s) => s.id === service)!.icon} ${SERVICES.find((s) => s.id === service)!.label}`} />
-                <Row label="Country" value={`${country.flag} ${country.name}`} />
+                <Row
+                  label="Service"
+                  icon={<ServiceIcon id={service} className="size-4" />}
+                  value={SERVICES.find((s) => s.id === service)!.label}
+                />
+                <Row
+                  label="Country"
+                  icon={<CountryFlag country={country} className="h-4 w-6" />}
+                  value={country.name}
+                />
                 {provider && <Row label="Provider" value={provider.short} />}
                 {recipientValid && <Row label={service === "electricity" ? "Meter" : "Phone"} value={recipient} mono />}
                 {bundle && <Row label="Bundle" value={`${bundle.size} · ${bundle.validity}`} />}
@@ -753,18 +765,31 @@ function SectionTitle({ n, title, done }: { n: number; title: string; done?: boo
   );
 }
 
-function Row({ label, value, mono, strong }: { label: string; value: string; mono?: boolean; strong?: boolean }) {
+function Row({
+  label,
+  value,
+  mono,
+  strong,
+  icon,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  strong?: boolean;
+  icon?: ReactNode;
+}) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span className="text-ink-500">{label}</span>
       <span
         className={cn(
-          "text-right font-semibold text-ink-900",
+          "flex items-center justify-end gap-2 text-right font-semibold text-ink-900",
           mono && "font-mono",
           strong && "text-base font-extrabold text-brand-700",
         )}
       >
-        {value}
+        {icon}
+        <span>{value}</span>
       </span>
     </div>
   );
