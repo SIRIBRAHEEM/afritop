@@ -48,7 +48,7 @@ export function Faq() {
               <span
                 className={cn(
                   "grid size-9 shrink-0 place-items-center border-2 border-ink-950 transition-all duration-300",
-                  isOpen ? "btn-cta rotate-45 bg-night text-[#d4ff3f]" : "bg-surface text-ink-950",
+                  isOpen ? "btn-cta rotate-45 bg-night text-[#e6ed0a]" : "bg-surface text-ink-950",
                 )}
               >
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

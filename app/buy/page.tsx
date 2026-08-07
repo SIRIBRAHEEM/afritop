@@ -293,7 +293,7 @@ function BuyFlow() {
                 className={cn(
                   "grid size-8 place-items-center text-xs font-extrabold transition-all duration-300",
                     step >= s.n
-                      ? "btn-cta border-2 border-ink-950 bg-night text-[#d4ff3f] shadow-hard-sm"
+                      ? "btn-cta border-2 border-ink-950 bg-night text-[#e6ed0a] shadow-hard-sm"
                       : "border-2 border-ink-950 bg-ink-100 text-ink-400",
                 )}
               >

@@ -287,7 +287,7 @@ export default function Home() {
                 <span className="absolute right-6 top-5 font-display text-3xl text-brand-500 transition-colors group-hover:text-brand-400">
                   0{i + 1}
                 </span>
-                <span className="grid size-14 place-items-center border-2 border-ink-950 bg-paper text-ink-950 transition-all duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:shadow-[0_0_0_3px_rgba(212,255,63,0.45)]">
+                <span className="grid size-14 place-items-center border-2 border-ink-950 bg-paper text-ink-950 transition-all duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:shadow-[0_0_0_3px_rgba(230,237,10,0.45)]">
                   <span className="animate-icon-bob">
                     <ServiceIcon id={s.id} className="size-7" />
                   </span>

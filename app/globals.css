@@ -38,20 +38,23 @@
   --radius-3xl: 0.375rem;
   --radius-4xl: 0.375rem;
 
-  /* ── Cypherpunk palette ─────────────────────────────────────
-   * Electric-lime canvas, near-black ink, beige raised surfaces.
+  /* ── Afrifleet palette (light) ──────────────────────────────
+   * Bright yellow #E6ED0A canvas, near-black ink, beige raised
+   * surfaces, charcoal #0B0B0C night panels. The signature yellow
+   * is afrifleet's exact #E6ED0A. Dark mode (the default, dark-first)
+   * inverts to charcoal canvas + yellow accents.
    * Strict rules: 2px near-black borders, crisp 2px corners, hard
    * offset shadows, no soft gradients, no pill shapes.
    */
 
-  /* Electric lime — the page canvas every section sits on. */
-  --color-paper: #d4ff3f;
+  /* Afrifleet yellow — the page canvas every section sits on. */
+  --color-paper: #e6ed0a;
 
   /* Beige — cards, inputs, buttons and secondary controls. */
   --color-surface: #ece4d3;
 
   /* Near-black — always-dark surfaces (footer, pay header, CTA block). */
-  --color-night: #0a0a0a;
+  --color-night: #0b0b0c;
 
   /* Brand — near-black ink (primary CTAs, emphasis). */
   --color-brand-50: #f4efe2;
@@ -66,11 +69,11 @@
   --color-brand-900: #0a0a0a;
   --color-brand-950: #000000;
 
-  /* Sun — lime accent on dark surfaces + black for legacy button bgs. */
+  /* Sun — yellow accent on dark surfaces + black for legacy button bgs. */
   --color-sun-50: #f4efe2;
   --color-sun-100: #e9e1ca;
   --color-sun-200: #d9ccae;
-  --color-sun-300: #d4ff3f;
+  --color-sun-300: #e6ed0a;
   --color-sun-400: #0a0a0a;
   --color-sun-500: #0a0a0a;
   --color-sun-600: #0a0a0a;
@@ -193,7 +196,7 @@
  * premium "charge" pulse rather than a strobing effect.
  */
 .afritop-mark-bolt {
-  filter: drop-shadow(0 0 3px rgba(212, 255, 63, 0.35));
+  filter: drop-shadow(0 0 3px rgba(230, 237, 10, 0.35));
 }
 .afritop-mark-ring {
   transform-box: fill-box;
@@ -242,74 +245,74 @@
   }
 }
 
-/* ── Dark theme ────────────────────────────────────────────────
- * Cypherpunk dark variant: black canvas, dark beige surfaces, lime
- * accents on dark backgrounds. Inverted so the toggle actually
- * changes the look while staying strictly Cypherpunk.
+/* ── Dark theme (default — dark-first like afrifleet) ──────────
+ * Charcoal #0B0B0C canvas, slate #262932 surfaces, white ink, and
+ * afrifleet's yellow #E6ED0A accents. This is the main look of the
+ * site; light mode is the bright-yellow alternative via the toggle.
  */
 .dark {
   color-scheme: dark;
-  --color-paper: #0a0a0a;
-  --color-surface: #1c1c1c;
+  --color-paper: #0b0b0c;
+  --color-surface: #262932;
 
-  --color-brand-50: #2a2a2a;
-  --color-brand-100: #333333;
-  --color-brand-200: #444444;
-  --color-brand-300: #555555;
-  --color-brand-400: #d4ff3f;
-  --color-brand-500: #d4ff3f;
-  --color-brand-600: #d4ff3f;
-  --color-brand-700: #d4ff3f;
-  --color-brand-800: #d4ff3f;
-  --color-brand-900: #d4ff3f;
-  --color-brand-950: #000000;
+  --color-brand-50: #2b2d33;
+  --color-brand-100: #34363e;
+  --color-brand-200: #41434d;
+  --color-brand-300: #50525e;
+  --color-brand-400: #e6ed0a;
+  --color-brand-500: #e6ed0a;
+  --color-brand-600: #e6ed0a;
+  --color-brand-700: #e6ed0a;
+  --color-brand-800: #e6ed0a;
+  --color-brand-900: #e6ed0a;
+  --color-brand-950: #0b0b0c;
 
-  --color-sun-50: #1a1a1a;
-  --color-sun-100: #2a2a2a;
-  --color-sun-200: #3a3a3a;
-  --color-sun-300: #d4ff3f;
-  --color-sun-400: #d4ff3f;
-  --color-sun-500: #d4ff3f;
-  --color-sun-600: #d4ff3f;
-  --color-sun-700: #d4ff3f;
-  --color-sun-800: #d4ff3f;
-  --color-sun-900: #d4ff3f;
+  --color-sun-50: #1e2024;
+  --color-sun-100: #2a2c32;
+  --color-sun-200: #3a3c45;
+  --color-sun-300: #e6ed0a;
+  --color-sun-400: #e6ed0a;
+  --color-sun-500: #e6ed0a;
+  --color-sun-600: #e6ed0a;
+  --color-sun-700: #e6ed0a;
+  --color-sun-800: #e6ed0a;
+  --color-sun-900: #e6ed0a;
 
-  --color-ink-50: #1a1a1a;
-  --color-ink-100: #2a2a2a;
-  --color-ink-200: #3a3a3a;
-  --color-ink-300: #9c9c9c;
-  --color-ink-400: #a8a8a8;
-  --color-ink-500: #c2c2c2;
-  --color-ink-600: #d4d4d4;
-  --color-ink-700: #e8e8e8;
-  --color-ink-800: #2a2a2a;
-  --color-ink-900: #fafafa;
+  --color-ink-50: #1a1b1f;
+  --color-ink-100: #2e3038;
+  --color-ink-200: #3b3d47;
+  --color-ink-300: #9ca3af;
+  --color-ink-400: #a9adb8;
+  --color-ink-500: #bbc0c9;
+  --color-ink-600: #cbcfd8;
+  --color-ink-700: #dadde4;
+  --color-ink-800: #23252b;
+  --color-ink-900: #f4f5f7;
   --color-ink-950: #ffffff;
 
-  /* Re-skin the body text to lime-on-black */
+  /* Re-skin the body text to white-on-charcoal */
   body {
     color: var(--color-ink-900);
   }
 
   ::selection {
-    background-color: #d4ff3f;
-    color: #0a0a0a;
+    background-color: #e6ed0a;
+    color: #0b0b0c;
   }
 
-  /* Primary CTAs: solid-black buttons would vanish into the near-black canvas,
-   * so in dark mode they flip to the lime accent with black ink + a black
-   * outline — the cypherpunk inversion of the light-mode black button.
+  /* Primary CTAs: solid-black buttons would vanish into the charcoal canvas,
+   * so in dark mode they flip to the yellow accent with black ink + a black
+   * outline — the inversion of the light-mode black button.
    * Light mode is untouched (btn-cta is a no-op without .dark). */
   .btn-cta {
     background-color: var(--color-brand-400);
-    border-color: #0a0a0a;
-    color: #0a0a0a;
+    border-color: #0b0b0c;
+    color: #0b0b0c;
   }
   .btn-cta:hover {
-    /* Fixed darker lime — color-mix() with a var gets statically resolved by
+    /* Fixed darker yellow — color-mix() with a var gets statically resolved by
      * LightningCSS at build time, which would bake in the light-theme value. */
-    background-color: #bbe037;
+    background-color: #cbd20a;
   }
 }
 
@@ -361,8 +364,8 @@ body {
 }
 
 ::selection {
-  background-color: #0a0a0a;
-  color: #d4ff3f;
+  background-color: #0b0b0c;
+  color: #e6ed0a;
 }
 
 /* Legacy hard-shadow utilities kept as no-ops — the flat design system

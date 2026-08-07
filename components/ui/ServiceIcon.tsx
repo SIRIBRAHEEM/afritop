@@ -56,8 +56,8 @@ export function ServiceIcon({ id, className }: { id: ServiceId; className?: stri
           {/* Equator */}
           <ellipse cx="12" cy="12" rx="8" ry="3.3" fill="none" stroke="#0a0a0a" strokeWidth="1" opacity="0.5" />
           {/* Lime landmasses */}
-          <circle cx="15.4" cy="9.7" r="2.1" fill="#d4ff3f" stroke="#0a0a0a" strokeWidth="0.9" />
-          <circle cx="13.1" cy="12.9" r="1.3" fill="#d4ff3f" stroke="#0a0a0a" strokeWidth="0.9" />
+          <circle cx="15.4" cy="9.7" r="2.1" fill="#e6ed0a" stroke="#0b0b0c" strokeWidth="0.9" />
+          <circle cx="13.1" cy="12.9" r="1.3" fill="#e6ed0a" stroke="#0b0b0c" strokeWidth="0.9" />
         </svg>
       );
     case "electricity":

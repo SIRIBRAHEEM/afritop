@@ -37,8 +37,8 @@ export function LogoMark({
         width="44"
         height="44"
         rx="11"
-        fill="#0a0a0a"
-        stroke={light ? "rgba(255,255,255,0.22)" : "rgba(10,10,10,0.85)"}
+        fill="#0b0b0c"
+        stroke={light ? "rgba(255,255,255,0.22)" : "rgba(11,11,12,0.85)"}
         strokeWidth="2"
       />
       {/* Flash ring — expands + fades on each flash cycle */}
@@ -47,12 +47,12 @@ export function LogoMark({
         cx="24"
         cy="24"
         r="17"
-        stroke="#d4ff3f"
+        stroke="#e6ed0a"
         strokeWidth="2.5"
         opacity="0"
       />
       {/* Bolt */}
-      <path className="afritop-mark-bolt" d="M26 4 6 28h18l-2 16 20-24h-18l2-16z" fill="#d4ff3f" />
+      <path className="afritop-mark-bolt" d="M26 4 6 28h18l-2 16 20-24h-18l2-16z" fill="#e6ed0a" />
       {/* Flash overlay — brightens the bolt at the flash moment */}
       <path
         className="afritop-mark-bolt-flash"

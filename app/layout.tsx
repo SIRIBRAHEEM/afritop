@@ -80,13 +80,15 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Apply the saved/system theme before paint so there's no flash. */}
+        {/* Apply the saved theme before paint so there's no flash.
+         * Dark-first (like afrifleet): dark is the default look — the
+         * bright-yellow light mode is the opt-in via the toggle. */}
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         {/* iOS ignores SVG touch icons — point at the static PNG mark. */}
         <link rel="apple-touch-icon" href="/icon.png" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("afritop-theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("afritop-theme");if(t!=="light"){document.documentElement.classList.add("dark")}}catch(e){}})();`,
           }}
         />
       </head>
