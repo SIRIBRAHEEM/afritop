@@ -149,6 +149,44 @@
   }
 }
 
+/* ── Colorful service icon micro-animations ────────────────────
+ * The flat colorful icons (ServiceIcon) stay alive with subtle
+ * motion: pulsing signal waves, an orbiting satellite dot and a
+ * breathing bolt glow. All disabled under prefers-reduced-motion.
+ */
+.icon-wave {
+  animation: wave-pulse 2.2s ease-in-out infinite;
+}
+.icon-orbit {
+  animation: orbit-spin 7s linear infinite;
+}
+.icon-bolt-glow {
+  animation: bolt-glow 2.6s ease-in-out infinite;
+}
+@keyframes wave-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes bolt-glow {
+  0%, 100% { filter: drop-shadow(0 0 1.5px rgba(255, 176, 32, 0.75)); }
+  50% { filter: drop-shadow(0 0 5px rgba(255, 176, 32, 1)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .icon-wave,
+  .icon-orbit,
+  .icon-bolt-glow {
+    animation: none;
+  }
+  .icon-orbit {
+    /* Keep the satellite parked where it started when motion is off. */
+    transform: none;
+  }
+}
+
 /* ── Animated flash-bolt logo mark ────────────────────────────
  * The bolt rests with a soft lime glow; on a slow 6s cycle a flash ring
  * expands and fades and the bolt brightens for a moment — a calm,

@@ -18,21 +18,29 @@ const WALLET_LINKS: { name: string; url: string; color: string; short: string }[
     short: w.name.replace(" Wallet", ""),
   }));
 
-const TRUST_POINTS: { title: string; text: string; icon: string }[] = [
+const TRUST_POINTS: {
+  title: string;
+  text: string;
+  color: string; // vibrant accent tile — theme-independent, like ServiceIcon
+  icon: "lock" | "card" | "check";
+}[] = [
   {
     title: "Self-custody",
     text: "USDC never leaves your wallet until you approve the exact amount. We never hold your funds.",
-    icon: "M12 2a5 5 0 0 0-5 5v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7h6v2H9V9Zm3-5a3 3 0 0 1 3 3v2H9V7a3 3 0 0 1 3-3Z",
+    color: "#10b981",
+    icon: "lock",
   },
   {
     title: "No card needed",
     text: "Pay with stable USDC from any EVM wallet — no bank card, no KYC, no hidden exchange margins.",
-    icon: "M2 5h14v14H2zM17 8h5v8h-5z",
+    color: "#f97316",
+    icon: "card",
   },
   {
     title: "On-chain verified",
     text: "Every payment settles on Arc and is confirmed on-chain before your top-up is delivered.",
-    icon: "M20 6 9 17l-5-5",
+    color: "#65a30a",
+    icon: "check",
   },
 ];
 
@@ -169,20 +177,26 @@ export function PaymentNetworks() {
               {TRUST_POINTS.map((t) => (
                 <div
                   key={t.title}
-                  className="border-2 border-ink-950 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  className="group border-2 border-ink-950 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5"
                 >
-                  <span className="btn-cta grid size-9 place-items-center border-2 border-ink-950 bg-night text-white">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="size-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d={t.icon} />
-                    </svg>
+                  <span
+                    className="grid size-9 place-items-center border-2 border-ink-950 text-white transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
+                    style={{ backgroundColor: t.color }}
+                  >
+                    {t.icon === "lock" ? (
+                      <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2a5 5 0 0 0-5 5v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7h6v2H9V9Zm3-5a3 3 0 0 1 3 3v2H9V7a3 3 0 0 1 3-3Z" />
+                      </svg>
+                    ) : t.icon === "card" ? (
+                      <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <path d="M2 10h20" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    )}
                   </span>
                   <h4 className="mt-3 font-display text-sm font-bold text-ink-950">
                     {t.title}
