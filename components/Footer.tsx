@@ -23,6 +23,7 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
   {
     title: "Resources",
     links: [
+      { label: "Documentation", href: "/docs" },
       { label: "Arc docs", href: "https://docs.arc.io/", external: true },
       { label: "Circle docs", href: "https://developers.circle.com/", external: true },
       { label: "ArcScan explorer", href: "https://testnet.arcscan.app/", external: true },

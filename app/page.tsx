@@ -487,6 +487,17 @@ export default function Home() {
           <div className="mt-12">
             <Faq />
           </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/docs"
+              className="inline-flex items-center gap-2 border-2 border-ink-950 bg-surface px-5 py-2.5 text-sm font-bold text-ink-950 transition-all hover:-translate-y-0.5 hover:bg-brand-50"
+            >
+              Read the full documentation
+              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
 
