@@ -167,7 +167,9 @@ export default function Home() {
                 <div className="p-5 sm:p-6">
                   {/* Tab bar — active white pill, rest text on dark bar */}
                   <div className="flex items-center gap-2 border-2 border-ink-950 bg-night px-3 py-2">
-                    <span className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-ink-950">Airtime</span>
+                    {/* Active tab — white pill with FIXED dark text: ink-950 flips
+                        to white in dark mode, which would make this white-on-white. */}
+                    <span className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-[#0a0a0a]">Airtime</span>
                     <span className="px-3 py-1.5 text-xs font-medium text-white/60">Data</span>
                     <span className="px-3 py-1.5 text-xs font-medium text-white/60">Electricity</span>
                   </div>
