@@ -57,7 +57,23 @@ export default function Home() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative border-b-2 border-ink-950 bg-paper">
+      <section className="relative overflow-hidden border-b-2 border-ink-950 bg-paper">
+        {/* Liquid blobs drifting behind the hero glass */}
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(47,107,255,0.9), rgba(47,107,255,0.2))", width: 420, height: 420, left: -140, top: -80, opacity: 0.32 }}
+          aria-hidden="true"
+        />
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(255,93,143,0.85), rgba(255,93,143,0.16))", width: 380, height: 380, right: -120, top: 60, opacity: 0.26, animationDelay: "8s" }}
+          aria-hidden="true"
+        />
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.8), rgba(139,92,246,0.15))", width: 340, height: 340, left: "38%", top: "55%", opacity: 0.22, animationDelay: "15s" }}
+          aria-hidden="true"
+        />
         <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-14 sm:px-6 lg:pb-16 lg:pt-20">
           <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
             {/* Big monospace headline — left */}
@@ -121,7 +137,7 @@ export default function Home() {
 
           {/* ── Product preview panel ────────────────────────── */}
           <div className="mt-14 animate-fade-up lg:mt-20" style={{ animationDelay: "200ms" }}>
-            <div className="overflow-hidden border-2 border-ink-950 bg-surface">
+            <div className="glass overflow-hidden">
               {/* Browser chrome bar */}
               <div className="flex items-center gap-3 border-b-2 border-ink-950 bg-paper px-4 py-3">
                 <span className="flex flex-col gap-1" aria-hidden="true">
@@ -263,7 +279,12 @@ export default function Home() {
       </section>
 
       {/* ── Services ─────────────────────────────────────────── */}
-      <section id="services" className="border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+      <section id="services" className="relative overflow-hidden border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(16,185,129,0.8), rgba(16,185,129,0.16))", width: 320, height: 320, right: -100, top: 80, opacity: 0.2, animationDelay: "5s" }}
+          aria-hidden="true"
+        />
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
@@ -282,7 +303,7 @@ export default function Home() {
               <Link
                 key={s.id}
                 href="/buy"
-                className="group relative block h-full border-2 border-ink-950 bg-surface p-7 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
+                className="group relative block h-full glass p-7 transition-all duration-200 hover:-translate-y-1"
               >
                 <span className="absolute right-6 top-5 font-display text-3xl text-brand-500 transition-colors group-hover:text-brand-400">
                   0{i + 1}
@@ -314,7 +335,12 @@ export default function Home() {
       </section>
 
       {/* ── How it works ─────────────────────────────────────── */}
-      <section id="how-it-works" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+      <section id="how-it-works" className="relative overflow-hidden scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(255,176,32,0.85), rgba(255,176,32,0.18))", width: 300, height: 300, left: -110, bottom: -60, opacity: 0.24, animationDelay: "10s" }}
+          aria-hidden="true"
+        />
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-ink-500">How it works</p>
@@ -345,7 +371,12 @@ export default function Home() {
       </section>
 
       {/* ── Countries ────────────────────────────────────────── */}
-      <section id="countries" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+      <section id="countries" className="relative overflow-hidden scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.8), rgba(139,92,246,0.16))", width: 340, height: 340, right: -120, top: 40, opacity: 0.2, animationDelay: "12s" }}
+          aria-hidden="true"
+        />
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl">
@@ -364,7 +395,7 @@ export default function Home() {
               <Link
                 key={c.code}
                 href="/buy"
-                className="group border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
+                className="group glass p-6 transition-all duration-200 hover:-translate-y-1"
               >
                 <div className="flex items-center justify-between">
                   <span className="block origin-left transition-transform duration-300 group-hover:-rotate-2 group-hover:scale-110">
@@ -397,7 +428,12 @@ export default function Home() {
       <PaymentNetworks />
 
       {/* ── Why Afritop ──────────────────────────────────────── */}
-      <section id="pricing" className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+      <section id="pricing" className="relative overflow-hidden scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24">
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(47,107,255,0.85), rgba(47,107,255,0.16))", width: 320, height: 320, left: -110, top: "30%", opacity: 0.2, animationDelay: "3s" }}
+          aria-hidden="true"
+        />
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="max-w-2xl">
             <p className="text-sm font-medium uppercase tracking-widest text-ink-500">Why Afritop</p>
@@ -410,7 +446,7 @@ export default function Home() {
             {FEATURES.map((f) => (
               <div
                 key={f.title}
-                className="border-2 border-ink-950 bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:bg-brand-50"
+                className="glass h-full p-6 transition-all duration-200 hover:-translate-y-1"
               >
                 <span className="btn-cta grid size-11 place-items-center border-2 border-ink-950 bg-night text-white">
                   <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -424,7 +460,7 @@ export default function Home() {
           </div>
 
           {/* FX transparency — live rates */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-6 border-2 border-ink-950 bg-surface p-8 sm:flex-row">
+          <div className="glass mt-10 flex flex-col items-center justify-between gap-6 p-8 sm:flex-row">
             <div>
               <h3 className="font-display text-xl font-bold text-ink-950">Live exchange rates</h3>
               <p className="mt-1 text-sm text-ink-500">
@@ -458,8 +494,19 @@ export default function Home() {
       {/* py-20 sm:py-24 — matches every other section so the night panel
           floats with breathing room instead of butting into the section
           divider above it (the "black line"). */}
-      <section className="bg-paper px-4 py-20 sm:px-6 sm:py-24">
+      <section className="relative overflow-hidden bg-paper px-4 py-20 sm:px-6 sm:py-24">
         <div className="relative mx-auto max-w-6xl overflow-hidden border-2 border-ink-950 bg-night px-5 py-16 text-center text-white sm:px-12 sm:py-20">
+          {/* Liquid glow blobs inside the night panel */}
+          <span
+            className="liquid-blob"
+            style={{ background: "radial-gradient(circle, rgba(230,237,10,0.9), rgba(230,237,10,0.1))", width: 420, height: 420, left: -160, top: -120, opacity: 0.5 }}
+            aria-hidden="true"
+          />
+          <span
+            className="liquid-blob"
+            style={{ background: "radial-gradient(circle, rgba(47,107,255,0.8), rgba(47,107,255,0.1))", width: 360, height: 360, right: -140, bottom: -120, opacity: 0.45, animationDelay: "9s" }}
+            aria-hidden="true"
+          />
           {/* Lime top accent strip — crisp flat edge on the night panel. */}
           <div className="absolute inset-x-0 top-0 h-1.5 bg-sun-300" aria-hidden="true" />
           {/* Corner bolts — echo the flash-bolt logo mark, on-brand in both themes. */}

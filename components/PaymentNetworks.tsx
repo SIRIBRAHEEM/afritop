@@ -48,8 +48,13 @@ export function PaymentNetworks() {
   return (
     <section
       id="networks"
-      className="scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24"
+      className="relative overflow-hidden scroll-mt-20 border-b-2 border-ink-950 bg-paper py-20 sm:py-24"
     >
+      <span
+        className="liquid-blob"
+        style={{ background: "radial-gradient(circle, rgba(16,185,129,0.8), rgba(16,185,129,0.16))", width: 340, height: 340, right: -110, top: "20%", opacity: 0.2, animationDelay: "6s" }}
+        aria-hidden="true"
+      />
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
@@ -68,7 +73,7 @@ export function PaymentNetworks() {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
           {/* ── Wallets ── */}
-          <div className="border-2 border-ink-950 bg-surface p-7 sm:p-8">
+          <div className="glass p-7 sm:p-8">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-xl font-bold text-ink-950">
                 Works with your wallet
@@ -125,7 +130,12 @@ export function PaymentNetworks() {
           {/* ── Network + trust points ── */}
           <div className="flex flex-col gap-6">
             {/* Network card */}
-            <div className="border-2 border-ink-950 bg-night p-7 text-white">
+            <div className="relative overflow-hidden border-2 border-ink-950 bg-night p-7 text-white">
+              <span
+                className="liquid-blob"
+                style={{ background: "radial-gradient(circle, rgba(230,237,10,0.85), rgba(230,237,10,0.08))", width: 280, height: 280, right: -80, top: -80, opacity: 0.5 }}
+                aria-hidden="true"
+              />
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-xl font-bold text-white">
                   Arc by Circle
@@ -177,7 +187,7 @@ export function PaymentNetworks() {
               {TRUST_POINTS.map((t) => (
                 <div
                   key={t.title}
-                  className="group border-2 border-ink-950 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  className="group glass p-4 transition-all duration-200 hover:-translate-y-0.5"
                 >
                   <span
                     className="grid size-9 place-items-center border-2 border-ink-950 text-white transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"

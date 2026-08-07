@@ -40,8 +40,8 @@ export function Faq() {
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
               className={cn(
-                "flex w-full items-center justify-between gap-4 border-2 border-ink-950 bg-surface px-5 py-5 text-left transition-all duration-200 hover:-translate-y-0.5 sm:px-6",
-                isOpen && "bg-brand-50",
+                "flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition-all duration-200 hover:-translate-y-0.5 sm:px-6",
+                isOpen ? "glass-strong" : "glass",
               )}
             >
               <span className="font-display text-lg font-bold text-ink-900 sm:text-xl">{f.q}</span>

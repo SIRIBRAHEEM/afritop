@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatLocal, formatUsd } from "@/lib/fx";
 import { getUsdcChain } from "@/lib/chains";
 import { StatusChip } from "@/components/StatusChip";
+import { BalloonCelebration } from "@/components/BalloonCelebration";
 import type { ReceiptEntry } from "@/lib/receipt-journal";
 
 function txExplorerLink(txHash: string, chainId?: number): string {
@@ -18,9 +19,28 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
   const failed = entry.status === "failed";
 
   return (
-    <div className="flex-1 bg-paper">
-      <div className="mx-auto max-w-xl px-4 py-14 sm:py-20">
-        <div className="animate-pop overflow-hidden border-2 border-ink-950 bg-surface">
+    <div className="relative flex-1 overflow-hidden bg-paper">
+      {/* Liquid blobs drifting behind the glass receipt */}
+      <span
+        className="liquid-blob"
+        style={{ background: "radial-gradient(circle, rgba(47,107,255,0.85), rgba(47,107,255,0.2))", width: 380, height: 380, left: -120, top: -60, opacity: 0.35 }}
+        aria-hidden="true"
+      />
+      <span
+        className="liquid-blob"
+        style={{ background: "radial-gradient(circle, rgba(255,93,143,0.8), rgba(255,93,143,0.18))", width: 340, height: 340, right: -110, top: "35%", opacity: 0.3, animationDelay: "7s" }}
+        aria-hidden="true"
+      />
+      <span
+        className="liquid-blob"
+        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.75), rgba(139,92,246,0.16))", width: 300, height: 300, left: "30%", bottom: -140, opacity: 0.28, animationDelay: "13s" }}
+        aria-hidden="true"
+      />
+
+      {delivered && <BalloonCelebration />}
+
+      <div className="relative mx-auto max-w-xl px-4 py-14 sm:py-20">
+        <div className="animate-pop glass-strong overflow-hidden">
           {/* Header */}
           <div
             className={
@@ -31,6 +51,11 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
                   : "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
             }
           >
+            {delivered && (
+              <span className="mb-4 inline-flex items-center gap-1.5 border-2 border-night bg-sun-300 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-night">
+                🎉 Payment successful
+              </span>
+            )}
             <span className="relative mx-auto grid size-16 place-items-center">
               <span
                 className={

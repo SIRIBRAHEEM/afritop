@@ -147,7 +147,7 @@ export default function TransactionsPage() {
 
         {/* Wallet sign-in panel */}
         {session.status === "loading" ? null : !signedIn ? (
-          <div className="mt-8 border-2 border-ink-950 bg-surface p-6 shadow-hard sm:p-8">
+          <div className="glass-strong mt-8 p-6 sm:p-8">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
               <div className="max-w-md text-center sm:text-left">
                 <span className="inline-flex items-center gap-2 border-2 border-ink-950 bg-brand-50 px-3 py-1 text-xs font-bold text-ink-950 shadow-hard-sm">
@@ -186,7 +186,7 @@ export default function TransactionsPage() {
             </svg>
           </div>
         ) : rows.length === 0 ? (
-          <div className="mt-12 border-2 border-ink-950 bg-ink-50/50 px-6 py-20 text-center shadow-hard">
+          <div className="glass mt-12 px-6 py-20 text-center">
             <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-surface text-ink-950">
               <svg viewBox="0 0 24 24" className="size-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -209,7 +209,7 @@ export default function TransactionsPage() {
         ) : (
           <>
             {/* Desktop table */}
-            <div className="mt-8 hidden overflow-hidden border-2 border-ink-950 bg-surface shadow-hard md:block">
+            <div className="glass mt-8 hidden overflow-hidden md:block">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b-2 border-ink-950 bg-ink-50/70 text-xs font-bold uppercase tracking-wider text-ink-400">
@@ -285,7 +285,7 @@ export default function TransactionsPage() {
                   <Link
                     key={o.id}
                     href={`/success?orderId=${o.id}`}
-                    className="block border-2 border-ink-950 bg-surface p-5 shadow-hard-sm transition-all hover:shadow-hard"
+                    className="glass block p-5 transition-all duration-200 hover:-translate-y-0.5"
                   >
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-2">

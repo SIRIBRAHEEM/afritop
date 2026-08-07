@@ -410,3 +410,148 @@ body {
   border: 2px solid var(--color-paper);
 }
 *::-webkit-scrollbar-thumb:hover { background: var(--color-ink-700); }
+
+/* ══ Glass liquid style ════════════════════════════════════════
+ * Frosted-glass surfaces floating over drifting liquid blobs. The flat
+ * 2px-border system stays for chips/buttons; cards and panels become
+ * translucent, blurred glass with a glossy top sheen and soft depth.
+ * Theme-aware via color-mix against the surface token, so it follows
+ * light (beige glass on yellow) and dark (slate glass on charcoal).
+ */
+.glass,
+.glass-strong {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--color-ink-950) 16%, transparent);
+  border-radius: 0.875rem;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition:
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.2s ease;
+}
+.glass {
+  background: color-mix(in srgb, var(--color-surface) 64%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
+  backdrop-filter: blur(16px) saturate(1.35);
+}
+.glass-strong {
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+}
+.dark .glass {
+  background: color-mix(in srgb, var(--color-surface) 50%, rgba(255, 255, 255, 0.05));
+}
+.dark .glass-strong {
+  background: color-mix(in srgb, var(--color-surface) 70%, rgba(255, 255, 255, 0.06));
+}
+/* Glossy top sheen — the wet-glass highlight. */
+.glass::before,
+.glass-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), transparent 44%);
+  pointer-events: none;
+  z-index: 1;
+}
+.dark .glass::before,
+.dark .glass-strong::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 44%);
+}
+.glass:hover,
+.glass-strong:hover {
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+/* Older browsers / reduced-transparency: fall back to a solid surface. */
+@supports not ((backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px))) {
+  .glass,
+  .glass-strong {
+    background: var(--color-surface);
+  }
+}
+
+/* Frosted sticky navbar (blur under the bar as content scrolls). */
+.glass-nav {
+  background: color-mix(in srgb, var(--color-paper) 62%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink-950) 20%, transparent);
+}
+
+/* Liquid blobs — soft colored orbs drifting behind glass panels. */
+.liquid-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(56px);
+  pointer-events: none;
+  animation: liquid-drift 22s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes liquid-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(48px, -36px) scale(1.14); }
+  66% { transform: translate(-36px, 30px) scale(0.9); }
+}
+/* Mobile perf: much softer blur and slower drift on phones so the glass +
+ * blob compositing stays cheap on low-end GPUs. */
+@media (max-width: 1023px) {
+  .liquid-blob {
+    filter: blur(32px);
+    animation-duration: 30s;
+  }
+}
+
+/* ══ Payment-success celebration ═══════════════════════════════
+ * Balloons rising across the viewport + confetti drifting down,
+ * rendered when a receipt shows "Delivered". Pure CSS keyframes;
+ * disabled under prefers-reduced-motion.
+ */
+.balloon-rise {
+  position: absolute;
+  bottom: -22%;
+  animation: balloon-rise linear infinite;
+  will-change: transform;
+}
+@keyframes balloon-rise {
+  0% { transform: translateY(0) translateX(0) rotate(-4deg); }
+  25% { transform: translateY(-26vh) translateX(18px) rotate(4deg); }
+  50% { transform: translateY(-52vh) translateX(-14px) rotate(-4deg); }
+  75% { transform: translateY(-78vh) translateX(16px) rotate(3deg); }
+  100% { transform: translateY(-104vh) translateX(0) rotate(-3deg); }
+}
+.confetti-piece {
+  position: absolute;
+  top: -6%;
+  animation: confetti-fall linear infinite;
+  will-change: transform;
+}
+/* Balloon strings — dark on light canvases, light on dark canvases. */
+.balloon-string {
+  stroke: rgba(11, 11, 12, 0.55);
+}
+.dark .balloon-string {
+  stroke: rgba(255, 255, 255, 0.6);
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(112vh) rotate(640deg); opacity: 0.7; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .liquid-blob,
+  .balloon-rise,
+  .confetti-piece {
+    animation: none;
+  }
+  .balloon-rise,
+  .confetti-piece {
+    opacity: 0;
+  }
+}

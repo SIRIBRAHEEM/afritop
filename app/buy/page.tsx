@@ -259,8 +259,19 @@ function BuyFlow() {
     country.code === "NG" ? "801 234 5678" : country.code === "GH" ? "24 123 4567" : country.code === "KE" ? "712 345 678" : "82 123 4567";
 
   return (
-    <div className="bg-paper">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+    <div className="relative bg-paper">
+      {/* Liquid blobs clipped to the page — keeps the sticky summary working */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(47,107,255,0.8), rgba(47,107,255,0.15))", width: 380, height: 380, left: -130, top: 120, opacity: 0.22 }}
+        />
+        <span
+          className="liquid-blob"
+          style={{ background: "radial-gradient(circle, rgba(255,93,143,0.75), rgba(255,93,143,0.14))", width: 340, height: 340, right: -120, top: "40%", opacity: 0.2, animationDelay: "9s" }}
+        />
+      </div>
+      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="animate-fade-up">
           <p className="text-sm font-bold uppercase tracking-widest text-brand-600">Buy top-up</p>
           <h1 className="mt-2 font-display text-h2 font-semibold text-ink-900">
@@ -326,10 +337,8 @@ function BuyFlow() {
                     onClick={() => selectService(s.id)}
                     aria-pressed={service === s.id}
                     className={cn(
-                      "relative flex items-center gap-3 bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
-                      service === s.id
-                        ? "bg-paper border-2 border-ink-950 shadow-hard"
-                        : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
+                      "relative flex items-center gap-3 p-4 text-left transition-all duration-200 hover:-translate-y-0.5",
+                      service === s.id ? "glass-strong" : "glass",
                     )}
                   >
                     {service === s.id && <SelectedCheck />}
@@ -361,10 +370,8 @@ function BuyFlow() {
                     onClick={() => selectCountry(c.code)}
                     aria-pressed={countryCode === c.code}
                     className={cn(
-                      "relative bg-surface p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
-                      countryCode === c.code
-                        ? "bg-paper border-2 border-ink-950 shadow-hard"
-                        : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
+                      "relative p-4 text-center transition-all duration-200 hover:-translate-y-0.5",
+                      countryCode === c.code ? "glass-strong" : "glass",
                     )}
                   >
                     {countryCode === c.code && <SelectedCheck />}
@@ -395,10 +402,8 @@ function BuyFlow() {
                       onClick={() => setProviderId(p.id)}
                       aria-pressed={active}
                       className={cn(
-                        "flex items-center gap-2 bg-surface py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
-                        active
-                          ? "bg-paper text-ink-950 border-2 border-ink-950 shadow-hard"
-                          : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
+                        "flex items-center gap-2 py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 transition-all duration-200",
+                        active ? "glass-strong text-ink-950" : "glass",
                       )}
                     >
                       <BrandMark logo={p.logo} name={p.name} short={p.short} color={p.color} size={28} />
@@ -474,10 +479,8 @@ function BuyFlow() {
                         onClick={() => setBundleId(b.id)}
                         aria-pressed={active}
                         className={cn(
-                          "relative flex items-center justify-between bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
-                          active
-                            ? "bg-paper border-2 border-ink-950 shadow-hard"
-                            : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
+                          "relative flex items-center justify-between p-4 text-left transition-all duration-200 hover:-translate-y-0.5",
+                          active ? "glass-strong" : "glass",
                         )}
                       >
                         {active && <SelectedCheck />}
@@ -544,7 +547,7 @@ function BuyFlow() {
 
           {/* ── Summary ── */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="border-2 border-ink-950 bg-surface p-6 shadow-hard">
+            <div className="glass-strong p-6">
               <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">Order summary</h2>
 
               <div className="mt-4 space-y-3 text-sm">
