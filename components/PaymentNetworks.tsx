@@ -99,6 +99,7 @@ export function PaymentNetworks() {
                     short={w.short}
                     color={w.color}
                     size={34}
+                    className="transition-transform duration-200 group-hover:scale-105"
                   />
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-extrabold text-ink-950">

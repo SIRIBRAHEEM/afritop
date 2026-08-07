@@ -8,6 +8,7 @@ import { NumberTicker } from "@/components/ui/NumberTicker";
 import { Marquee } from "@/components/ui/Marquee";
 import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { LiveDeliveriesChart } from "@/components/LiveDeliveriesChart";
 
 const STATS = [
   { v: 99, suffix: "%", l: "delivery success rate" },
@@ -172,41 +173,11 @@ export default function Home() {
                   </div>
 
                   <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_1fr]">
-                    {/* Flat line/area chart — black strokes on lime fill */}
-                    <div className="border-2 border-ink-950 bg-paper p-4">
-                      <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-bold uppercase tracking-widest text-ink-500">Deliveries this week</p>
-                        <span className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-ink-950">
-                          <span className="size-2 bg-ink-950" />
-                          live
-                        </span>
-                      </div>
-                      <svg viewBox="0 0 320 120" className="mt-3 w-full text-ink-950" aria-hidden="true">
-                        {/* area fill */}
-                        <path
-                          d="M0 92 L45 80 L90 86 L135 62 L180 70 L225 42 L270 54 L320 30 L320 120 L0 120 Z"
-                          fill="#d4ff3f"
-                          stroke="none"
-                        />
-                        {/* ink stroke line */}
-                        <path
-                          d="M0 92 L45 80 L90 86 L135 62 L180 70 L225 42 L270 54 L320 30"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinejoin="round"
-                          strokeLinecap="round"
-                        />
-                        {/* baseline + ticks */}
-                        <line x1="0" y1="116" x2="320" y2="116" stroke="currentColor" strokeWidth="1.5" />
-                        <line x1="0" y1="8" x2="320" y2="8" stroke="currentColor" strokeWidth="1" strokeDasharray="3 5" />
-                      </svg>
-                      <div className="mt-2 flex items-center justify-between font-mono text-[11px] font-bold text-ink-500">
-                        <span>mon</span>
-                        <span>wed</span>
-                        <span>fri</span>
-                        <span>sun</span>
-                      </div>
+                    {/* Live deliveries chart — animated, real-time counter.
+                        bg-surface (not bg-paper): in light mode paper is lime,
+                        which would swallow the lime area fill. */}
+                    <div className="border-2 border-ink-950 bg-surface p-4">
+                      <LiveDeliveriesChart />
                     </div>
 
                     {/* Live receipt card */}
