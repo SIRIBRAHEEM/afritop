@@ -127,10 +127,10 @@ export default function TransactionsPage() {
                   <span className="animate-ping-slow absolute inline-flex size-2 rounded-full bg-brand-500" />
                   <span className="relative inline-flex size-2 rounded-full bg-brand-500" />
                 </span>
-                Synced to the cloud — <span className="font-mono font-semibold text-ink-700">{shortAddress(session.address)}</span>
+                Synced to the cloud with <span className="font-mono font-semibold text-ink-700">{shortAddress(session.address)}</span>
               </p>
             ) : (
-              <p className="mt-2 text-ink-500">Every top-up, token and payment — in one place.</p>
+              <p className="mt-2 text-ink-500">Every top-up, token and payment in one place.</p>
             )}
           </div>
           <button
@@ -160,7 +160,7 @@ export default function TransactionsPage() {
                   Sign in with your wallet
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-ink-500">
-                  Your transaction history lives in the cloud, tied to your wallet — sign
+                  Your transaction history lives in the cloud, tied to your wallet. Sign
                   in from any device and it follows you. New payments sync instantly;
                   receipts from before you signed in stay on this device.
                 </p>
@@ -196,7 +196,7 @@ export default function TransactionsPage() {
             <h2 className="mt-5 text-xl font-extrabold text-ink-900">No transactions yet</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">
               {signedIn
-                ? "When you buy airtime, data or electricity with this wallet, your receipts will show up here — on any device."
+                ? "When you buy airtime, data or electricity with this wallet, your receipts will show up here on any device."
                 : "When you buy airtime, data or electricity, your receipts will show up here."}
             </p>
             <Link

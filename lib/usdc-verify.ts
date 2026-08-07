@@ -91,6 +91,6 @@ export async function verifyUsdcPayment(opts: {
 
   return {
     ok: false,
-    reason: `Couldn't confirm the transaction on ${opts.chain.label}. It may still be settling — wait a moment and try again.`,
+    reason: `Couldn't confirm the transaction on ${opts.chain.label}. It may still be settling. Wait a moment and try again.`,
   };
 }

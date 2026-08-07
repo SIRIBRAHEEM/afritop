@@ -6,15 +6,15 @@ import { cn } from "@/lib/utils";
 const FAQS = [
   {
     q: "How fast is delivery?",
-    a: "Airtime credits hit the number in seconds. Electricity tokens are generated the moment your USDC payment settles on-chain — usually well under a minute.",
+    a: "Airtime credits hit the number in seconds. Electricity tokens are generated the moment your USDC payment settles on-chain, usually well under a minute.",
   },
   {
     q: "What is USDC and why do I pay with it?",
-    a: "USDC is a stablecoin issued by Circle, always worth 1 US dollar. You pay straight from your own wallet — MetaMask, Coinbase, Trust or Rabby — on Arc. No bank card, no hidden exchange margins.",
+    a: "USDC is a stablecoin issued by Circle, always worth 1 US dollar. You pay straight from your own wallet (MetaMask, Coinbase, Trust or Rabby) on Arc. No bank card, no hidden exchange margins.",
   },
   {
     q: "Which countries and networks do you support?",
-    a: "We currently cover Nigeria, Ghana, Kenya and South Africa — 14 mobile networks and 11 power utilities. More countries are on the way.",
+    a: "We currently cover Nigeria, Ghana, Kenya and South Africa: 14 mobile networks and 11 power utilities. More countries are on the way.",
   },
   {
     q: "Do I need an account?",

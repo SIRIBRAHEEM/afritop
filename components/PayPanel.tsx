@@ -315,7 +315,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               <circle cx="12" cy="12" r="9" />
               <path d="M12 8v4M12 16h.01" />
             </svg>
-            Payment cancelled — no charge was made.
+            Payment cancelled. No charge was made.
           </div>
         )}
 
@@ -455,7 +455,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                       disabled={busy === "connecting"}
                       className="mt-3 text-xs font-bold text-brand-700 hover:text-brand-600"
                     >
-                      I&apos;ve installed a wallet — try again →
+                      I&apos;ve installed a wallet. Try again →
                     </button>
                   </div>
                 )}
@@ -481,7 +481,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
 
                 {!walletMatchesChain && (
                   <p className="bg-sun-50 px-4 py-2.5 text-xs font-semibold text-sun-800">
-                    Your wallet is on another network. Pick <strong>{selectedChain.label}</strong> above —
+                    Your wallet is on another network. Pick <strong>{selectedChain.label}</strong> above and
                     we&apos;ll prompt your wallet to switch.
                   </p>
                 )}
@@ -501,7 +501,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   {busy === "sending" && "Waiting for your approval…"}
                   {busy === "confirming" && "Confirming on-chain…"}
                   {!busy && !lastConfirm && `Pay ${formatUsd(order.usdTotal)} USDC`}
-                  {!busy && lastConfirm && "Payment sent — check again above"}
+                  {!busy && lastConfirm && "Payment sent. Check again above"}
                 </button>
               </>
             )}
@@ -540,13 +540,13 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   <circle cx="12" cy="12" r="9" />
                   <path d="M12 8v4M12 16h.01" />
                 </svg>
-                Payment sent — confirming…
+                Payment sent. Confirming…
               </p>
               <p className="mt-1.5 leading-relaxed">
                 Your USDC transfer was broadcast, but on-chain confirmation is taking longer than
                 usual. If it shows as successful on the explorer, tap <strong>Check again</strong>
-                and we&apos;ll finish your top-up. If it failed on-chain, start a new payment instead —
-                a failed transfer sends nothing.
+                and we&apos;ll finish your top-up. If it failed on-chain, start a new payment instead.
+                A failed transfer sends nothing.
               </p>
               {error && <p className="mt-2 text-xs font-semibold text-sun-900/80">{error}</p>}
               <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -610,7 +610,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               className="flex w-full items-center justify-center gap-2 border-2 border-transparent px-6 py-3 text-sm font-bold text-ink-400 transition-colors hover:border-ink-950 hover:bg-surface hover:text-ink-950 disabled:cursor-wait disabled:opacity-70"
             >
               {busy === "simulating" ? <Spinner /> : null}
-              {busy === "simulating" ? "Simulating…" : "Demo mode — simulate payment"}
+              {busy === "simulating" ? "Simulating…" : "Demo mode: simulate payment"}
             </button>
           )}
         </div>

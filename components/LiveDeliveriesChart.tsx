@@ -294,7 +294,7 @@ export function LiveDeliveriesChart() {
       {/* Empty-state hint */}
       {isEmpty && (
         <p className="mt-2 text-center font-mono text-[11px] font-bold text-ink-400">
-          Waiting for the first real delivery — it will light up here live
+          Waiting for the first real delivery. It will light up here live
         </p>
       )}
 

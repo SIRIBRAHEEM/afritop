@@ -139,7 +139,7 @@ export function LiveFxRates() {
               {entry.rate > 0 ? (
                 <AnimatedRate value={entry.rate} decimals={entry.code === "NGN" ? 0 : 1} />
               ) : (
-                "—"
+                "–"
               )}
 
               {/* Live dot indicator */}

@@ -144,7 +144,7 @@ async function readOrders(): Promise<Order[]> {
       return [];
     }
   } catch (err) {
-    console.warn("[store] filesystem unavailable — using in-memory store", err);
+    console.warn("[store] filesystem unavailable. Using in-memory store", err);
     memoryStore = [];
     return memoryStore;
   }
@@ -155,7 +155,7 @@ async function writeOrders(orders: Order[]): Promise<void> {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(ORDERS_FILE, JSON.stringify(orders, null, 2), "utf8");
   } catch (err) {
-    console.warn("[store] filesystem unavailable — keeping orders in memory", err);
+    console.warn("[store] filesystem unavailable. Keeping orders in memory", err);
     memoryStore = orders;
   }
 }

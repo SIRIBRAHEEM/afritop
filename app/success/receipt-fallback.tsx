@@ -39,7 +39,7 @@ export function ReceiptFallback({ orderId }: { orderId: string }) {
           </span>
           <h1 className="mt-4 font-display text-2xl font-bold text-ink-900">Order not found</h1>
           <p className="mt-2 text-sm text-ink-500">
-            We couldn&apos;t find that order. If you just paid, give it a few seconds and refresh — or
+            We couldn&apos;t find that order. If you just paid, give it a few seconds and refresh, or
             check your browser&apos;s saved receipts.
           </p>
           <Link

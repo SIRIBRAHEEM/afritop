@@ -21,7 +21,7 @@ const SECTIONS = [
   },
   {
     title: "5. Contact",
-    body: "Questions? Email the team at ibramzzzy@gmail.com — we usually reply within a few hours.",
+    body: "Questions? Email the team at ibramzzzy@gmail.com and we usually reply within a few hours.",
   },
 ];
 

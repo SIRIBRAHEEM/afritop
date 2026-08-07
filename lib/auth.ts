@@ -18,7 +18,7 @@ if (!process.env.AUTH_SECRET && process.env.NODE_ENV === "production") {
   // A predictable fallback secret would let anyone forge a session cookie for any
   // wallet address. Never run production without AUTH_SECRET.
   console.warn(
-    "[auth] AUTH_SECRET is not set — sessions are signed with the insecure dev fallback. Set AUTH_SECRET in production.",
+    "[auth] AUTH_SECRET is not set. Sessions are signed with the insecure dev fallback. Set AUTH_SECRET in production.",
   );
 }
 export const SESSION_COOKIE = "afritop_session";

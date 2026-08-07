@@ -32,7 +32,7 @@ const TRUST_POINTS: {
   },
   {
     title: "No card needed",
-    text: "Pay with stable USDC from any EVM wallet — no bank card, no KYC, no hidden exchange margins.",
+    text: "Pay with stable USDC from any EVM wallet. No bank card, no KYC, no hidden exchange margins.",
     color: "#f97316",
     icon: "card",
   },
@@ -66,7 +66,7 @@ export function PaymentNetworks() {
             </h2>
           </div>
           <p className="max-w-xs text-sm text-ink-500">
-            Connect any of these wallets — we detect what&apos;s installed and
+            Connect any of these wallets. We detect what&apos;s installed and
             settle in USDC on Arc.
           </p>
         </div>
@@ -84,7 +84,7 @@ export function PaymentNetworks() {
             </div>
             <p className="mt-2 text-sm leading-relaxed text-ink-500">
               Install any of these and we&apos;ll detect it automatically when you
-              check out — no accounts, no sign-ups.
+              check out. No accounts, no sign-ups.
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
@@ -145,8 +145,8 @@ export function PaymentNetworks() {
                 </span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-white/70">
-                A stablecoin-native L1 built by Circle — sub-second finality,
-                gas paid in USDC.
+                A stablecoin-native L1 built by Circle with sub-second finality.
+                Gas is paid in USDC.
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 border-2 border-ink-950 bg-surface px-3 py-1.5 font-mono text-xs font-bold text-ink-950">

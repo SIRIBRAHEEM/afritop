@@ -43,7 +43,7 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
       // No API key configured → credit instantly so the demo works end-to-end.
       await updateOrder(orderId, {
         status: "delivered",
-        message: "Simulated credit — add your Africa's Talking key to go live.",
+        message: "Simulated credit. Add your Africa's Talking key to go live.",
       });
     }
   } else if (order.service === "electricity") {
@@ -51,13 +51,13 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
     await updateOrder(orderId, {
       status: "delivered",
       token,
-      message: "Simulated token — connect a vending partner to go live.",
+      message: "Simulated token. Connect a vending partner to go live.",
     });
   } else {
     // data bundles
     await updateOrder(orderId, {
       status: "delivered",
-      message: "Simulated data bundle — connect a vending partner to go live.",
+      message: "Simulated data bundle. Connect a vending partner to go live.",
     });
   }
 

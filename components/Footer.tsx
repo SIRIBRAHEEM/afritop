@@ -47,7 +47,7 @@ export function Footer() {
             <Logo light />
             <p className="mt-4 text-sm leading-relaxed text-white/55">
               Airtime, data and prepaid electricity for Nigeria, Ghana, Kenya and
-              South Africa — paid in USDC, delivered in seconds.
+              South Africa, paid in USDC and delivered in seconds.
             </p>
             <div className="mt-5 flex items-center gap-2 border-2 border-ink-950 bg-white/10 px-3.5 py-2.5 text-xs text-white/70">
               <svg viewBox="0 0 24 24" className="size-4 text-white" fill="currentColor" aria-hidden="true">

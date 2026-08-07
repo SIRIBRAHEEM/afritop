@@ -20,11 +20,11 @@ const STATS = [
 const STEPS = [
   {
     title: "Choose your top-up",
-    text: "Pick airtime, data or electricity — then your country, network and amount.",
+    text: "Pick airtime, data or electricity, then your country, network and amount.",
   },
   {
     title: "Pay with USDC",
-    text: "Connect any EVM wallet and pay in stable USDC on Arc — confirmed on-chain.",
+    text: "Connect any EVM wallet and pay in stable USDC on Arc. Every payment is confirmed on-chain.",
   },
   {
     title: "Delivered in seconds",
@@ -39,15 +39,15 @@ const FEATURES = [
   },
   {
     title: "Transparent pricing",
-    text: "You pay face value plus a flat 1.5% platform fee — displayed before you pay. No hidden margins.",
+    text: "You pay face value plus a flat 1.5% platform fee, all shown before you pay. No hidden margins.",
   },
   {
     title: "USDC-first payments",
-    text: "Settle in stable, borderless USDC straight from your own wallet on Arc — Circle's stablecoin network.",
+    text: "Settle in stable, borderless USDC straight from your own wallet on Arc, Circle's stablecoin network.",
   },
   {
     title: "Built for Africa",
-    text: "Local currencies, local networks and local power companies — from Nigeria to South Africa.",
+    text: "Local currencies, local networks and local power companies, from Nigeria to South Africa.",
   },
 ];
 
@@ -96,7 +96,7 @@ export default function Home() {
             <div className="animate-fade-up lg:pb-2" style={{ animationDelay: "120ms" }}>
               <p className="text-lg leading-relaxed text-ink-500">
                 Buy airtime, data bundles and prepaid electricity for Nigeria, Ghana,
-                Kenya and South Africa — pay in USDC from your own wallet, delivered
+                Kenya and South Africa. Pay in USDC from your own wallet and it lands
                 in seconds.
               </p>
 
@@ -294,7 +294,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="max-w-xs text-sm leading-relaxed text-ink-500">
-              Three services, one checkout. Pick what you need — we handle the rest.
+              Three services, one checkout. Pick what you need and we handle the rest.
             </p>
           </div>
 
@@ -348,7 +348,7 @@ export default function Home() {
               Top-up in three quick steps
             </h2>
             <p className="mt-4 text-lg text-ink-500">
-              The fastest way to top-up — from choosing to delivered, in under a minute.
+              The fastest way to top-up, from choosing to delivered in under a minute.
             </p>
           </div>
 
@@ -386,7 +386,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="max-w-xs text-sm text-ink-500">
-              Local networks and power utilities, priced in local currency — paid in USDC.
+              Local networks and power utilities, priced in local currency and paid in USDC.
             </p>
           </div>
 
@@ -538,7 +538,7 @@ export default function Home() {
               <span className="text-sun-300">Your meter is running.</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-white/70">
-              Solve it in seconds — pay in USDC from your own wallet and the top-up lands instantly.
+              Solve it in seconds. Pay in USDC from your own wallet and the top-up lands instantly.
             </p>
             <Link
               href="/buy"

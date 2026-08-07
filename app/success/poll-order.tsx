@@ -66,7 +66,7 @@ export function PollOrder({ orderId }: { orderId: string }) {
         <h1 className="mt-5 font-display text-2xl font-bold text-ink-900">Payment received</h1>
         <p className="mt-2 text-sm leading-relaxed text-ink-500">
           Your order <span className="font-mono font-bold text-ink-700">{orderId}</span> is being
-          fulfilled. We&apos;re waiting for Circle to confirm the settlement — this usually takes a
+          fulfilled. We&apos;re waiting for Circle to confirm the settlement. This usually takes a
           few seconds.
         </p>
         <p className="mt-4 text-xs font-semibold text-ink-400">Checking… {elapsed}s</p>

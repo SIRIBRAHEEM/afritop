@@ -91,7 +91,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
                     entry.service
                   } top-up has been delivered to ${entry.recipient}.`
                 : failed
-                  ? "We couldn't complete the delivery. Your payment will be reviewed — please contact support."
+                  ? "We couldn't complete the delivery. Your payment will be reviewed. Please contact support."
                   : "Your payment was received and is being processed."}
             </p>
           </div>

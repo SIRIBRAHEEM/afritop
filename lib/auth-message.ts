@@ -10,7 +10,7 @@ export function buildAuthMessage(opts: {
   domain: string;
 }): string {
   return [
-    "Afritop — Sign in with your wallet",
+    "Afritop: sign in with your wallet",
     "",
     `Domain: ${opts.domain}`,
     `Address: ${opts.address}`,

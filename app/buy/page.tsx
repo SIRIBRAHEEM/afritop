@@ -278,7 +278,7 @@ function BuyFlow() {
             What are we topping up?
           </h1>
           <p className="mt-2 text-ink-500">
-            Pick a service, enter the details, pay in USDC — delivered in seconds.
+            Pick a service, enter the details, pay in USDC and it lands in seconds.
           </p>
         </div>
 
@@ -288,7 +288,7 @@ function BuyFlow() {
               <circle cx="12" cy="12" r="9" />
               <path d="M12 8v4M12 16h.01" />
             </svg>
-            Payment cancelled — no charge was made. Your order is still waiting.
+            Payment cancelled. No charge was made and your order is still waiting.
           </div>
         )}
 
@@ -459,7 +459,7 @@ function BuyFlow() {
                   <p className="mt-2 text-xs font-semibold text-red-500">
                     {service === "electricity"
                       ? "Enter a valid meter number (6–20 digits)."
-                      : `Enter a valid ${country.name} number — ${country.phoneDigits} digits after ${country.phonePrefix}, e.g. ${phonePlaceholder}.`}
+                      : `Enter a valid ${country.name} number with ${country.phoneDigits} digits after ${country.phonePrefix}, e.g. ${phonePlaceholder}.`}
                   </p>
                 )}
               </div>
@@ -596,13 +596,13 @@ function BuyFlow() {
                       <circle cx="12" cy="12" r="9" />
                       <path d="M12 8v4M12 16h.01" />
                     </svg>
-                    Payment sent — confirming…
+                    Payment sent. Confirming…
                   </p>
                   <p className="mt-1.5 leading-relaxed">
                     Your USDC transfer was broadcast, but we haven&apos;t confirmed it on-chain yet. If
                     it shows as successful on the explorer, tap <strong>Check again</strong> and
-                    we&apos;ll finish your top-up. If it failed on-chain, start a new payment instead —
-                    a failed transfer sends nothing.
+                    we&apos;ll finish your top-up. If it failed on-chain, start a new payment instead.
+                    A failed transfer sends nothing.
                   </p>
                   {error && <p className="mt-2 text-xs font-semibold text-sun-900/80">{error}</p>}
                   <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -647,7 +647,7 @@ function BuyFlow() {
                 <div className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800 animate-fade-in">
                   <p className="font-bold">No wallet extension detected.</p>
                   <p className="mt-1">
-                    Install a browser wallet to pay USDC on-chain — then click pay again:
+                    Install a browser wallet to pay USDC on-chain, then click pay again:
                   </p>
                   <div className="mt-2.5 flex flex-wrap gap-2">
                     {WALLET_INSTALLS.map((w) => (
@@ -686,7 +686,7 @@ function BuyFlow() {
                     Pay {formatUsd(usdTotal)} with USDC
                   </>
                 ) : txRef ? (
-                  "Payment sent — check again above"
+                  "Payment sent. Check again above"
                 ) : (
                   "Complete the details to pay"
                 )}
@@ -704,7 +704,7 @@ function BuyFlow() {
             {!ready && (
               <p className="mt-4 border-2 border-ink-950 bg-ink-50 px-4 py-3 text-xs leading-relaxed text-ink-400">
                 {step === 1
-                  ? "Tell us what to top up and the amount above — your total appears here."
+                  ? "Tell us what to top up and the amount above. Your total appears here."
                   : "Finish the recipient and amount fields above to unlock checkout."}
               </p>
             )}
@@ -738,7 +738,7 @@ function BuyFlow() {
             <div className="mt-4 space-y-2">
               {wallets.length === 0 && (
                 <p className="bg-ink-50 px-4 py-3 text-xs text-ink-500">
-                  No wallets detected yet — open your wallet extension and try again.
+                  No wallets detected yet. Open your wallet extension and try again.
                 </p>
               )}
               {wallets.map((w) => (
