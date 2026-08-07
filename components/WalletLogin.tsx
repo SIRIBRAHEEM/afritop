@@ -96,7 +96,7 @@ export function WalletLogin({ className }: { className?: string }) {
               <button
                 type="button"
                 onClick={() => void signOutSession()}
-                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm font-bold text-red-500 transition-colors hover:bg-red-50"
+                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm font-bold text-red-500 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
               >
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />

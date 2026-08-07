@@ -332,9 +332,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
             </div>
             <p className="mt-4 font-mono text-4xl font-bold tracking-tight text-white">
               {formatUsd(order.usdTotal)}
-              <span className="ml-2 text-sm font-semibold text-ink-400">USDC</span>
+              <span className="ml-2 text-sm font-semibold text-white/60">USDC</span>
             </p>
-            <p className="mt-1 text-sm capitalize text-ink-300">
+            <p className="mt-1 text-sm capitalize text-white/60">
               {order.service} · {order.provider} · {order.recipientLabel} {order.recipient}
             </p>
           </div>
@@ -346,7 +346,8 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           </div>
         </div>
 
-        {/* Wallet payment */}          <div className="mt-6 border-2 border-ink-950 bg-surface p-6 sm:p-7">
+        {/* Wallet payment */}
+        <div className="mt-6 border-2 border-ink-950 bg-surface p-6 sm:p-7">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-bold text-ink-900">
               Pay with your wallet
@@ -553,7 +554,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   type="button"
                   onClick={() => void retryConfirm()}
                   disabled={busy === "confirming"}
-                  className="inline-flex items-center gap-1.5 bg-sun-600 px-4 py-2 text-xs font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-sun-700 disabled:cursor-wait disabled:opacity-70 dark:text-night"
+                  className="inline-flex items-center gap-1.5 border-2 border-ink-950 bg-sun-600 px-4 py-2 text-xs font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-sun-700 disabled:cursor-wait disabled:opacity-70 dark:text-night"
                 >
                   {busy === "confirming" ? <Spinner /> : null}
                   {busy === "confirming" ? "Checking…" : "Check again"}
@@ -562,7 +563,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   href={confirmChain?.explorerTx(lastConfirm.txHash)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-surface px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
+                  className="border-2 border-ink-950 bg-surface px-4 py-2 text-xs font-bold text-ink-700 shadow-sm transition-colors hover:shadow-md"
                 >
                   View on {confirmChain?.short ?? "explorer"} ↗
                 </a>

@@ -28,7 +28,11 @@ const space = Space_Mono({
   display: "swap",
 });
 
+// NOTE: swap this for your custom domain once it's live (e.g. https://afritop.xyz).
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://afritop.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Afritop — Buy airtime, data & electricity across Africa",
     template: "%s · Afritop",
@@ -53,6 +57,14 @@ export const metadata: Metadata = {
     description:
       "Buy airtime, data and prepaid electricity across Nigeria, Ghana, Kenya and South Africa. Pay in USDC from any EVM wallet, delivered in seconds.",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Afritop — Top up Africa in seconds" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Afritop — Top up Africa in seconds",
+    description:
+      "Buy airtime, data and prepaid electricity across Nigeria, Ghana, Kenya and South Africa. Pay in USDC from any EVM wallet, delivered in seconds.",
+    images: ["/og.png"],
   },
 };
 

@@ -63,7 +63,7 @@ export function Navbar() {
           <WalletLogin />
           <Link
             href="/buy"
-            className="btn-cta hidden rounded-full border-2 border-ink-950 bg-night px-5 py-2.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800 sm:inline-flex"
+            className="btn-cta hidden border-2 border-ink-950 bg-night px-5 py-2.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-ink-800 sm:inline-flex"
           >
             Top up now
           </Link>
@@ -95,19 +95,19 @@ export function Navbar() {
       >
         <div className="space-y-1 border-b-2 border-ink-950 bg-paper px-4 py-3">
           {LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={() => setOpen(false)}
-            className="block border-2 border-ink-950 px-4 py-2.5 text-sm font-medium text-ink-700 transition-colors hover:bg-ink-100"
-          >
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="block border-2 border-ink-950 px-4 py-2.5 text-sm font-medium text-ink-700 transition-colors hover:bg-ink-100"
+            >
               {link.label}
             </Link>
           ))}
           <Link
             href="/buy"
             onClick={() => setOpen(false)}
-            className="btn-cta mt-2 block rounded-full border-2 border-ink-950 bg-night px-4 py-3 text-center text-sm font-medium text-white"
+            className="btn-cta mt-2 block border-2 border-ink-950 bg-night px-4 py-3 text-center text-sm font-medium text-white"
           >
             Top up now
           </Link>

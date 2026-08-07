@@ -273,6 +273,14 @@
   }
 }
 
+/* ── Keyboard focus ────────────────────────────────────────────
+ * Crisp 2px ink outline so tabbing through controls is always visible,
+ * on every surface, in both themes. */
+:focus-visible {
+  outline: 2px solid var(--color-ink-950);
+  outline-offset: 2px;
+}
+
 /* ── Base corner rules ─────────────────────────────────────────
  * Sharp, minimal corner radius (6px max) on every layout container,
  * card, button, input and panel — the flat "printed" pixel-edged look.

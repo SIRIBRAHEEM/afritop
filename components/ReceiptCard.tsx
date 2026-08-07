@@ -210,7 +210,7 @@ function CopyButton({ token }: { token: string }) {
     <button
       type="button"
       onClick={() => void copy()}
-      className="inline-flex items-center gap-2 border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/20"
+      className="inline-flex items-center gap-2 border-2 border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/20"
     >
       {copied ? (
         <>
