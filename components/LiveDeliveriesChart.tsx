@@ -7,6 +7,7 @@ const W = 320;
 const H = 120;
 const PAD = 10;
 const POLL_MS = 15000;
+const CACHE_KEY = "afritop-chart-stats";
 
 interface DeliveryStats {
   weekTotal: number;
@@ -38,10 +39,14 @@ function toY(buckets: number[]): number[] {
 
 /**
  * Live "Deliveries this week" chart for the hero — driven by REAL on-site
- * transactions, not a simulation. Polls /api/stats (which aggregates fulfilled
- * orders from the store) every 15s, smoothly morphs the line to the new daily
- * buckets and tweens the counter. Pauses while the tab is hidden, resumes with
- * a fresh fetch when it becomes visible, and respects prefers-reduced-motion.
+ * transactions. Polls /api/stats every 15s, morphs the line to the latest
+ * daily buckets and tweens the counter.
+ *
+ * The last stats are cached in localStorage so returning to the site never
+ * shows a "cleared" chart: the previous real numbers restore instantly, then
+ * a fresh fetch morphs them to the latest state. Pauses while the tab is
+ * hidden, resumes with a fresh fetch when it becomes visible, and respects
+ * prefers-reduced-motion.
  */
 export function LiveDeliveriesChart() {
   const [ys, setYs] = React.useState<number[]>([]);
@@ -122,6 +127,33 @@ export function LiveDeliveriesChart() {
     reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let alive = true;
 
+    // Instantly restore the last real stats (deferred so SSR/hydration stay
+    // stable and no setState runs synchronously inside the effect).
+    let cached: DeliveryStats | null = null;
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (raw) {
+        const p = JSON.parse(raw) as DeliveryStats;
+        if (Array.isArray(p.buckets) && p.buckets.length === 7 && typeof p.weekTotal === "number") {
+          cached = p;
+        }
+      }
+    } catch {
+      /* private mode / corrupt value — start fresh */
+    }
+    const restore = window.setTimeout(() => {
+      if (!alive || !cached) return;
+      drawn.current = true; // skip the draw-in — show data immediately
+      const next = toY(cached.buckets);
+      shown.current = next;
+      setYs(next);
+      totalRef.current = cached.weekTotal;
+      setTotal(cached.weekTotal);
+      setLive(cached.live ?? 0);
+      if (Array.isArray(cached.labels) && cached.labels.length === 7) setLabels(cached.labels);
+      setLoaded(true);
+    }, 0);
+
     const load = async () => {
       try {
         const res = await fetch("/api/stats", { cache: "no-store" });
@@ -130,6 +162,11 @@ export function LiveDeliveriesChart() {
         if (!alive) return;
         setLoaded(true);
         applyStats(stats);
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(stats));
+        } catch {
+          /* private mode */
+        }
       } catch {
         // Network blip — keep the last known data, never crash the chart.
       }
@@ -147,6 +184,7 @@ export function LiveDeliveriesChart() {
 
     return () => {
       alive = false;
+      clearTimeout(restore);
       clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
       cancelAnimationFrame(raf.current);
@@ -200,7 +238,7 @@ export function LiveDeliveriesChart() {
           />
         ))}
         {isEmpty ? (
-          /* No real deliveries yet — a quiet dashed baseline. */
+          /* No real deliveries yet — a quiet dashed baseline, gently breathing. */
           <line
             x1={PAD}
             x2={W - PAD}
@@ -210,6 +248,7 @@ export function LiveDeliveriesChart() {
             strokeOpacity={0.3}
             strokeWidth={2}
             strokeDasharray="4 5"
+            className="animate-pulse motion-reduce:animate-none"
           />
         ) : (
           <>
@@ -269,7 +308,11 @@ export function LiveDeliveriesChart() {
             top-ups this week
           </p>
         </div>
-        <span className="mb-0.5 inline-flex items-center gap-1 font-mono text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+        {/* key={live} re-triggers a small pop whenever new deliveries land */}
+        <span
+          key={live}
+          className="mb-0.5 inline-flex items-center gap-1 animate-pop font-mono text-[11px] font-bold text-emerald-600 dark:text-emerald-400"
+        >
           <TrendingUp className="size-3.5" aria-hidden="true" />
           +{live} live
         </span>
