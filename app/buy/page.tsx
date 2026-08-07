@@ -324,13 +324,15 @@ function BuyFlow() {
                     key={s.id}
                     type="button"
                     onClick={() => selectService(s.id)}
+                    aria-pressed={service === s.id}
                     className={cn(
-                      "flex items-center gap-3 bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                      "relative flex items-center gap-3 bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       service === s.id
-                        ? "bg-brand-50 border-2 border-ink-950 shadow-hard"
+                        ? "bg-paper border-2 border-ink-950 shadow-hard"
                         : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                     )}
                   >
+                    {service === s.id && <SelectedCheck />}
                     <span
                       className={cn(
                         "grid size-11 shrink-0 place-items-center text-ink-950 transition-all duration-300",
@@ -357,13 +359,15 @@ function BuyFlow() {
                     key={c.code}
                     type="button"
                     onClick={() => selectCountry(c.code)}
+                    aria-pressed={countryCode === c.code}
                     className={cn(
-                      "bg-surface p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                      "relative bg-surface p-4 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                       countryCode === c.code
-                        ? "bg-brand-50 border-2 border-ink-950 shadow-hard"
+                        ? "bg-paper border-2 border-ink-950 shadow-hard"
                         : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                     )}
                   >
+                    {countryCode === c.code && <SelectedCheck />}
                     <span className="mx-auto block w-fit origin-center transition-transform duration-300 group-hover:scale-110">
                       <CountryFlag country={c} className="h-9 w-12 border-2 border-ink-950" />
                     </span>
@@ -389,14 +393,16 @@ function BuyFlow() {
                       key={p.id}
                       type="button"
                       onClick={() => setProviderId(p.id)}
+                      aria-pressed={active}
                       className={cn(
-                        "flex items-center gap-2.5 bg-surface py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
+                        "flex items-center gap-2 bg-surface py-2.5 pl-3.5 pr-5 text-sm font-bold text-ink-700 shadow-sm transition-all duration-200",
                         active
-                          ? "bg-brand-50 text-ink-950 border-2 border-ink-950 shadow-hard"
+                          ? "bg-paper text-ink-950 border-2 border-ink-950 shadow-hard"
                           : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                       )}
                     >
                       <BrandMark logo={p.logo} name={p.name} short={p.short} color={p.color} size={28} />
+                      {active && <CheckMark className="text-ink-950" />}
                       {p.short}
                     </button>
                   );
@@ -466,18 +472,20 @@ function BuyFlow() {
                         key={b.id}
                         type="button"
                         onClick={() => setBundleId(b.id)}
+                        aria-pressed={active}
                         className={cn(
-                          "flex items-center justify-between bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                          "relative flex items-center justify-between bg-surface p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                           active
-                            ? "bg-brand-50 border-2 border-ink-950 shadow-hard"
+                            ? "bg-paper border-2 border-ink-950 shadow-hard"
                             : "border-2 border-ink-950 shadow-hard-sm hover:shadow-hard",
                         )}
                       >
+                        {active && <SelectedCheck />}
                         <span>
                           <span className="block text-base font-extrabold text-ink-900">{b.size}</span>
                           <span className="block text-xs text-ink-400">{b.validity}</span>
                         </span>
-                        <span className="font-mono text-sm font-bold text-brand-700">
+                        <span className="pr-1 font-mono text-sm font-bold text-brand-700">
                           {formatLocal(b.price, country.currency)}
                         </span>
                       </button>
@@ -492,13 +500,15 @@ function BuyFlow() {
                         key={v}
                         type="button"
                         onClick={() => pickQuick(v)}
+                        aria-pressed={quick === v}
                         className={cn(
-                          "px-4 py-2 font-mono text-sm font-bold shadow-sm transition-all duration-200",
+                          "inline-flex items-center gap-1.5 px-4 py-2 font-mono text-sm font-bold shadow-sm transition-all duration-200",
                           quick === v
-                            ? "bg-brand-50 text-ink-950 border-2 border-ink-950 shadow-hard"
+                            ? "bg-paper text-ink-950 border-2 border-ink-950 shadow-hard"
                             : "border-2 border-ink-950 bg-surface text-ink-600 shadow-hard-sm hover:shadow-hard",
                         )}
                       >
+                        {quick === v && <CheckMark className="text-ink-950" />}
                         {formatLocal(v, country.currency)}
                       </button>
                     ))}
@@ -747,6 +757,33 @@ function BuyFlow() {
         </div>
       )}
     </div>
+  );
+}
+
+/** Small check icon used inside selection markers. */
+function CheckMark({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={cn("size-3.5", className)}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+/** Corner sticker that marks a card as selected — night tile with a lime check. */
+function SelectedCheck() {
+  return (
+    <span className="absolute -right-1.5 -top-1.5 z-10 grid size-6 place-items-center border-2 border-ink-950 bg-night text-sun-300">
+      <CheckMark className="size-3" />
+    </span>
   );
 }
 

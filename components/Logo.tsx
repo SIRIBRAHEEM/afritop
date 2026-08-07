@@ -28,7 +28,7 @@ export function Logo({
       />
       <span
         className={cn(
-          "font-display text-lg font-bold tracking-tight",
+          "hidden font-display text-lg font-bold tracking-tight min-[400px]:inline",
           light ? "text-white" : "text-ink-950",
         )}
       >

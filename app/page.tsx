@@ -454,7 +454,7 @@ export default function Home() {
 
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="bg-paper px-4 pb-20 sm:px-6">
-        <div className="relative mx-auto max-w-6xl overflow-hidden border-2 border-ink-950 bg-night px-6 py-16 text-center text-white sm:px-12">
+        <div className="relative mx-auto max-w-6xl overflow-hidden border-2 border-ink-950 bg-night px-5 py-16 text-center text-white sm:px-12 sm:py-20">
           <div className="relative">
             <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-surface text-ink-950">
               <svg viewBox="0 0 24 24" className="size-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -463,7 +463,7 @@ export default function Home() {
             </span>
             <h2 className="mx-auto mt-6 max-w-2xl font-display text-h2 font-bold">
               Your phone is low.{" "}
-              <span className="text-white">Your meter is running.</span>
+              <span className="text-sun-300">Your meter is running.</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-white/70">
               Solve it in seconds — pay in USDC from your own wallet and the top-up lands instantly.

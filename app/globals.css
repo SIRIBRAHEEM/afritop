@@ -320,17 +320,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Full-bleed lime canvas wrapped in a thin black frame that hugs the
- * viewport edges — like a hard 2px outline around the whole page. */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  border: 2px solid var(--color-ink-950);
-  pointer-events: none;
-  z-index: 9999;
-}
-
 ::selection {
   background-color: #0a0a0a;
   color: #d4ff3f;
