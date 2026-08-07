@@ -3,7 +3,7 @@ import { Inter, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { SupportChat } from "@/components/SupportChat";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 // Premium type stack: Inter for body/nav/buttons, Space Grotesk for
 // headlines (geometric, confident, fintech-grade), Space Mono reserved
@@ -94,7 +94,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />
-        <SupportChat />
+        <WhatsAppButton />
       </body>
     </html>
   );
