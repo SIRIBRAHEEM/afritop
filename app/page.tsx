@@ -173,9 +173,9 @@ export default function Home() {
                   </div>
 
                   <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_1fr]">
-                    {/* Live deliveries chart — animated, real-time counter.
-                        bg-surface (not bg-paper): in light mode paper is lime,
-                        which would swallow the lime area fill. */}
+                    {/* Live deliveries chart — polls /api/stats for REAL on-site
+                        transactions. bg-surface (not bg-paper): in light mode
+                        paper is lime, which would swallow the lime area fill. */}
                     <div className="border-2 border-ink-950 bg-surface p-4">
                       <LiveDeliveriesChart />
                     </div>
