@@ -9,7 +9,6 @@ import { cn, isValidPhone, isValidMeter } from "@/lib/utils";
 import { BrandMark } from "@/components/BrandMark";
 import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { CountryFlag } from "@/components/ui/CountryFlag";
-import { Reveal } from "@/components/ui/Reveal";
 import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { USDC_CHAINS } from "@/lib/chains";
 import {
@@ -263,7 +262,7 @@ function BuyFlow() {
     <div className="bg-paper">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="animate-fade-up">
-          <p className="text-sm font-bold uppercase tracking-widest text-brand-600">🛒 Buy top-up</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-brand-600">Buy top-up</p>
           <h1 className="mt-2 font-display text-h2 font-semibold text-ink-900">
             What are we topping up?
           </h1>
@@ -283,7 +282,6 @@ function BuyFlow() {
         )}
 
         {/* Stepper */}
-        <Reveal delay={60}>
         <ol className="mt-8 flex items-center gap-2 sm:gap-3">
           {[
             { n: 1, label: "Service" },
@@ -313,7 +311,6 @@ function BuyFlow() {
             </li>
           ))}
         </ol>
-        </Reveal>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           {/* ── Form ── */}
@@ -547,8 +544,8 @@ function BuyFlow() {
 
           {/* ── Summary ── */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <Reveal className="border-2 border-ink-950 bg-surface p-6 shadow-hard">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">📋 Order summary</h2>
+            <div className="border-2 border-ink-950 bg-surface p-6 shadow-hard">
+              <h2 className="text-sm font-bold uppercase tracking-widest text-ink-400">Order summary</h2>
 
               <div className="mt-4 space-y-3 text-sm">
                 <Row
@@ -699,7 +696,7 @@ function BuyFlow() {
                 </svg>
                 Secure checkout by Circle · USDC
               </p>
-            </Reveal>
+            </div>
 
             {!ready && (
               <p className="mt-4 border-2 border-ink-950 bg-ink-50 px-4 py-3 text-xs leading-relaxed text-ink-400">

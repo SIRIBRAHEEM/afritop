@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { WALLET_INSTALLS } from "@/lib/web3";
 import { BrandMark } from "@/components/BrandMark";
-import { Reveal } from "@/components/ui/Reveal";
-import { Lock, CreditCard, ShieldCheck } from "lucide-react";
 
 /**
  * "Supported payment networks" trust section.
@@ -24,25 +22,25 @@ const TRUST_POINTS: {
   title: string;
   text: string;
   color: string; // vibrant accent tile — theme-independent, like ServiceIcon
-  Icon: typeof Lock;
+  icon: "lock" | "card" | "check";
 }[] = [
   {
     title: "Self-custody",
     text: "USDC never leaves your wallet until you approve the exact amount. We never hold your funds.",
     color: "#10b981",
-    Icon: Lock,
+    icon: "lock",
   },
   {
     title: "No card needed",
     text: "Pay with stable USDC from any EVM wallet — no bank card, no KYC, no hidden exchange margins.",
     color: "#f97316",
-    Icon: CreditCard,
+    icon: "card",
   },
   {
     title: "On-chain verified",
     text: "Every payment settles on Arc and is confirmed on-chain before your top-up is delivered.",
     color: "#65a30a",
-    Icon: ShieldCheck,
+    icon: "check",
   },
 ];
 
@@ -56,7 +54,7 @@ export function PaymentNetworks() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             <p className="text-sm font-medium uppercase tracking-widest text-ink-500">
-              💳 How you pay
+              How you pay
             </p>
             <h2 className="mt-3 font-display text-4xl font-bold text-ink-950 sm:text-5xl">
               Supported payment networks
@@ -70,7 +68,7 @@ export function PaymentNetworks() {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
           {/* ── Wallets ── */}
-          <Reveal className="border-2 border-ink-950 bg-surface p-7 sm:p-8">
+          <div className="border-2 border-ink-950 bg-surface p-7 sm:p-8">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-xl font-bold text-ink-950">
                 Works with your wallet
@@ -122,10 +120,10 @@ export function PaymentNetworks() {
                 </Link>
               ))}
             </div>
-          </Reveal>
+          </div>
 
           {/* ── Network + trust points ── */}
-          <Reveal className="flex flex-col gap-6" delay={120}>
+          <div className="flex flex-col gap-6">
             {/* Network card */}
             <div className="border-2 border-ink-950 bg-night p-7 text-white">
               <div className="flex items-center justify-between">
@@ -176,16 +174,29 @@ export function PaymentNetworks() {
 
             {/* Trust points */}
             <div className="grid gap-3 sm:grid-cols-3">
-              {TRUST_POINTS.map((t, i) => (
-                <Reveal key={t.title} delay={i * 80} className="h-full">
-                <div className="group h-full border-2 border-ink-950 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5">
+              {TRUST_POINTS.map((t) => (
+                <div
+                  key={t.title}
+                  className="group border-2 border-ink-950 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5"
+                >
                   <span
                     className="grid size-9 place-items-center border-2 border-ink-950 text-white transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
                     style={{ backgroundColor: t.color }}
                   >
-                    <span className="animate-icon-bob">
-                      <t.Icon className="size-4" strokeWidth={2.5} />
-                    </span>
+                    {t.icon === "lock" ? (
+                      <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2a5 5 0 0 0-5 5v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7h6v2H9V9Zm3-5a3 3 0 0 1 3 3v2H9V7a3 3 0 0 1 3-3Z" />
+                      </svg>
+                    ) : t.icon === "card" ? (
+                      <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <path d="M2 10h20" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    )}
                   </span>
                   <h4 className="mt-3 font-display text-sm font-bold text-ink-950">
                     {t.title}
@@ -194,10 +205,9 @@ export function PaymentNetworks() {
                     {t.text}
                   </p>
                 </div>
-                </Reveal>
               ))}
             </div>
-          </Reveal>
+          </div>
         </div>
       </div>
     </section>
