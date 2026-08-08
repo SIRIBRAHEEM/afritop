@@ -6,6 +6,7 @@ import { formatLocal, formatUsd } from "@/lib/fx";
 import { getUsdcChain } from "@/lib/chains";
 import { StatusChip } from "@/components/StatusChip";
 import { BalloonCelebration } from "@/components/BalloonCelebration";
+import { ReceiptActions } from "@/components/ReceiptActions";
 import type { ReceiptEntry } from "@/lib/receipt-journal";
 
 function txExplorerLink(txHash: string, chainId?: number): string {
@@ -40,7 +41,8 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
       {delivered && <BalloonCelebration />}
 
       <div className="relative mx-auto max-w-xl px-4 py-14 sm:py-20">
-        <div className="animate-pop glass-strong overflow-hidden">
+        {/* id lets ReceiptActions capture exactly this card for PNG/PDF export */}
+        <div id={`afritop-receipt-${entry.id}`} className="animate-pop glass-strong overflow-hidden">
           {/* Header */}
           <div
             className={
@@ -187,6 +189,11 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
             </div>
           </div>
         </div>
+
+        {/* Download / share — shown once the receipt is real */}
+        {delivered && (
+          <ReceiptActions receiptId={`afritop-receipt-${entry.id}`} entry={entry} />
+        )}
       </div>
     </div>
   );
