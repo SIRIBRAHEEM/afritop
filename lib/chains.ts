@@ -1,4 +1,4 @@
-import { defineChain, getAddress, keccak256, toBytes, type Chain } from "viem";
+import { defineChain, type Chain } from "viem";
 
 export interface UsdcChain {
   id: string;
@@ -63,26 +63,6 @@ export function paymentReceiver(): `0x${string}` {
 
 export function receiverIsDemo(): boolean {
   return !process.env.USDC_RECEIVER;
-}
-
-/**
- * Unique, deterministic deposit address for a QR / copy-address order.
- *
- * QR orders no longer share one receiver: with a shared address, ANY recent
- * transfer to it (from an earlier test, another tester, a faucet sweep…) can
- * match by amount and auto-deliver an order the user never paid. Deriving a
- * fresh address per order means only a payment to THIS order's address can
- * complete it — zero ambiguity.
- *
- * The address is derived from the order id (keccak truncated to 20 bytes), so
- * it's stable across serverless instances. In this testnet phase the funds sit
- * at the derived address; a production HD wallet (seed env var + sweep) slots
- * into this function later without changing the flow.
- */
-export function depositAddressFor(orderId: string): `0x${string}` {
-  const hash = keccak256(toBytes(`afritop:v1:${orderId}`));
-  // Checksummed so it displays consistently in wallets and explorers.
-  return getAddress(`0x${hash.slice(2, 42)}`);
 }
 
 /** Minimal ERC-20 transfer ABI — all we need to move USDC. */

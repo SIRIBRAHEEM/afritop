@@ -15,10 +15,9 @@ import { ReceiptCard } from "@/components/ReceiptCard";
  * ephemeral server store. Reads the client receipt journal — written the
  * moment a payment was broadcast — so the receipt always displays.
  *
- * When the journal only has the pending entry (a QR / copy-address payment
- * auto-completed by the server-side sweep while the page was closed), we poll
- * /api/orders/[id] and fold the settled order back into the journal, so the
- * receipt appears by itself without a manual refresh.
+ * When the journal only has the pending entry, we poll /api/orders/[id] and
+ * fold the settled order back into the journal, so the receipt appears by
+ * itself without a manual refresh.
  *
  * `getServerSnapshot` returns `null` so the server and the hydration render
  * both show the neutral spinner; the journal is only read once mounted.

@@ -1,13 +1,12 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createWalletClient, custom, getAddress, parseUnits, type EIP1193Provider } from "viem";
 import { USDC_CHAINS, ERC20_TRANSFER_ABI, getUsdcChain, type UsdcChain } from "@/lib/chains";
 import { confirmUsdcPayment, WALLET_INSTALLS, withTimeout } from "@/lib/web3";
 import { BrandMark } from "@/components/BrandMark";
-import { QrPayPanel } from "@/components/QrPayPanel";
-import { getReceiptsSnapshot, saveReceipt, subscribeReceipts, updateReceipt } from "@/lib/receipt-journal";
+import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { formatLocal, formatUsd } from "@/lib/fx";
 import { cn, shortenAddress } from "@/lib/utils";
 
@@ -59,11 +58,6 @@ function humanizeError(err: unknown): string {
 
 export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPanelProps) {
   const router = useRouter();
-  // Client-side copy of this order (saved by /buy before navigating). Sent with
-  // confirmations so the server can rebuild the order if its ephemeral store
-  // lost it, keeping the wallet flow working on serverless platforms.
-  const receipts = useSyncExternalStore(subscribeReceipts, getReceiptsSnapshot, () => null);
-  const journalEntry = receipts?.find((r) => r.id === order.id);
   const [wallet, setWallet] = useState<WalletState | null>(null);
   const [selectedChainId, setSelectedChainId] = useState<number>(USDC_CHAINS[0].chain.id);
   const [busy, setBusy] = useState<Busy>(null);
@@ -79,11 +73,6 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
   } | null>(null);
   const [copied, setCopied] = useState(false);
   const [showInstallHelp, setShowInstallHelp] = useState(false);
-  // Which payment method is shown: connect a browser wallet, or scan a QR /
-  // copy the address and send USDC from any wallet (incl. phone wallet apps).
-  // This page is reached from the "Pay by QR code" path, so the QR / copy
-  // address view — with its automatic watcher — is the default.
-  const [payMethod, setPayMethod] = useState<"wallet" | "scan">("scan");
 
   const selectedChain = useMemo(
     () => USDC_CHAINS.find((c) => c.chain.id === selectedChainId) ?? USDC_CHAINS[0],
@@ -222,7 +211,6 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         txHash: hash,
         chainId: selectedChain.chain.id,
         sender: address,
-        order: journalEntry,
       });
       if (!confirm.ok) {
         // Broadcast-but-unconfirmed → recovery panel with Check again (never pay
@@ -253,7 +241,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     setBusy("confirming");
     setError(null);
     try {
-      const confirm = await confirmUsdcPayment({ ...lastConfirm, order: journalEntry });
+      const confirm = await confirmUsdcPayment(lastConfirm);
       if (!confirm.ok) throw new Error(confirm.error);
       updateReceipt(lastConfirm.orderId, { status: "delivered", token: confirm.token, message: confirm.message });
       setLastConfirm(null);
@@ -358,11 +346,11 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           </div>
         </div>
 
-        {/* Payment */}
+        {/* Wallet payment */}
         <div className="mt-6 border-2 border-ink-950 bg-surface p-6 sm:p-7">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-bold text-ink-900">
-              Pay with USDC
+              Pay with your wallet
             </h2>
             <span className="grid size-10 place-items-center border-2 border-ink-950 bg-brand-50 text-ink-950">
               <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -372,46 +360,6 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
             </span>
           </div>
 
-          {/* Payment method tabs */}
-          <div className="mt-5 grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => setPayMethod("wallet")}
-              aria-pressed={payMethod === "wallet"}
-              className={cn(
-                "flex items-center justify-center gap-2 px-3 py-3 text-sm font-extrabold transition-all duration-200",
-                payMethod === "wallet"
-                  ? "border-2 border-ink-950 bg-night text-white"
-                  : "border-2 border-ink-950 bg-ink-50 text-ink-500 hover:text-ink-950",
-              )}
-            >
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12a9 9 0 1 1-9-9" />
-                <path d="M21 3v6h-6" />
-              </svg>
-              Connect wallet
-            </button>
-            <button
-              type="button"
-              onClick={() => setPayMethod("scan")}
-              aria-pressed={payMethod === "scan"}
-              className={cn(
-                "flex items-center justify-center gap-2 px-3 py-3 text-sm font-extrabold transition-all duration-200",
-                payMethod === "scan"
-                  ? "border-2 border-ink-950 bg-night text-white"
-                  : "border-2 border-ink-950 bg-ink-50 text-ink-500 hover:text-ink-950",
-              )}
-            >
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2" />
-                <path d="M7 12h10" />
-              </svg>
-              Scan QR / copy address
-            </button>
-          </div>
-
-          {payMethod === "wallet" ? (
-            <>
           {/* Network picker */}
           <p className="mt-5 text-xs font-bold uppercase tracking-widest text-ink-400">Pay on</p>
           <div className="mt-2.5 grid grid-cols-3 gap-2">
@@ -639,10 +587,6 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
             </div>
             <p className="mt-1 break-all font-mono text-xs font-semibold text-ink-700">{order.receiver}</p>
           </div>
-            </>
-          ) : (
-            <QrPayPanel order={order} />
-          )}
         </div>
 
         {/* Alternatives */}
@@ -673,9 +617,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
 
         {demoMode && (
           <p className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
-            <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. QR payments go to a
-            unique address generated for each order; connect-wallet payments go to{" "}
-            <code className="font-mono">USDC_RECEIVER</code> when set, otherwise the demo burn address.
+            <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. Set{" "}
+            <code className="font-mono">USDC_RECEIVER</code> to your own EVM address to receive
+            testnet USDC directly, instead of the demo burn address.
           </p>
         )}          <p className="mt-6 text-center text-xs font-bold text-ink-400">
             <svg viewBox="0 0 24 24" className="inline size-3.5 -mt-0.5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

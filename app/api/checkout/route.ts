@@ -3,7 +3,7 @@ import { SERVICES, getCountry, getProvider, findBundle } from "@/lib/catalog";
 import { toUsd, platformFee, round2 } from "@/lib/fx";
 import { addOrder, getOrder, updateOrder } from "@/lib/store";
 import { createCheckoutSession, isCircleConfigured } from "@/lib/circle";
-import { depositAddressFor, paymentReceiver, receiverIsDemo } from "@/lib/chains";
+import { paymentReceiver, receiverIsDemo } from "@/lib/chains";
 import { uid, normalizePhone, isValidPhone, isValidMeter } from "@/lib/utils";
 
 export const runtime = "nodejs";
@@ -40,10 +40,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { service, countryCode, providerId, recipient, amount, bundleId } = body;
     const paymentMethod: "wallet" | "circle" = body.paymentMethod === "circle" ? "circle" : "wallet";
-    // QR / copy-address orders get a unique deposit address per order, so a
-    // transfer to any other address (or an old transfer to a shared one) can
-    // never auto-complete them. Connect-wallet orders keep the shared receiver.
-    const qr = body.qr === true;
     const origin = requestOrigin(request);
 
     // Reuse an existing pending order when asked (e.g. switching payment method).
@@ -141,8 +137,7 @@ export async function POST(request: Request) {
       usdTotal,
       bundle: bundle ? { size: bundle.size, validity: bundle.validity } : undefined,
       paymentMethod: "wallet",
-      qr: qr || undefined,
-      receiver: qr ? depositAddressFor(orderId) : paymentReceiver(),
+      receiver: paymentReceiver(),
     });
 
     // Wallet payments (the default) go to the /pay/[orderId] page.
@@ -151,8 +146,7 @@ export async function POST(request: Request) {
         mode: "wallet",
         checkoutUrl: `/pay/${orderId}`,
         orderId,
-        qr,
-        receiver: qr ? depositAddressFor(orderId) : paymentReceiver(),
+        receiver: paymentReceiver(),
         demo: receiverIsDemo(),
       });
     }

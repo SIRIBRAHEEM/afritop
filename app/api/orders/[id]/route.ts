@@ -6,9 +6,8 @@ export const runtime = "nodejs";
 /**
  * GET /api/orders/[id]
  *
- * Returns a single order by id. The success page polls this to detect when a
- * QR / copy-address payment has been auto-completed server-side (by the
- * sweep), without needing a wallet session.
+ * Returns a single order by id. The success page polls this to detect when an
+ * order reaches a settled state, without needing a wallet session.
  */
 export async function GET(
   _request: Request,

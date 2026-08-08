@@ -29,10 +29,6 @@ export interface ReceiptEntry {
   currency: string;
   usdTotal: number;
   bundle?: { size: string; validity: string };
-  qr?: boolean; // QR / copy-address order (unique deposit address)
-  receiver?: string; // USDC payment destination (QR / copy-address flow)
-  usdSubtotal?: number;
-  fee?: number;
   txHash?: string;
   chainId?: number;
   token?: string;
@@ -126,10 +122,6 @@ export function orderToEntry(order: Order): ReceiptEntry {
     currency: order.currency,
     usdTotal: order.usdTotal,
     bundle: order.bundle,
-    qr: order.qr,
-    receiver: order.receiver,
-    usdSubtotal: order.usdSubtotal,
-    fee: order.fee,
     txHash: order.txHash,
     chainId: order.chainId,
     token: order.token,

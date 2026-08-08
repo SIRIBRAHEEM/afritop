@@ -31,8 +31,7 @@ export function PollOrder({ orderId }: { orderId: string }) {
       if (cancelled) return;
       setElapsed(Math.round((Date.now() - started) / 1000));
       try {
-        // Single-order lookup works for every flow (no wallet session needed),
-        // including QR / copy-address payments auto-completed by the sweep.
+        // Single-order lookup works for every flow (no wallet session needed).
         const res = await fetch(`/api/orders/${orderId}`);
         const data = await res.json();
         const order: Order | undefined = data?.order;
