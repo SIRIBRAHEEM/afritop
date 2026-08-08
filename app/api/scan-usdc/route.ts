@@ -4,6 +4,7 @@ import { getUsdcChain, receiverIsDemo } from "@/lib/chains";
 import { scanUsdcTransfer, verifyUsdcPayment } from "@/lib/usdc-verify";
 import { fulfillOrder } from "@/lib/fulfill";
 import { recreateOrderFromClient } from "@/lib/order-recovery";
+import { runSweep } from "@/lib/sweep";
 
 export const runtime = "nodejs";
 
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
       );
     }
     if (order.status === "delivered" || order.status === "paid") {
-      return NextResponse.json({ ok: true, order });
+      return NextResponse.json({ ok: true, txHash: order.txHash, order });
     }
     if (order.status !== "pending_payment") {
       return NextResponse.json({ error: "This order can't be paid anymore." }, { status: 400 });
@@ -115,6 +116,15 @@ export async function POST(request: Request) {
         since: new Date(order.createdAt).getTime(),
       });
       if (!found) {
+        // The payment may have just landed but not surfaced to this specific
+        // scan yet (RPC indexing lag). Run the server-side sweep — it matches
+        // transfers to every pending order, including this one — then re-check
+        // so a just-arrived payment completes on this very poll.
+        await runSweep();
+        const after = await getOrder(orderId);
+        if (after && (after.status === "delivered" || after.status === "paid")) {
+          return NextResponse.json({ ok: true, txHash: after.txHash, order: after });
+        }
         return NextResponse.json(
           {
             error:

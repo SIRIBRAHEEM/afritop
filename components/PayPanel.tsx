@@ -81,7 +81,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
   const [showInstallHelp, setShowInstallHelp] = useState(false);
   // Which payment method is shown: connect a browser wallet, or scan a QR /
   // copy the address and send USDC from any wallet (incl. phone wallet apps).
-  const [payMethod, setPayMethod] = useState<"wallet" | "scan">("wallet");
+  // This page is reached from the "Pay by QR code" path, so the QR / copy
+  // address view — with its automatic watcher — is the default.
+  const [payMethod, setPayMethod] = useState<"wallet" | "scan">("scan");
 
   const selectedChain = useMemo(
     () => USDC_CHAINS.find((c) => c.chain.id === selectedChainId) ?? USDC_CHAINS[0],

@@ -142,10 +142,25 @@ export function QrPayPanel({ order }: QrPayPanelProps) {
   }
 
   // While this panel is open, keep watching the receiver address for the
-  // payment. Stops automatically on confirm or unmount.
+  // payment. An immediate first check catches a payment that already landed
+  // (e.g. the page was reloaded after sending), then poll. Stops on confirm
+  // or unmount.
   useEffect(() => {
+    let cancelled = false;
+    // Check once right away — catches a payment that already landed (e.g. the
+    // page was reloaded after sending) — then keep polling. The first call is
+    // deferred past the synchronous effect body so it can never set state
+    // mid-render.
+    const first = (async () => {
+      await new Promise((r) => setTimeout(r, 0));
+      if (!cancelled) await checkPayment(true);
+    })();
+    void first;
     const id = setInterval(() => void checkPayment(true), POLL_MS);
-    return () => clearInterval(id);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order.id, chain.chain.id]);
 

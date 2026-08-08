@@ -2,13 +2,15 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
-import { subscribeReceipts, getReceiptsSnapshot, type ReceiptEntry } from "@/lib/receipt-journal";
+import {
+  orderToEntry,
+  saveReceipt,
+  subscribeReceipts,
+  getReceiptsSnapshot,
+  type ReceiptEntry,
+} from "@/lib/receipt-journal";
+import type { Order } from "@/lib/store";
 import { ReceiptCard } from "@/components/ReceiptCard";
-
-interface RawOrder {
-  id: string;
-  status: string;
-}
 
 export function PollOrder({ orderId }: { orderId: string }) {
   const router = useRouter();
@@ -29,10 +31,15 @@ export function PollOrder({ orderId }: { orderId: string }) {
       if (cancelled) return;
       setElapsed(Math.round((Date.now() - started) / 1000));
       try {
-        const res = await fetch("/api/transactions");
+        // Single-order lookup works for every flow (no wallet session needed),
+        // including QR / copy-address payments auto-completed by the sweep.
+        const res = await fetch(`/api/orders/${orderId}`);
         const data = await res.json();
-        const order: RawOrder | undefined = data?.orders?.find((o: RawOrder) => o.id === orderId);
+        const order: Order | undefined = data?.order;
         if (order && order.status !== "pending_payment") {
+          // Mirror the settled order into the journal so the receipt renders
+          // instantly, then refresh so the server page shows the full card.
+          saveReceipt(orderToEntry(order));
           router.refresh();
           return;
         }
@@ -66,8 +73,8 @@ export function PollOrder({ orderId }: { orderId: string }) {
         <h1 className="mt-5 font-display text-2xl font-bold text-ink-900">Payment received</h1>
         <p className="mt-2 text-sm leading-relaxed text-ink-500">
           Your order <span className="font-mono font-bold text-ink-700">{orderId}</span> is being
-          fulfilled. We&apos;re waiting for Circle to confirm the settlement. This usually takes a
-          few seconds.
+          fulfilled. We&apos;re confirming your payment on-chain and it completes automatically. This
+          usually takes a few seconds.
         </p>
         <p className="mt-4 text-xs font-semibold text-ink-400">Checking… {elapsed}s</p>
       </div>
