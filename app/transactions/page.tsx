@@ -237,7 +237,7 @@ export default function TransactionsPage() {
                             <span
                               className={
                                 o.source === "cloud"
-                                  ? "border-2 border-ink-950 bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-ink-950 shadow-hard-sm"
+                                  ? "border-2 border-ink-950 bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-ink-950 shadow-hard-sm dark:bg-brand-500/15 dark:border-brand-400"
                                   : "border-2 border-ink-950 bg-ink-100 px-2 py-0.5 text-[11px] font-bold text-ink-500 shadow-hard-sm"
                               }
                             >
@@ -293,7 +293,7 @@ export default function TransactionsPage() {
                         <span
                           className={
                             o.source === "cloud"
-                              ? "border-2 border-ink-950 bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-ink-950 shadow-hard-sm"
+                              ? "border-2 border-ink-950 bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-ink-950 shadow-hard-sm dark:bg-brand-500/15 dark:border-brand-400"
                               : "border-2 border-ink-950 bg-ink-100 px-2 py-0.5 text-[11px] font-bold text-ink-500 shadow-hard-sm"
                           }
                         >

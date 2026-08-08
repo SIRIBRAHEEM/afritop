@@ -177,7 +177,7 @@ export function WalletLogin({ className }: { className?: string }) {
                 ))}
               </>
             )}
-            {error && <p className="px-3 py-2 text-xs font-semibold text-red-500">{error}</p>}
+            {error && <p className="px-3 py-2 text-xs font-semibold text-red-500 dark:text-red-400">{error}</p>}
           </div>
         </>
       )}

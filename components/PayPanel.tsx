@@ -375,7 +375,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
                   className={cn(
                     "relative rounded-md px-2.5 py-2.5 text-center transition-all duration-200",
                     active
-                      ? "bg-brand-50 border-2 border-ink-950"
+                      ? "bg-brand-50 border-2 border-ink-950 dark:bg-brand-500/15 dark:border-brand-400"
                       : "bg-surface border-2 border-ink-950",
                     locked && "cursor-not-allowed opacity-50",
                   )}

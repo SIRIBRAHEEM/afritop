@@ -474,7 +474,7 @@ function BuyFlow() {
                   </span>
                 </div>
                 {recipient && !recipientValid && (
-                  <p className="mt-2 text-xs font-semibold text-red-500">
+                  <p className="mt-2 text-xs font-semibold text-red-500 dark:text-red-400">
                     {service === "electricity"
                       ? "Enter a valid meter number (6–20 digits)."
                       : `Enter a valid ${country.name} number with ${country.phoneDigits} digits after ${country.phonePrefix}, e.g. ${phonePlaceholder}.`}
@@ -549,10 +549,10 @@ function BuyFlow() {
                     />
                   </div>
                   {!Number.isFinite(amountLocal) && amount.length > 0 && (
-                    <p className="mt-2 text-xs font-semibold text-red-500">Enter a valid amount.</p>
+                    <p className="mt-2 text-xs font-semibold text-red-500 dark:text-red-400">Enter a valid amount.</p>
                   )}
                   {Number.isFinite(amountLocal) && amount.length > 0 && !amountValid && (
-                    <p className="mt-2 text-xs font-semibold text-red-500">
+                    <p className="mt-2 text-xs font-semibold text-red-500 dark:text-red-400">
                       {service === "airtime"
                         ? `Range: ${formatLocal(country.minAirtime, country.currency)} – ${formatLocal(country.maxAirtime, country.currency)}`
                         : `Range: ${formatLocal(country.minElectricity, country.currency)} – ${formatLocal(country.maxElectricity, country.currency)}`}

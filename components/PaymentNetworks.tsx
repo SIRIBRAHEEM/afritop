@@ -159,7 +159,7 @@ export function PaymentNetworks() {
                     <circle cx="12" cy="12" r="10" />
                     <path
                       d="M12 5.5a6.5 6.5 0 0 0 0 13c.8 0 1.5-.14 2.2-.4L12 12l2.2-6.1a6.6 6.6 0 0 0-2.2-.4Z"
-                      fill="#0a0a0a"
+                      fill="currentColor"
                     />
                   </svg>
                   USDC
