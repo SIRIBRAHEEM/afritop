@@ -2,6 +2,7 @@ import {
   createPublicClient,
   http,
   hexToBigInt,
+  parseAbiItem,
   parseUnits,
   type Hash,
   type Log,
@@ -10,6 +11,9 @@ import type { UsdcChain } from "@/lib/chains";
 
 // keccak256("Transfer(address,address,uint256)")
 const TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+const TRANSFER_EVENT = parseAbiItem(
+  "event Transfer(address indexed from, address indexed to, uint256 value)",
+);
 
 export interface VerifyResult {
   ok: boolean;
@@ -93,4 +97,72 @@ export async function verifyUsdcPayment(opts: {
     ok: false,
     reason: `Couldn't confirm the transaction on ${opts.chain.label}. It may still be settling. Wait a moment and try again.`,
   };
+}
+
+/**
+ * Scans recent USDC Transfer logs to `to` and returns the newest transfer that
+ * sent at least `expectedAmountUsd` and isn't in `excludeTxHashes`.
+ *
+ * Used for QR / copy-address payments, where the tx hash isn't known in
+ * advance: the user sends USDC from any wallet (even a phone wallet app) and
+ * we watch the receiver address until the payment lands.
+ */
+export async function scanUsdcTransfer(opts: {
+  chain: UsdcChain;
+  to: string;
+  expectedAmountUsd: string;
+  excludeTxHashes?: string[];
+  blocksBack?: number;
+}): Promise<{ txHash: Hash; from: string; value: bigint } | null> {
+  const rpcs = opts.chain.chain.rpcUrls.public.http;
+  // Arc blocks in under a second, so try a wide window first (covers slow
+  // payers) and fall back to a narrower one if the RPC rejects the range.
+  const windows = [opts.blocksBack ?? 200_000, 20_000];
+  const excluded = new Set((opts.excludeTxHashes ?? []).map((h) => h.toLowerCase()));
+  const expected = parseUnits(opts.expectedAmountUsd, 6);
+  const to = opts.to.toLowerCase() as `0x${string}`;
+
+  for (const rpc of rpcs) {
+    try {
+      const publicClient = createPublicClient({
+        chain: opts.chain.chain,
+        transport: http(rpc, { retryCount: 1 }),
+      });
+      const latest = await publicClient.getBlockNumber();
+
+      for (const blocksBack of windows) {
+        try {
+          const fromBlock = latest - BigInt(blocksBack);
+          const logs = await publicClient.getLogs({
+            address: opts.chain.usdc,
+            event: TRANSFER_EVENT,
+            args: { to },
+            fromBlock,
+            toBlock: "latest",
+          });
+
+          // Newest first, so a payment that just landed wins over older ones.
+          const candidates = logs
+            .filter((l) => !excluded.has(l.transactionHash.toLowerCase()))
+            .sort((a, b) => Number(b.blockNumber! - a.blockNumber!));
+
+          for (const log of candidates) {
+            if (hexToBigInt(log.data) >= expected) {
+              return {
+                txHash: log.transactionHash,
+                from: addrFromTopic(log.topics[1]),
+                value: hexToBigInt(log.data),
+              };
+            }
+          }
+          return null;
+        } catch {
+          // Range rejected — retry with the narrower window.
+        }
+      }
+    } catch {
+      // Try the next RPC. No match isn't an error — the payment just isn't there yet.
+    }
+  }
+  return null;
 }

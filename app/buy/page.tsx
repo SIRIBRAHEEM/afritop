@@ -39,6 +39,9 @@ function BuyFlow() {
   const [bundleId, setBundleId] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // The secondary "pay by QR / copy the address" path — creates the order and
+  // routes to /pay/[orderId], which works without a browser wallet extension.
+  const [creatingOrder, setCreatingOrder] = useState(false);
   const [payStage, setPayStage] = useState<string | null>(null);
   // Set once the wallet has broadcast a USDC transfer that the server hasn't
   // confirmed yet — powers the "payment sent, still confirming" recovery UI.
@@ -233,6 +236,35 @@ function BuyFlow() {
       setError(humanizeWalletError(e));
       setLoading(false);
       setPayStage(null);
+    }
+  }
+
+  /** Create the order and hand off to the /pay page (QR scan / copy address). */
+  async function createOrderForQr() {
+    if (!ready) return;
+    setCreatingOrder(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service,
+          countryCode,
+          providerId: provider!.id,
+          recipient,
+          amount: service === "data" ? undefined : amountLocal,
+          bundleId: service === "data" ? bundleId : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error ?? "Something went wrong. Please try again.");
+      }
+      router.push(data.checkoutUrl);
+    } catch (e) {
+      setError(humanizeWalletError(e));
+      setCreatingOrder(false);
     }
   }
 
@@ -690,6 +722,25 @@ function BuyFlow() {
                 ) : (
                   "Complete the details to pay"
                 )}
+              </button>
+
+              <button
+                type="button"
+                disabled={!ready || loading || creatingOrder || Boolean(txRef)}
+                onClick={() => void createOrderForQr()}
+                className="mt-3 flex w-full items-center justify-center gap-2 border-2 border-ink-950 bg-surface px-6 py-3.5 text-sm font-bold text-ink-950 transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {creatingOrder ? (
+                  <Spinner />
+                ) : (
+                  <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2" />
+                    <path d="M7 12h10" />
+                  </svg>
+                )}
+                {creatingOrder
+                  ? "Creating order…"
+                  : "No wallet? Pay by QR code or copy the address"}
               </button>
 
               <p className="mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-ink-500">
