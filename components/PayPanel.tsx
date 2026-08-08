@@ -673,9 +673,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
 
         {demoMode && (
           <p className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
-            <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. Set{" "}
-            <code className="font-mono">USDC_RECEIVER</code> to your own EVM address to receive
-            testnet USDC directly, instead of the demo burn address.
+            <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. QR payments go to a
+            unique address generated for each order; connect-wallet payments go to{" "}
+            <code className="font-mono">USDC_RECEIVER</code> when set, otherwise the demo burn address.
           </p>
         )}          <p className="mt-6 text-center text-xs font-bold text-ink-400">
             <svg viewBox="0 0 24 24" className="inline size-3.5 -mt-0.5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

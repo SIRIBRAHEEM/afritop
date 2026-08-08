@@ -42,8 +42,13 @@ export async function runSweep(): Promise<SweepResult> {
   const all = await listOrders();
   // Every tx hash already claimed by any order — one transfer pays one order.
   const used = new Set(all.filter((o) => o.txHash).map((o) => o.txHash!.toLowerCase()));
+  // Only sweep QR orders: their receiver is a unique per-order deposit address,
+  // so any matching transfer is unambiguous. Wallet-flow orders are verified
+  // inline with the sender check instead (a stranger's transfer to a shared
+  // receiver must never auto-complete one), and this also excludes any legacy
+  // shared-receiver orders still sitting in the store.
   const pending = all
-    .filter((o) => o.status === "pending_payment" && o.receiver)
+    .filter((o) => o.status === "pending_payment" && o.receiver && o.qr === true)
     .slice(0, MAX_ORDERS_PER_RUN);
 
   const fulfilled: string[] = [];

@@ -1,5 +1,5 @@
 import { addOrder, type Order } from "@/lib/store";
-import { paymentReceiver } from "@/lib/chains";
+import { depositAddressFor, paymentReceiver } from "@/lib/chains";
 import { SERVICES, type ServiceId } from "@/lib/catalog";
 
 /** Smallest order total we'll rebuild — matches the $0.05 platform-fee floor. */
@@ -10,10 +10,10 @@ const MIN_USD_TOTAL = 0.05;
  * starts / instance rotation) from the client's receipt-journal entry, which
  * /buy saves before navigating to the pay page.
  *
- * The payment destination is ALWAYS server-derived (`paymentReceiver()`), never
- * client-supplied. Amount and shape are validated so a forged payload can't
- * slip below the fee floor. Delivery is still gated by real on-chain
- * verification in the calling route.
+ * The payment destination is ALWAYS server-derived (the order's unique deposit
+ * address for QR orders, `paymentReceiver()` otherwise), never client-supplied.
+ * Amount and shape are validated so a forged payload can't slip below the fee
+ * floor. Delivery is still gated by real on-chain verification in the route.
  */
 export async function recreateOrderFromClient(
   orderId: string,
@@ -54,7 +54,8 @@ export async function recreateOrderFromClient(
         ? (p.bundle as { size: string; validity: string })
         : undefined,
     paymentMethod: "wallet",
-    receiver: paymentReceiver(), // always server-derived, never client-supplied
+    qr: p.qr === true ? true : undefined,
+    receiver: p.qr === true ? depositAddressFor(orderId) : paymentReceiver(),
   };
   await addOrder(order);
   return order;

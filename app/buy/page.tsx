@@ -273,6 +273,7 @@ function BuyFlow() {
           recipient,
           amount: service === "data" ? undefined : amountLocal,
           bundleId: service === "data" ? bundleId : undefined,
+          qr: true, // unique per-order deposit address — no shared-receiver matches
         }),
       });
       const data = await res.json();
@@ -299,6 +300,7 @@ function BuyFlow() {
         usdTotal,
         usdSubtotal,
         fee,
+        qr: true,
         receiver: data.receiver,
         bundle: bundle ? { size: bundle.size, validity: bundle.validity } : undefined,
         paymentMethod: "wallet",

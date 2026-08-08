@@ -24,6 +24,7 @@ export interface Order {
   token?: string; // electricity recharge token
   providerRef?: string; // reference returned by the vendor
   paymentMethod: "wallet" | "circle" | "mock";
+  qr?: boolean; // QR / copy-address payment → receiver is a unique deposit address
   receiver?: string; // USDC wallet receiver address (wallet payments)
   txHash?: string; // on-chain transaction hash (wallet payments)
   chainId?: number; // network the USDC payment was made on

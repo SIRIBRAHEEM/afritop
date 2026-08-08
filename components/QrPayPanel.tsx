@@ -198,6 +198,10 @@ export function QrPayPanel({ order }: QrPayPanelProps) {
             <p className="text-xs font-semibold text-ink-500">
               on {chain.label} ({chain.short} Testnet)
             </p>
+            <p className="text-xs font-semibold text-ink-500">
+              This address is unique to this order. Only a payment to it
+              completes this top-up.
+            </p>
           </div>
         </div>
       </div>
