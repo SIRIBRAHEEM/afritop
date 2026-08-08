@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { COUNTRIES, SERVICES, getCountry, findBundle, type ServiceId } from "@/lib/catalog";
 import { toUsd, platformFee, round2, formatLocal, formatUsd, FX_RATES } from "@/lib/fx";
-import { cn, isValidPhone, isValidMeter } from "@/lib/utils";
+import { cn, isValidPhone, isValidMeter, normalizePhone } from "@/lib/utils";
 import { BrandMark } from "@/components/BrandMark";
 import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { CountryFlag } from "@/components/ui/CountryFlag";
@@ -206,13 +206,31 @@ function BuyFlow() {
         chainId: payChain.chain.id,
       });
 
-      // 5) Server-side on-chain verification + fulfillment (authoritative).
+      // 5) Server-side on-chain verification + fulfillment (authoritative). The
+      // order payload lets the server rebuild the order if its ephemeral store
+      // lost it (serverless instances don't share the file-backed store).
       setPayStage("Confirming on-chain…");
       const confirm = await confirmUsdcPayment({
         orderId: data.orderId,
         txHash,
         chainId: payChain.chain.id,
         sender: conn.address,
+        order: {
+          id: data.orderId,
+          createdAt: new Date().toISOString(),
+          service,
+          countryCode,
+          providerId: provider!.id,
+          providerShort: provider!.short,
+          providerName: provider!.name,
+          recipientLabel: service === "electricity" ? "Meter no." : "Phone",
+          recipient: normalizePhone(country.phonePrefix, recipient),
+          amountLocal,
+          currency: country.currency,
+          usdSubtotal,
+          fee,
+          usdTotal,
+        },
       });
       if (!confirm.ok) {
         // Broadcast-but-unconfirmed → recovery panel with Check again (never pay
@@ -261,6 +279,30 @@ function BuyFlow() {
       if (!res.ok) {
         throw new Error(data.error ?? "Something went wrong. Please try again.");
       }
+      // Mirror the order into the local receipt journal BEFORE navigating. The
+      // server store is ephemeral on serverless platforms, so /pay/[orderId]
+      // must be able to render this order from the device even when the server
+      // no longer has it (it's recreated server-side when the payment lands).
+      saveReceipt({
+        id: data.orderId,
+        createdAt: new Date().toISOString(),
+        status: "pending_payment",
+        service,
+        countryCode,
+        providerId: provider!.id,
+        providerShort: provider!.short,
+        providerName: provider!.name,
+        recipientLabel: service === "electricity" ? "Meter no." : "Phone",
+        recipient: normalizePhone(country.phonePrefix, recipient),
+        amountLocal,
+        currency: country.currency,
+        usdTotal,
+        usdSubtotal,
+        fee,
+        receiver: data.receiver,
+        bundle: bundle ? { size: bundle.size, validity: bundle.validity } : undefined,
+        paymentMethod: "wallet",
+      });
       router.push(data.checkoutUrl);
     } catch (e) {
       setError(humanizeWalletError(e));

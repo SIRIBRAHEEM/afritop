@@ -3,12 +3,13 @@ import { getOrder, listOrders, updateOrder } from "@/lib/store";
 import { getUsdcChain, receiverIsDemo } from "@/lib/chains";
 import { scanUsdcTransfer, verifyUsdcPayment } from "@/lib/usdc-verify";
 import { fulfillOrder } from "@/lib/fulfill";
+import { recreateOrderFromClient } from "@/lib/order-recovery";
 
 export const runtime = "nodejs";
 
 /**
  * POST /api/scan-usdc
- * Body: { orderId, chainId, txHash? }
+ * Body: { orderId, chainId, txHash?, order? }
  *
  * Confirms a USDC payment for an order when the user paid by QR code or by
  * copying the address (the tx hash isn't known in advance):
@@ -19,11 +20,16 @@ export const runtime = "nodejs";
  *
  * On success the order is marked paid and delivered, and the sender's wallet
  * address is recorded so the payment shows up in that wallet's cloud history.
+ *
+ * `order` (optional) is the client receipt-journal entry for this order. The
+ * server store is ephemeral on serverless platforms, so when the order is
+ * missing here it's rebuilt from that entry — with the receiver always taken
+ * from the server (paymentReceiver()), never from the client.
  */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { orderId, chainId, txHash } = body;
+    const { orderId, chainId, txHash, order: clientOrder } = body;
 
     if (!orderId || !chainId) {
       return NextResponse.json(
@@ -32,9 +38,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const order = await getOrder(orderId);
+    let order = await getOrder(orderId);
+    if (!order && clientOrder) {
+      order = await recreateOrderFromClient(orderId, clientOrder);
+    }
     if (!order) {
-      return NextResponse.json({ error: "Order not found." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Order not found. Please create a new order from the top-up page." },
+        { status: 404 },
+      );
     }
     if (order.status === "delivered" || order.status === "paid") {
       return NextResponse.json({ ok: true, order });
@@ -72,12 +84,12 @@ export async function POST(request: Request) {
       );
     }
 
-    let txHashFound: string;
-    let sender: string | undefined;
-
     // Transient errors (payment may still be settling) keep polling alive;
     // anything definitive tells the client to stop.
     const TRANSIENT = /still settling|not indexed|wait a moment|No USDC transfer/i;
+
+    let txHashFound: string;
+    let sender: string | undefined;
 
     if (txHash) {
       const result = await verifyUsdcPayment({
@@ -100,6 +112,7 @@ export async function POST(request: Request) {
         to: order.receiver,
         expectedAmountUsd: order.usdTotal.toFixed(2),
         excludeTxHashes: usedTxHashes,
+        since: new Date(order.createdAt).getTime(),
       });
       if (!found) {
         return NextResponse.json(

@@ -3,20 +3,25 @@ import { getOrder, listOrders, updateOrder } from "@/lib/store";
 import { getUsdcChain, receiverIsDemo } from "@/lib/chains";
 import { verifyUsdcPayment } from "@/lib/usdc-verify";
 import { fulfillOrder } from "@/lib/fulfill";
+import { recreateOrderFromClient } from "@/lib/order-recovery";
 
 export const runtime = "nodejs";
 
 /**
  * POST /api/confirm-usdc
- * Body: { orderId, txHash, chainId, sender }
+ * Body: { orderId, txHash, chainId, sender, order? }
  *
  * Verifies the USDC transfer on-chain against the order's receiver + total,
  * then fulfils the order (sends airtime / generates tokens).
+ *
+ * `order` (optional) is the client receipt-journal entry. The server store is
+ * ephemeral on serverless platforms, so when the order is missing here it's
+ * rebuilt from that entry (receiver is always server-derived).
  */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { orderId, txHash, chainId, sender } = body;
+    const { orderId, txHash, chainId, sender, order: clientOrder } = body;
 
     if (!orderId || !txHash || !chainId) {
       return NextResponse.json(
@@ -25,7 +30,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const order = await getOrder(orderId);
+    let order = await getOrder(orderId);
+    if (!order && clientOrder) {
+      order = await recreateOrderFromClient(orderId, clientOrder);
+    }
     if (!order) {
       return NextResponse.json({ error: "Order not found." }, { status: 404 });
     }

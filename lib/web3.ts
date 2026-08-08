@@ -229,6 +229,8 @@ export async function confirmUsdcPayment(opts: {
   chainId: number;
   sender: string;
   attempts?: number;
+  /** Client journal entry — lets the server rebuild the order if its ephemeral store lost it. */
+  order?: unknown;
 }): Promise<
   | { ok: true; token?: string; message?: string }
   | { ok: false; error: string; retryable: boolean }
@@ -246,6 +248,7 @@ export async function confirmUsdcPayment(opts: {
           txHash: opts.txHash,
           chainId: opts.chainId,
           sender: opts.sender,
+          order: opts.order,
         }),
       });
       const data = await res.json();

@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { createWalletClient, custom, getAddress, parseUnits, type EIP1193Provider } from "viem";
 import { USDC_CHAINS, ERC20_TRANSFER_ABI, getUsdcChain, type UsdcChain } from "@/lib/chains";
 import { confirmUsdcPayment, WALLET_INSTALLS, withTimeout } from "@/lib/web3";
 import { BrandMark } from "@/components/BrandMark";
 import { QrPayPanel } from "@/components/QrPayPanel";
-import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
+import { getReceiptsSnapshot, saveReceipt, subscribeReceipts, updateReceipt } from "@/lib/receipt-journal";
 import { formatLocal, formatUsd } from "@/lib/fx";
 import { cn, shortenAddress } from "@/lib/utils";
 
@@ -59,6 +59,11 @@ function humanizeError(err: unknown): string {
 
 export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPanelProps) {
   const router = useRouter();
+  // Client-side copy of this order (saved by /buy before navigating). Sent with
+  // confirmations so the server can rebuild the order if its ephemeral store
+  // lost it, keeping the wallet flow working on serverless platforms.
+  const receipts = useSyncExternalStore(subscribeReceipts, getReceiptsSnapshot, () => null);
+  const journalEntry = receipts?.find((r) => r.id === order.id);
   const [wallet, setWallet] = useState<WalletState | null>(null);
   const [selectedChainId, setSelectedChainId] = useState<number>(USDC_CHAINS[0].chain.id);
   const [busy, setBusy] = useState<Busy>(null);
@@ -215,6 +220,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         txHash: hash,
         chainId: selectedChain.chain.id,
         sender: address,
+        order: journalEntry,
       });
       if (!confirm.ok) {
         // Broadcast-but-unconfirmed → recovery panel with Check again (never pay
@@ -245,7 +251,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     setBusy("confirming");
     setError(null);
     try {
-      const confirm = await confirmUsdcPayment(lastConfirm);
+      const confirm = await confirmUsdcPayment({ ...lastConfirm, order: journalEntry });
       if (!confirm.ok) throw new Error(confirm.error);
       updateReceipt(lastConfirm.orderId, { status: "delivered", token: confirm.token, message: confirm.message });
       setLastConfirm(null);

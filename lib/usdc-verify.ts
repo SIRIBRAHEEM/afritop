@@ -113,11 +113,20 @@ export async function scanUsdcTransfer(opts: {
   expectedAmountUsd: string;
   excludeTxHashes?: string[];
   blocksBack?: number;
+  /** Order creation time (epoch ms) — only transfers after this count. */
+  since?: number;
 }): Promise<{ txHash: Hash; from: string; value: bigint } | null> {
   const rpcs = opts.chain.chain.rpcUrls.public.http;
-  // Arc blocks in under a second, so try a wide window first (covers slow
-  // payers) and fall back to a narrower one if the RPC rejects the range.
-  const windows = [opts.blocksBack ?? 200_000, 20_000];
+  // Never match transfers that predate the order: the receiver is a shared
+  // address, and an old unrelated payment to it must not settle a new order.
+  // Arc blocks in under a second, so the window is sized from the order's age
+  // (~2 blocks/sec) with a comfortable margin, then wider fallbacks if the
+  // RPC rejects the range.
+  const elapsedSec = opts.since ? Math.max(0, (Date.now() - opts.since) / 1000) : 0;
+  // Floor of 50k blocks (~last few hours on Arc) so a slow payer is never
+  // missed, while still excluding transfers that predate the order entirely.
+  const timeBased = Math.max(50_000, Math.min(600_000, Math.ceil(elapsedSec * 2) + 5_000));
+  const windows = [timeBased, opts.blocksBack ?? 200_000, 20_000];
   const excluded = new Set((opts.excludeTxHashes ?? []).map((h) => h.toLowerCase()));
   const expected = parseUnits(opts.expectedAmountUsd, 6);
   const to = opts.to.toLowerCase() as `0x${string}`;

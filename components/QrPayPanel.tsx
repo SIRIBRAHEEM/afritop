@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import QRCode from "react-qr-code";
 import { USDC_CHAINS, paymentRequestUri } from "@/lib/chains";
-import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
+import {
+  getReceiptsSnapshot,
+  saveReceipt,
+  subscribeReceipts,
+  updateReceipt,
+} from "@/lib/receipt-journal";
 import { formatUsd } from "@/lib/fx";
 
 /**
@@ -45,6 +50,11 @@ const POLL_MS = 6000;
 export function QrPayPanel({ order }: QrPayPanelProps) {
   const router = useRouter();
   const chain = USDC_CHAINS[0]; // Arc Testnet — the only payment network right now
+  // The client-side copy of this order (saved by /buy before navigating). Sent
+  // with every check so the server can recreate the order if its ephemeral
+  // store lost it, keeping fulfillment working on serverless platforms.
+  const receipts = useSyncExternalStore(subscribeReceipts, getReceiptsSnapshot, () => null);
+  const journalEntry = receipts?.find((r) => r.id === order.id);
 
   const [txHashInput, setTxHashInput] = useState("");
   const [checking, setChecking] = useState(false);
@@ -77,7 +87,12 @@ export function QrPayPanel({ order }: QrPayPanelProps) {
       const res = await fetch("/api/scan-usdc", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId: order.id, chainId: chain.chain.id, txHash }),
+        body: JSON.stringify({
+          orderId: order.id,
+          chainId: chain.chain.id,
+          txHash,
+          order: journalEntry,
+        }),
       });
       const data = await res.json();
       if (res.ok) {
