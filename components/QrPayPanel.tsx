@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import QRCode from "react-qr-code";
-import { USDC_CHAINS, paymentRequestUri } from "@/lib/chains";
+import { USDC_CHAINS } from "@/lib/chains";
 import {
   getReceiptsSnapshot,
   saveReceipt,
@@ -67,12 +67,10 @@ export function QrPayPanel({ order }: QrPayPanelProps) {
   const stopRef = useRef(false);
   const txHashRef = useRef("");
 
-  const qrValue = paymentRequestUri({
-    chainId: chain.chain.id,
-    token: chain.usdc,
-    to: order.receiver,
-    amountUsd: order.usdTotal,
-  });
+  // The QR encodes the receiver address itself, not a long payment-request
+  // URI. Scanners in any wallet app recognise the address and open a send
+  // screen; the amount is entered by hand (shown below).
+  const qrValue = order.receiver;
 
   async function checkPayment(silent = false) {
     if (checkingRef.current || doneRef.current || stopRef.current) return;
@@ -191,8 +189,8 @@ export function QrPayPanel({ order }: QrPayPanelProps) {
           </div>
           <div className="w-full space-y-2.5">
             <p className="rounded-md border-2 border-ink-950 bg-ink-50 px-3.5 py-2.5 text-sm text-ink-700">
-              Open your wallet app on your phone and scan this code. It
-              pre-fills the recipient and the exact amount.
+              Open your wallet app on your phone and scan this code. It fills
+              in the address, then enter the exact amount before confirming.
             </p>
             <p className="font-mono text-lg font-extrabold text-brand-700">
               {formatUsd(order.usdTotal)} USDC

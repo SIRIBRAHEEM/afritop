@@ -1,4 +1,4 @@
-import { defineChain, parseUnits, type Chain } from "viem";
+import { defineChain, type Chain } from "viem";
 
 export interface UsdcChain {
   id: string;
@@ -63,24 +63,6 @@ export function paymentReceiver(): `0x${string}` {
 
 export function receiverIsDemo(): boolean {
   return !process.env.USDC_RECEIVER;
-}
-
-/**
- * EIP-681 payment request URI for an ERC-20 USDC transfer. Wallets that
- * support scan-to-pay (MetaMask Mobile, Rabby, Coinbase Wallet, Trust Wallet,
- * Rainbow…) read the recipient and exact amount straight from this URI, so
- * scanning the QR code opens a pre-filled send screen.
- *
- * Format: ethereum:pay-<token>@<chainId>/transfer?address=<to>&uint256=<wei>
- */
-export function paymentRequestUri(opts: {
-  chainId: number;
-  token: `0x${string}`;
-  to: string;
-  amountUsd: number;
-}): string {
-  const wei = parseUnits(opts.amountUsd.toFixed(2), 6).toString();
-  return `ethereum:pay-${opts.token}@${opts.chainId}/transfer?address=${opts.to}&uint256=${wei}`;
 }
 
 /** Minimal ERC-20 transfer ABI — all we need to move USDC. */
