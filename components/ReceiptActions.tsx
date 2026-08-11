@@ -43,7 +43,7 @@ export function ReceiptActions({
       pixelRatio: 2,
       // The glass card is translucent — give it a solid paper backdrop so the
       // exported image is clean, matching the user's current theme.
-      backgroundColor: dark ? "#0b0b0c" : "#f7f2e2",
+      backgroundColor: dark ? "#0b0b0c" : "#e6ed0a",
       cacheBust: true,
       // Fonts are already painted in the live DOM; re-embedding them adds
       // network work and a failure mode for zero visible gain.
