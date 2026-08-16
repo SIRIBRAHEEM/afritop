@@ -106,7 +106,7 @@ export const COUNTRIES: Country[] = [
     phoneDigits: 9,
     networks: [
       { id: "mtn-gh", name: "MTN Ghana", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
-      { id: "telecel", name: "Telecel (Vodafone)", short: "TELECEL", color: "#ED1C24" },
+      { id: "telecel", name: "Telecel (Vodafone)", short: "TELECEL", color: "#ED1C24", logo: "https://telecelgroup.com/wp-content/uploads/2026/04/T-01-RED.png" },
       { id: "airteltigo", name: "AirtelTigo", short: "AIRTELTIGO", color: "#0047AB", logo: "https://www.google.com/s2/favicons?domain=airteltigo.com&sz=128" },
     ],
     distributors: [
