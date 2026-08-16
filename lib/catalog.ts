@@ -54,7 +54,7 @@ export const COUNTRIES: Country[] = [
     phonePrefix: "+234",
     phoneDigits: 10,
     networks: [
-      { id: "mtn", name: "MTN Nigeria", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
+      { id: "mtn", name: "MTN Nigeria", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/a/af/MTN_Logo.svg" },
       { id: "glo", name: "Glo", short: "GLO", color: "#00A651", logo: "https://upload.wikimedia.org/wikipedia/commons/8/86/GloLogo.png" },
       { id: "airtel", name: "Airtel Nigeria", short: "AIRTEL", color: "#E4002B", logo: "https://upload.wikimedia.org/wikipedia/commons/d/da/Airtel_Africa_logo.svg" },
       { id: "9mobile", name: "9mobile", short: "9MOBILE", color: "#0AA089", logo: "https://www.google.com/s2/favicons?domain=9mobile.com.ng&sz=128" },
@@ -105,7 +105,7 @@ export const COUNTRIES: Country[] = [
     phonePrefix: "+233",
     phoneDigits: 9,
     networks: [
-      { id: "mtn-gh", name: "MTN Ghana", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
+      { id: "mtn-gh", name: "MTN Ghana", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/a/af/MTN_Logo.svg" },
       { id: "telecel", name: "Telecel (Vodafone)", short: "TELECEL", color: "#ED1C24", logo: "https://telecelgroup.com/wp-content/uploads/2026/04/T-01-RED.png" },
       { id: "airteltigo", name: "AirtelTigo", short: "AIRTELTIGO", color: "#0047AB", logo: "https://www.google.com/s2/favicons?domain=airteltigo.com&sz=128" },
     ],
@@ -188,7 +188,7 @@ export const COUNTRIES: Country[] = [
     phoneDigits: 9,
     networks: [
       { id: "vodacom", name: "Vodacom", short: "VODACOM", color: "#E60000", logo: "https://upload.wikimedia.org/wikipedia/en/8/8c/Vodacom_Logo_2017.svg" },
-      { id: "mtn-za", name: "MTN South Africa", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2a/MTN_2022_logo.svg" },
+      { id: "mtn-za", name: "MTN South Africa", short: "MTN", color: "#FFCC00", logo: "https://upload.wikimedia.org/wikipedia/commons/a/af/MTN_Logo.svg" },
       { id: "cellc", name: "Cell C", short: "CELL C", color: "#0033A0", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b6/Cell_C_New_2024_logo.svg" },
       { id: "telkom-za", name: "Telkom Mobile", short: "TELKOM", color: "#C8102E", logo: "https://www.google.com/s2/favicons?domain=telkom.co.za&sz=128" },
     ],
