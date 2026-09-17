@@ -4,8 +4,8 @@ import { QUOTE_CURRENCIES } from "@/lib/fx";
  * Live USD → local-currency rates.
  *
  * One source of truth for both the marketing rate ticker and the checkout, so
- * the number a customer sees is the number they're charged. Free Frankfurter
- * API, no key required.
+ * the number a customer sees is the number they're charged. Free
+ * open.er-api.com, no key required.
  *
  * This module deliberately FAILS CLOSED. During the testnet phase a stale
  * hardcoded rate was harmless because no real money moved; on mainnet, pricing
@@ -22,7 +22,8 @@ export interface FxRates {
   fetchedAt: number;
 }
 
-const FRANKFURTER_URL = `https://api.frankfurter.app/latest?from=USD&to=${QUOTE_CURRENCIES.join(",")}`;
+/** ExchangeRate-API — free, supports NGN/GHS/KES/ZAR, no key required. */
+const FX_API_URL = "https://open.er-api.com/v6/latest/USD";
 
 /** Serve a fresh-enough rate without re-fetching on every request. */
 const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -34,12 +35,12 @@ let inFlight: Promise<FxRates | null> | null = null;
 
 async function fetchLive(): Promise<FxRates | null> {
   try {
-    const res = await fetch(FRANKFURTER_URL, { cache: "no-store" });
+    const res = await fetch(FX_API_URL, { cache: "no-store" });
     if (!res.ok) {
-      console.warn("[fx-rates] Frankfurter returned", res.status);
+      console.warn("[fx-rates] exchange-rate API returned", res.status);
       return null;
     }
-    const data = (await res.json()) as { rates?: Record<string, number>; date?: string };
+    const data = (await res.json()) as { rates?: Record<string, number>; date?: string; time_last_update_utc?: string };
 
     const rates: Record<string, number> = {};
     for (const code of QUOTE_CURRENCIES) {
