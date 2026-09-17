@@ -1,5 +1,3 @@
-import { delay } from "@/lib/utils";
-
 /**
  * Africa's Talking — Airtime API client.
  *
@@ -22,8 +20,12 @@ export interface AirtimeResult {
   message?: string;
 }
 
+/**
+ * Airtime needs both the API key and the app username. `AT_USERNAME=sandbox`
+ * is only meaningful against the sandbox API, which `AT_ENV` selects.
+ */
 export function isAirtimeConfigured(): boolean {
-  return Boolean(process.env.AT_API_KEY);
+  return Boolean(process.env.AT_API_KEY && process.env.AT_USERNAME);
 }
 
 /** Returns null when Africa's Talking is not configured (callers fall back to simulation). */
@@ -64,9 +66,4 @@ export async function sendAirtime(recipients: AirtimeRecipient[]): Promise<Airti
     ref: response?.requestId,
     message: ok ? undefined : response?.errorMessage || "Airtime request failed",
   };
-}
-
-/** Simulated delivery used when the sandbox key isn't configured or the service isn't live yet. */
-export async function simulateDelivery(ms = 1100): Promise<void> {
-  await delay(ms);
 }

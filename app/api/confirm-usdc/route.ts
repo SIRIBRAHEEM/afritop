@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getOrder, listOrders, updateOrder } from "@/lib/store";
-import { getUsdcChain, receiverIsDemo } from "@/lib/chains";
+import { getUsdcChain, paymentsEnabled } from "@/lib/chains";
 import { verifyUsdcPayment } from "@/lib/usdc-verify";
 import { fulfillOrder } from "@/lib/fulfill";
 import { recreateOrderFromClient } from "@/lib/order-recovery";
@@ -30,6 +30,15 @@ export async function POST(request: Request) {
       );
     }
 
+    // Fail closed: with no configured receiver this deployment can't accept
+    // real USDC, so nothing is payable.
+    if (!paymentsEnabled()) {
+      return NextResponse.json(
+        { error: "Payments are temporarily unavailable. Please try again shortly." },
+        { status: 503 },
+      );
+    }
+
     let order = await getOrder(orderId);
     if (!order && clientOrder) {
       order = await recreateOrderFromClient(orderId, clientOrder);
@@ -50,15 +59,6 @@ export async function POST(request: Request) {
     const chain = getUsdcChain(Number(chainId));
     if (!chain) {
       return NextResponse.json({ error: "Unsupported payment network." }, { status: 400 });
-    }
-
-    // Safety: never accept real (mainnet) USDC while the receiver is still the
-    // demo burn address — the money would be permanently lost.
-    if (receiverIsDemo() && !chain.testnet) {
-      return NextResponse.json(
-        { error: "Mainnet payments are disabled in demo mode. Set USDC_RECEIVER to enable them." },
-        { status: 403 },
-      );
     }
 
     // Replay guard: one on-chain transaction may only pay for one order.

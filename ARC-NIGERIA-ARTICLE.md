@@ -84,11 +84,12 @@ This is what "crypto payments for everyday life" actually looks like — not tra
 
 I'm building this in the open, so here's the truth:
 
-- Payments are **live and real** — on-chain USDC verification runs on **Arc Testnet** right now, with free testnet USDC from the [Circle faucet](https://faucet.circle.com).
-- Airtime delivery is real via **Africa's Talking**; data and electricity vending plug into partner APIs (like VTpass) as they go live.
-- The live FX rates are being swapped in, and the plan is to go **Arc mainnet** as soon as it ships.
+- Payments are **live and real on Arc mainnet** — chain ID `5042`, settled in USDC, verified on-chain before anything is delivered. The testnet phase is over.
+- Airtime delivery is **real** via **Africa's Talking**. That's the service we can genuinely deliver today.
+- **Data bundles and electricity tokens are still simulated** — no vending partner is connected yet, so nothing is issued. Since you pay real USDC, these are labelled as simulated *before* you approve the payment, not afterwards. If you buy one, ask me for a refund.
+- Pricing runs on **live FX rates** with a transparent spread on top of mid-market, so the rate you see is the rate you're charged.
 
-I'd rather ship honestly than pretend — and the architecture is built so every piece can go from testnet to production cleanly.
+I'd rather ship honestly than pretend. Selling something I can't deliver and only mentioning it on the receipt would be the dishonest version of this post — so the labels sit in front of the payment, where they can actually change your decision.
 
 ---
 
@@ -98,8 +99,7 @@ I'd rather ship honestly than pretend — and the architecture is built so every
 - 🐦 **Afritop on X:** https://x.com/AfriTopapp
 - 🛠️ **Built by:** https://x.com/siribraheem33
 - 📖 **Arc docs:** https://docs.arc.io
-- 💧 **Free testnet USDC:** https://faucet.circle.com
 
-Connect a wallet with some testnet USDC and top yourself up — it takes 30 seconds, and I'd genuinely love to hear what you think.
+Connect a wallet with USDC on [Arc](https://explorer.arc.io) and top yourself up — it takes 30 seconds, and I'd genuinely love to hear what you think.
 
 *If you're a dev, founder, or just someone who believes Africa should pay with the money in their own wallet — let's talk.* ⚡

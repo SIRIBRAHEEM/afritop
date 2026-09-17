@@ -1,5 +1,5 @@
 import { getOrder, updateOrder, type Order } from "@/lib/store";
-import { sendAirtime } from "@/lib/africastalking";
+import { sendAirtime, isAirtimeConfigured } from "@/lib/africastalking";
 
 /** Generate a standard 20-digit prepaid electricity token, grouped like "1234-5678-…". */
 function generateElectricityToken(): string {
@@ -10,9 +10,16 @@ function generateElectricityToken(): string {
 
 /**
  * Marks an order as paid and executes delivery:
- *  - airtime     → real Africa's Talking send (simulated when sandbox key is absent)
- *  - electricity → simulated token vending (wire a vending partner like VTpass here)
- *  - data        → simulated bundle (wire a vending partner here)
+ *  - airtime     → real Africa's Talking send. If it isn't configured the order
+ *                  FAILS rather than inventing a credit, because the customer
+ *                  has already paid real USDC on Arc mainnet.
+ *  - electricity → simulated token vending, flagged `simulated` (wire a vending
+ *                  partner like VTpass here)
+ *  - data        → simulated bundle, flagged `simulated`
+ *
+ * `simulated: true` is what the receipt and success page read to tell the
+ * customer the top-up wasn't issued by a real partner. Nothing simulated is
+ * ever reported as a plain, unqualified delivery.
  */
 export async function fulfillOrder(orderId: string): Promise<Order> {
   const order = await getOrder(orderId);
@@ -25,39 +32,52 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
   await updateOrder(orderId, { status: "paid" });
 
   if (order.service === "airtime") {
-    const result = await sendAirtime([
-      {
-        phoneNumber: order.recipient,
-        amount: String(order.amountLocal),
-        currencyCode: order.currency,
-      },
-    ]);
-
-    if (result) {
+    if (!isAirtimeConfigured()) {
+      // Real money, no delivery path. This must surface as a failure so it gets
+      // refunded — never as a fake "delivered" credit.
       await updateOrder(orderId, {
-        status: result.delivered ? "delivered" : "failed",
-        providerRef: result.ref,
-        message: result.message,
+        status: "failed",
+        message:
+          "Airtime delivery isn't configured on this server, so the top-up couldn't be sent. Contact support for a refund.",
       });
     } else {
-      // No API key configured → credit instantly so the demo works end-to-end.
-      await updateOrder(orderId, {
-        status: "delivered",
-        message: "Simulated credit. Add your Africa's Talking key to go live.",
-      });
+      const result = await sendAirtime([
+        {
+          phoneNumber: order.recipient,
+          amount: String(order.amountLocal),
+          currencyCode: order.currency,
+        },
+      ]);
+
+      if (result) {
+        await updateOrder(orderId, {
+          status: result.delivered ? "delivered" : "failed",
+          providerRef: result.ref,
+          message: result.message,
+        });
+      } else {
+        await updateOrder(orderId, {
+          status: "failed",
+          message: "Airtime delivery failed. Contact support for a refund.",
+        });
+      }
     }
   } else if (order.service === "electricity") {
     const token = generateElectricityToken();
     await updateOrder(orderId, {
       status: "delivered",
+      simulated: true,
       token,
-      message: "Simulated token. Connect a vending partner to go live.",
+      message:
+        "Simulated token — no vending partner is connected yet, so this token isn't valid on your meter. Contact support for a refund.",
     });
   } else {
     // data bundles
     await updateOrder(orderId, {
       status: "delivered",
-      message: "Simulated data bundle. Connect a vending partner to go live.",
+      simulated: true,
+      message:
+        "Simulated data bundle — no vending partner is connected yet, so no bundle was issued. Contact support for a refund.",
     });
   }
 

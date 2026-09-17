@@ -69,15 +69,24 @@ export function LiveFxRates() {
   React.useEffect(() => {
     mountedRef.current = true;
     fetch("/api/fx-rates")
-      .then((r) => r.json())
-      .then((data) => {
-        if (mountedRef.current && data.rates) {
-          setRates(data.rates);
-          setLastUpdated(new Date());
+      .then(async (r) => ({ ok: r.ok, data: await r.json().catch(() => ({})) }))
+      .then(({ ok, data }) => {
+        if (!mountedRef.current) return;
+        // The route fails closed when it can't source a trustworthy rate. Show
+        // those as unavailable instead of leaving the skeleton up forever.
+        if (!ok || !data.rates) {
+          setRates({});
+          setError(true);
+          return;
         }
+        setRates(data.rates);
+        setLastUpdated(new Date());
       })
       .catch(() => {
-        if (mountedRef.current) setError(true);
+        if (mountedRef.current) {
+          setRates({});
+          setError(true);
+        }
       });
     return () => {
       mountedRef.current = false;
@@ -90,14 +99,17 @@ export function LiveFxRates() {
     async function poll() {
       try {
         const res = await fetch("/api/fx-rates");
-        const data = await res.json();
-        if (data.rates) {
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.rates) {
           setRates(data.rates);
           setLastUpdated(new Date());
           setError(false);
+        } else {
+          // Keep the last good numbers on screen, but flag them as not live.
+          setError(true);
         }
       } catch {
-        /* silent — server may be down */
+        setError(true);
       }
     }
     pollRef.current = setInterval(poll, 60_000);

@@ -141,7 +141,7 @@ export function PaymentNetworks() {
                   Arc by Circle
                 </h3>
                 <span className="border-2 border-ink-950 bg-surface px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-950">
-                  Testnet
+                  Mainnet
                 </span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-white/70">

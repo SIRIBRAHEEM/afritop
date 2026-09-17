@@ -23,9 +23,11 @@ export function isCircleConfigured(): boolean {
 export async function createCheckoutSession(input: CheckoutSessionInput): Promise<string | null> {
   if (!isCircleConfigured()) return null;
 
-  // Testnet-only phase: Arc mainnet isn't live yet, so the hosted checkout
-  // must run against the sandbox (testnet) API — buyers pay with testnet USDC
-  // on Arc Testnet. Flip to https://api.circle.com/v1 only once Arc mainnet ships.
+  // DEFERRED: Circle hosted checkout is not part of the Arc mainnet launch. The
+  // wallet path is the single supported payment route, and this sandbox base URL
+  // keeps the integration dormant rather than half-live. Before this can take
+  // real payments it needs the production base (https://api.circle.com/v1), a
+  // production key, and `CIRCLE_ENV` actually honoured.
   const base = "https://api-sandbox.circle.com/v1";
 
   const res = await fetch(`${base}/checkout/sessions`, {

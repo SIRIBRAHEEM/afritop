@@ -11,13 +11,17 @@ import type { ReceiptEntry } from "@/lib/receipt-journal";
 
 function txExplorerLink(txHash: string, chainId?: number): string {
   const chain = chainId ? getUsdcChain(chainId) : undefined;
-  return chain ? chain.explorerTx(txHash) : `https://etherscan.io/tx/${txHash}`;
+  return chain ? chain.explorerTx(txHash) : `https://explorer.arc.io/tx/${txHash}`;
 }
 
 /** One receipt card — used by /success (server order or journal fallback). */
 export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
   const delivered = entry.status === "delivered";
   const failed = entry.status === "failed";
+  // A simulated delivery is NOT a delivery. Never let the celebratory state
+  // imply the customer received something a real partner issued.
+  const simulated = delivered && Boolean(entry.simulated);
+  const trulyDelivered = delivered && !simulated;
 
   return (
     <div className="relative flex-1 overflow-hidden bg-paper">
@@ -38,7 +42,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
         aria-hidden="true"
       />
 
-      {delivered && <BalloonCelebration />}
+      {trulyDelivered && <BalloonCelebration />}
 
       <div className="relative mx-auto max-w-xl px-4 py-14 sm:py-20">
         {/* id lets ReceiptActions capture exactly this card for PNG/PDF export */}
@@ -46,32 +50,39 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
           {/* Header */}
           <div
             className={
-              delivered
-                ? "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
-                : failed
-                  ? "border-b-2 border-ink-950 bg-red-600 px-7 py-10 text-center text-white"
-                  : "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
+              simulated
+                ? "border-b-2 border-ink-950 bg-sun-600 px-7 py-10 text-center text-white"
+                : delivered
+                  ? "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
+                  : failed
+                    ? "border-b-2 border-ink-950 bg-red-600 px-7 py-10 text-center text-white"
+                    : "border-b-2 border-ink-950 bg-night px-7 py-10 text-center text-white"
             }
           >
-            {delivered && (
+            {trulyDelivered && (
               <span className="mb-4 inline-flex items-center gap-1.5 border-2 border-night bg-sun-300 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-night">
                 🎉 Payment successful
+              </span>
+            )}
+            {simulated && (
+              <span className="mb-4 inline-flex items-center gap-1.5 border-2 border-night bg-sun-300 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-night">
+                Simulated delivery
               </span>
             )}
             <span className="relative mx-auto grid size-16 place-items-center">
               <span
                 className={
-                  delivered
+                  trulyDelivered
                     ? "animate-ping-slow absolute inset-0 bg-white/30"
                     : "absolute inset-0 bg-white/20"
                 }
               />
               <span className="relative grid size-16 place-items-center border-2 border-ink-950 bg-surface text-3xl">
-                {delivered ? (
+                {trulyDelivered ? (
                   <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
-                ) : failed ? (
+                ) : simulated || failed ? (
                   <svg viewBox="0 0 24 24" className="size-8 text-ink-950" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
                     <path d="M12 9v4M12 17h.01" />
@@ -85,16 +96,24 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
               </span>
             </span>
             <h1 className="mt-5 font-display text-3xl font-bold">
-              {delivered ? "Delivered!" : failed ? "Delivery failed" : "Payment received"}
+              {trulyDelivered
+                ? "Delivered!"
+                : simulated
+                  ? "Not delivered"
+                  : failed
+                    ? "Delivery failed"
+                    : "Payment received"}
             </h1>
             <p className="mx-auto mt-2 max-w-sm text-sm text-white/80">
-              {delivered
+              {trulyDelivered
                 ? `Your ${formatLocal(entry.amountLocal, entry.currency)} ${entry.providerShort} ${
                     entry.service
                   } top-up has been delivered to ${entry.recipient}.`
-                : failed
-                  ? "We couldn't complete the delivery. Your payment will be reviewed. Please contact support."
-                  : "Your payment was received and is being processed."}
+                : simulated
+                  ? `We took your payment, but this ${entry.service} top-up was NOT delivered. No vending partner is connected yet, so nothing was issued for ${entry.recipient}. Contact support for a refund.`
+                  : failed
+                    ? "We couldn't complete the delivery. Your payment will be reviewed. Please contact support."
+                    : "Your payment was received and is being processed."}
             </p>
           </div>
 
@@ -136,7 +155,7 @@ export function ReceiptCard({ entry }: { entry: ReceiptEntry }) {
               </div>
             )}
 
-            {entry.message && delivered && (
+            {entry.message && (delivered || simulated) && (
               <p className="mt-5 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
                 <svg viewBox="0 0 24 24" className="mr-1.5 inline size-3.5 -mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />

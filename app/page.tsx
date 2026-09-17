@@ -315,6 +315,11 @@ export default function Home() {
                 </span>
                 <h3 className="mt-6 font-display text-2xl font-bold text-ink-950">{s.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-500">{s.tagline}</p>
+                {s.delivery === "simulated" && (
+                  <span className="mt-3 inline-block border border-ink-950 bg-sun-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-sun-800">
+                    Simulated delivery
+                  </span>
+                )}
                 <div className="mt-6 flex items-center justify-between pt-4 text-sm">
                   <span className="font-medium text-ink-950">
                     {s.id === "airtime" && `from ${formatLocal(ng.minAirtime, "NGN")}`}

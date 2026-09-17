@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getOrder } from "@/lib/store";
-import { receiverIsDemo } from "@/lib/chains";
+import { paymentsEnabled } from "@/lib/chains";
 import { isCircleConfigured } from "@/lib/circle";
 import { PayPanel } from "@/components/PayPanel";
 
@@ -47,6 +47,37 @@ export default async function PayPage({
     redirect(`/success?orderId=${orderId}`);
   }
 
+  // Fail closed. With no valid receiver configured there is nowhere safe to
+  // send USDC, so we never ask anyone to approve a transfer. The server would
+  // refuse the order anyway (`/api/checkout`, `/api/confirm-usdc`).
+  if (!paymentsEnabled()) {
+    return (
+      <div className="grid flex-1 place-items-center bg-paper px-4 py-24">
+        <div className="max-w-md border-2 border-ink-950 bg-surface p-8 text-center">
+          <span className="mx-auto grid size-16 place-items-center border-2 border-ink-950 bg-sun-50 text-ink-950">
+            <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+              <path d="M12 9v4M12 17h.01" />
+            </svg>
+          </span>
+          <h1 className="mt-4 font-display text-2xl font-bold text-ink-900">
+            Payments are temporarily unavailable
+          </h1>
+          <p className="mt-2 text-sm text-ink-500">
+            We can&apos;t take USDC on Arc at the moment, so this order can&apos;t be paid.
+            Nothing has been charged. Please try again later.
+          </p>
+          <a
+            href="/buy"
+            className="btn-cta mt-6 inline-flex border-2 border-ink-950 bg-night px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-ink-800"
+          >
+            Back to top-up
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <PayPanel
       order={{
@@ -63,7 +94,6 @@ export default async function PayPage({
         countryCode: order.countryCode,
         receiver: order.receiver ?? "",
       }}
-      demoMode={receiverIsDemo()}
       circleConfigured={isCircleConfigured()}
       cancelled={cancelled === "1"}
     />

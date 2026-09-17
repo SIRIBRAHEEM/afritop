@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { SERVICES, getCountry, getProvider, findBundle } from "@/lib/catalog";
 import { toUsd, platformFee, round2 } from "@/lib/fx";
+import { getFxRates } from "@/lib/fx-rates";
 import { addOrder, getOrder, updateOrder } from "@/lib/store";
 import { createCheckoutSession, isCircleConfigured } from "@/lib/circle";
-import { paymentReceiver, receiverIsDemo } from "@/lib/chains";
+import { isAirtimeConfigured } from "@/lib/africastalking";
+import { paymentReceiver, paymentsEnabled } from "@/lib/chains";
 import { uid, normalizePhone, isValidPhone, isValidMeter } from "@/lib/utils";
 
 export const runtime = "nodejs";
@@ -42,6 +44,16 @@ export async function POST(request: Request) {
     const paymentMethod: "wallet" | "circle" = body.paymentMethod === "circle" ? "circle" : "wallet";
     const origin = requestOrigin(request);
 
+    // Fail closed. With no configured receiver there is nowhere safe to send
+    // real USDC, so we refuse to create a payable order at all rather than
+    // falling back to a placeholder address.
+    if (!paymentsEnabled()) {
+      return json(503, {
+        error: "Payments are temporarily unavailable. Please try again shortly.",
+      });
+    }
+    const receiver = paymentReceiver() as `0x${string}`;
+
     // Reuse an existing pending order when asked (e.g. switching payment method).
     if (body.orderId) {
       const existing = await getOrder(body.orderId);
@@ -70,6 +82,17 @@ export async function POST(request: Request) {
     if (!country) return json(400, { error: "That country isn't supported yet." });
     if (!SERVICES.some((s) => s.id === service)) {
       return json(400, { error: "Unknown service." });
+    }
+
+    // Airtime is the one service we deliver for real. If Africa's Talking isn't
+    // configured we must not take the money: the old behaviour silently credited
+    // a fake top-up, which was harmless with testnet USDC and is not with real
+    // USDC. Data bundles and electricity are simulated by design and are
+    // labelled as such before payment.
+    if (service === "airtime" && !isAirtimeConfigured()) {
+      return json(503, {
+        error: "Airtime top-ups are temporarily unavailable. Please try again later.",
+      });
     }
 
     let provider;
@@ -115,7 +138,21 @@ export async function POST(request: Request) {
 
     recipientFormatted = normalizePhone(country.phonePrefix, recipient);
 
-    const usdSubtotal = toUsd(amountLocal, country.currency);
+    // Price off live rates only. If we can't source a rate we trust, refuse the
+    // order rather than charging from a stale number.
+    const fx = await getFxRates();
+    if (!fx) {
+      return json(503, {
+        error: "Live exchange rates are unavailable right now. Please try again in a few minutes.",
+      });
+    }
+
+    const usdSubtotal = toUsd(amountLocal, country.currency, fx.rates);
+    if (usdSubtotal === null) {
+      return json(503, {
+        error: "We can't price that currency right now. Please try again in a few minutes.",
+      });
+    }
     const fee = platformFee(usdSubtotal);
     const usdTotal = round2(usdSubtotal + fee);
 
@@ -137,7 +174,7 @@ export async function POST(request: Request) {
       usdTotal,
       bundle: bundle ? { size: bundle.size, validity: bundle.validity } : undefined,
       paymentMethod: "wallet",
-      receiver: paymentReceiver(),
+      receiver,
     });
 
     // Wallet payments (the default) go to the /pay/[orderId] page.
@@ -146,8 +183,7 @@ export async function POST(request: Request) {
         mode: "wallet",
         checkoutUrl: `/pay/${orderId}`,
         orderId,
-        receiver: paymentReceiver(),
-        demo: receiverIsDemo(),
+        receiver,
       });
     }
 

@@ -22,6 +22,8 @@ export interface Order {
   usdTotal: number;
   bundle?: { size: string; validity: string };
   token?: string; // electricity recharge token
+  /** Delivery was produced by our simulated pipeline, not a real vendor. */
+  simulated?: boolean;
   providerRef?: string; // reference returned by the vendor
   paymentMethod: "wallet" | "circle" | "mock";
   receiver?: string; // USDC wallet receiver address (wallet payments)

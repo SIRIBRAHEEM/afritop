@@ -125,6 +125,11 @@ export async function connectWith(provider: EIP1193Provider): Promise<WalletConn
   return { address, chainId, provider };
 }
 
+/** Explorer base URL for a chain, used in timeout/recovery copy. */
+function explorerUrl(chain: Chain): string {
+  return chain.blockExplorers?.default.url ?? "https://explorer.arc.io";
+}
+
 /** Switch the wallet to `chain`; adds it first when the wallet doesn't know it (4902). */
 export async function ensureChain(provider: EIP1193Provider, chain: Chain): Promise<void> {
   try {
@@ -134,7 +139,7 @@ export async function ensureChain(provider: EIP1193Provider, chain: Chain): Prom
         params: [{ chainId: `0x${chain.id.toString(16)}` }],
       }),
       45_000,
-      "Your wallet is taking too long to switch to Arc Testnet. Try again.",
+      `Your wallet is taking too long to switch to ${chain.name}. Try again.`,
     );
   } catch (err) {
     const e = err as { code?: number };
@@ -153,7 +158,7 @@ export async function ensureChain(provider: EIP1193Provider, chain: Chain): Prom
           ],
         }),
         45_000,
-        "Your wallet is taking too long to add Arc Testnet. Try again.",
+        `Your wallet is taking too long to add ${chain.name}. Try again.`,
       );
     } else {
       throw err;
@@ -210,13 +215,13 @@ export async function sendUsdcPayment(opts: {
       account: opts.address,
     }),
     60_000,
-    "Your wallet is taking too long to send the payment. If you already approved it, check testnet.arcscan.app before trying again.",
+    `Your wallet is taking too long to send the payment. If you already approved it, check ${explorerUrl(opts.chain)} before trying again.`,
   );
   return { txHash: hash };
 }
 
 /** Error text the server returns when the tx exists but hasn't surfaced yet. */
-const TRANSIENT_CONFIRM_RE = /still settling|not indexed|wait a moment/i;
+const TRANSIENT_CONFIRM_RE = /still settling|not indexed|wait a moment|couldn't find that transaction/i;
 
 /**
  * POST /api/confirm-usdc — server-side on-chain verification + fulfillment.
@@ -232,7 +237,7 @@ export async function confirmUsdcPayment(opts: {
   /** Client journal entry — lets the server rebuild the order if its ephemeral store lost it. */
   order?: unknown;
 }): Promise<
-  | { ok: true; token?: string; message?: string }
+  | { ok: true; token?: string; message?: string; simulated?: boolean }
   | { ok: false; error: string; retryable: boolean }
 > {
   const attempts = opts.attempts ?? 3;
@@ -255,8 +260,15 @@ export async function confirmUsdcPayment(opts: {
       if (res.ok) {
         // Surface the fulfilled order's delivery details (e.g. the electricity
         // recharge token) so the client journal can render the full receipt
-        // even if the ephemeral server store is reset.
-        return { ok: true, token: data?.order?.token, message: data?.order?.message };
+        // even if the ephemeral server store is reset. `simulated` matters most:
+        // without it the journal would render a simulated delivery as a real
+        // one, which is exactly the claim we must never make.
+        return {
+          ok: true,
+          token: data?.order?.token,
+          message: data?.order?.message,
+          simulated: Boolean(data?.order?.simulated),
+        };
       }
       lastError = data?.error ?? "The payment couldn't be confirmed. Please try again.";
       // Retryable = the tx was likely broadcast but hasn't surfaced on-chain yet

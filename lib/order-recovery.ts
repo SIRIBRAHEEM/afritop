@@ -35,6 +35,11 @@ export async function recreateOrderFromClient(
     return undefined;
   }
 
+  const receiver = paymentReceiver();
+  // Payments are unconfigured — never rebuild a payable order. The calling
+  // route refuses these before it gets this far.
+  if (!receiver) return undefined;
+
   const order: Order = {
     id: orderId,
     createdAt: typeof p.createdAt === "string" ? p.createdAt : new Date().toISOString(),
@@ -54,7 +59,7 @@ export async function recreateOrderFromClient(
         ? (p.bundle as { size: string; validity: string })
         : undefined,
     paymentMethod: "wallet",
-    receiver: paymentReceiver(), // always server-derived, never client-supplied
+    receiver, // always server-derived, never client-supplied
   };
   await addOrder(order);
   return order;

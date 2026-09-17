@@ -32,6 +32,8 @@ export interface ReceiptEntry {
   txHash?: string;
   chainId?: number;
   token?: string;
+  /** Delivery came from our simulated pipeline, not a real vendor. */
+  simulated?: boolean;
   message?: string;
   paymentMethod?: "wallet" | "circle" | "mock";
 }
@@ -125,6 +127,7 @@ export function orderToEntry(order: Order): ReceiptEntry {
     txHash: order.txHash,
     chainId: order.chainId,
     token: order.token,
+    simulated: order.simulated,
     message: order.message,
     paymentMethod: order.paymentMethod,
   };

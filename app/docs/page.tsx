@@ -121,7 +121,7 @@ export default function DocsPage() {
                 ))}
               </ul>
               <a
-                href="https://testnet.arcscan.app/"
+                href="https://explorer.arc.io/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 block border-2 border-ink-950 bg-paper px-3 py-2 text-xs font-bold text-ink-950 transition-all hover:-translate-y-0.5"
@@ -224,23 +224,22 @@ export default function DocsPage() {
               </ul>
               <div className="mt-6 flex flex-wrap gap-2">
                 {[
-                  { label: "Arc Testnet", mono: true },
+                  { label: "Arc Mainnet", mono: true },
                   { label: "Network: Arc (EVM L1 by Circle)", mono: false },
                   { label: "Gas: paid in USDC", mono: false },
+                  { label: "Chain ID 5042", mono: true },
                 ].map((c) => (
                   <span key={c.label} className="border-2 border-ink-950 bg-paper px-3 py-1.5 font-mono text-xs font-bold text-ink-950">
                     {c.label}
                   </span>
                 ))}
-                <a
-                  href="https://faucet.circle.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border-2 border-ink-950 bg-surface px-3 py-1.5 text-xs font-bold text-ink-700 transition-all hover:-translate-y-0.5"
-                >
-                  Get free testnet USDC ↗
-                </a>
               </div>
+              <p className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
+                <strong className="text-ink-900">What&apos;s delivered today.</strong> Airtime is
+                delivered for real through Africa&apos;s Talking. Data bundles and prepaid
+                electricity tokens are still fulfilled by a simulated pipeline — no vending
+                partner is connected yet — so they are labelled as simulated before you pay.
+              </p>
             </Section>
 
             {/* Wallets */}
@@ -263,7 +262,7 @@ export default function DocsPage() {
                 ))}
               </div>
               <p className="mt-5 border-l-2 border-ink-950 bg-paper px-4 py-3 text-xs leading-relaxed text-ink-500">
-                <strong className="text-ink-900">First time on Arc?</strong> Your wallet will be asked to add the Arc Testnet network.
+                <strong className="text-ink-900">First time on Arc?</strong> Your wallet will be asked to add the Arc network.
                 Approve it once and you&apos;re set. If nothing opens when you tap pay, install any of the wallets above and reload.
               </p>
             </Section>
@@ -314,7 +313,7 @@ export default function DocsPage() {
               <div className="mt-6 space-y-4">
                 {[
                   { q: "Nothing happens when I tap pay", a: "No wallet is installed or detected. Install MetaMask, Coinbase, Trust or Rabby, reload and try again. We detect it automatically." },
-                  { q: "My wallet says 'add network'", a: "Approve adding Arc Testnet once. That's the network we settle on, and it's a one-time step." },
+                  { q: "My wallet says 'add network'", a: "Approve adding Arc once. That's the network we settle on, and it's a one-time step." },
                   { q: "Payment sent but still confirming", a: "If your transfer shows on the explorer, tap Check again and we'll finish the top-up. If it failed on-chain, nothing was charged. Just start a new payment." },
                   { q: "Top-up hasn't arrived", a: "Usually a seconds-level delay from the network operator. Check your receipt status; if it shows Delivered, the vendor has sent it." },
                   { q: "Wrong number entered", a: "Always double-check the number before approving payment. Top-ups go to the number you entered and are final once sent." },

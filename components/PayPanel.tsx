@@ -8,6 +8,7 @@ import { confirmUsdcPayment, WALLET_INSTALLS, withTimeout } from "@/lib/web3";
 import { BrandMark } from "@/components/BrandMark";
 import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { formatLocal, formatUsd } from "@/lib/fx";
+import { SIMULATED_DELIVERY_NOTICE, isSimulatedService } from "@/lib/catalog";
 import { cn, shortenAddress } from "@/lib/utils";
 
 export interface PayPanelOrder {
@@ -27,12 +28,11 @@ export interface PayPanelOrder {
 
 interface PayPanelProps {
   order: PayPanelOrder;
-  demoMode: boolean;
   circleConfigured: boolean;
   cancelled: boolean;
 }
 
-type Busy = "connecting" | "switching" | "sending" | "confirming" | "circle" | "simulating" | null;
+type Busy = "connecting" | "switching" | "sending" | "confirming" | "circle" | null;
 
 interface WalletState {
   address: string;
@@ -56,7 +56,7 @@ function humanizeError(err: unknown): string {
   return "Something went wrong with the wallet request.";
 }
 
-export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPanelProps) {
+export function PayPanel({ order, circleConfigured, cancelled }: PayPanelProps) {
   const router = useRouter();
   const [wallet, setWallet] = useState<WalletState | null>(null);
   const [selectedChainId, setSelectedChainId] = useState<number>(USDC_CHAINS[0].chain.id);
@@ -81,9 +81,11 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
 
   const walletMatchesChain = wallet && wallet.chainId === selectedChain.chain.id;
   const connected = Boolean(wallet);
-  // Never allow paying on a mainnet chain while the receiver is still the demo burn address.
-  const lockedSelected = demoMode && !selectedChain.testnet;
-  const ready = connected && walletMatchesChain && !busy && !lockedSelected && !lastConfirm;
+  // No receiver means there is nowhere safe to send real USDC — the server
+  // refuses these orders outright, so don't let the UI offer to pay.
+  const ready =
+    connected && walletMatchesChain && !busy && !lastConfirm && Boolean(order.receiver);
+  const simulatedService = isSimulatedService(order.service);
   // Chain the broadcast tx actually happened on (user may have switched networks since).
   const confirmChain = lastConfirm ? getUsdcChain(lastConfirm.chainId) ?? selectedChain : null;
 
@@ -101,10 +103,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
       if (!accounts?.length) throw new Error("No accounts returned by the wallet.");
       const address = getAddress(accounts[0]);
       const chainId = Number(await ethereum.request({ method: "eth_chainId" }));
-      // Auto-select the wallet's chain only when it's allowed (never a mainnet
-      // chain while in demo mode — otherwise real USDC could go to the burn address).
+      // If the wallet is already on a network we support, preselect it.
       const active = USDC_CHAINS.find((c) => c.chain.id === chainId);
-      if (active && (!demoMode || active.testnet)) setSelectedChainId(active.chain.id);
+      if (active) setSelectedChainId(active.chain.id);
       setWallet({ address, chainId });
     } catch (e) {
       setError(humanizeError(e));
@@ -177,7 +178,7 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           account: address,
         }),
         60_000,
-        "Your wallet is taking too long to send the payment. If you already approved it, check testnet.arcscan.app before trying again.",
+        `Your wallet is taking too long to send the payment. If you already approved it, check ${selectedChain.explorer} before trying again.`,
       );
       setTxHash(hash);
       setBusy("confirming");
@@ -226,7 +227,12 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         setError(confirm.error);
         return;
       }
-      updateReceipt(order.id, { status: "delivered", token: confirm.token, message: confirm.message });
+      updateReceipt(order.id, {
+        status: "delivered",
+        token: confirm.token,
+        message: confirm.message,
+        simulated: confirm.simulated,
+      });
       setLastConfirm(null);
       router.push(`/success?orderId=${order.id}`);
     } catch (e) {
@@ -243,7 +249,12 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
     try {
       const confirm = await confirmUsdcPayment(lastConfirm);
       if (!confirm.ok) throw new Error(confirm.error);
-      updateReceipt(lastConfirm.orderId, { status: "delivered", token: confirm.token, message: confirm.message });
+      updateReceipt(lastConfirm.orderId, {
+        status: "delivered",
+        token: confirm.token,
+        message: confirm.message,
+        simulated: confirm.simulated,
+      });
       setLastConfirm(null);
       router.push(`/success?orderId=${lastConfirm.orderId}`);
     } catch (e) {
@@ -268,28 +279,6 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
         return;
       }
       window.location.assign(data.checkoutUrl);
-    } catch {
-      setBusy(null);
-      setError("Network error. Please try again.");
-    }
-  }
-
-  async function simulatePayment() {
-    setBusy("simulating");
-    setError(null);
-    try {
-      const res = await fetch("/api/purchase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId: order.id }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setBusy(null);
-        setError(data.error ?? "Simulation failed.");
-        return;
-      }
-      router.push(`/success?orderId=${order.id}`);
     } catch {
       setBusy(null);
       setError("Network error. Please try again.");
@@ -364,54 +353,36 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
           <p className="mt-5 text-xs font-bold uppercase tracking-widest text-ink-400">Pay on</p>
           <div className="mt-2.5 grid grid-cols-3 gap-2">
             {USDC_CHAINS.map((c) => {
-              const locked = demoMode && !c.testnet;
               const active = selectedChainId === c.chain.id;
               return (
                 <button
                   key={c.id}
                   type="button"
-                  disabled={locked || busy === "switching"}
+                  disabled={busy === "switching"}
                   onClick={() => void switchChain(c)}
                   className={cn(
                     "relative rounded-md px-2.5 py-2.5 text-center transition-all duration-200",
                     active
                       ? "bg-brand-50 border-2 border-ink-950 dark:bg-brand-500/15 dark:border-brand-400"
                       : "bg-surface border-2 border-ink-950",
-                    locked && "cursor-not-allowed opacity-50",
                   )}
                 >
                   <span className={cn("block text-sm font-extrabold", active ? "text-brand-800" : "text-ink-400")}>
                     {c.short}
                   </span>
                   <span className={cn("block text-[11px] font-bold", active ? "text-brand-600" : "text-ink-500")}>
-                    {c.testnet ? "Testnet" : "Mainnet"}
+                    Mainnet
                   </span>
-                  {locked && (
-                    <span className="absolute right-1.5 top-1.5" title="Set USDC_RECEIVER to enable mainnet">
-                      <svg viewBox="0 0 24 24" className="size-3 text-ink-400" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="4" y="10" width="16" height="11" rx="2" />
-                        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                      </svg>
-                    </span>
-                  )}
                 </button>
               );
             })}
           </div>
           <p className="mt-2 text-xs text-ink-400">{selectedChain.blurb}</p>
 
-          {selectedChain.testnet && selectedChain.faucetUrl && (
-            <a
-              href={selectedChain.faucetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 hover:text-brand-600"
-            >
-              <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M10 2v6m4-6v6M7 8h10l-1 12H8L7 8Zm-2 5h14" />
-              </svg>
-              Get free testnet USDC from the Circle faucet
-            </a>
+          {simulatedService && (
+            <p className="mt-5 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs font-semibold leading-relaxed text-sun-800">
+              {SIMULATED_DELIVERY_NOTICE}
+            </p>
           )}
 
           {/* Connect / pay */}
@@ -602,26 +573,9 @@ export function PayPanel({ order, demoMode, circleConfigured, cancelled }: PayPa
               {busy === "circle" ? "Preparing Circle checkout…" : "Or pay with Circle (hosted checkout)"}
             </button>
           )}
-          {demoMode && (
-            <button
-              type="button"
-              onClick={() => void simulatePayment()}
-              disabled={busy === "simulating"}
-              className="flex w-full items-center justify-center gap-2 border-2 border-transparent px-6 py-3 text-sm font-bold text-ink-400 transition-colors hover:border-ink-950 hover:bg-surface hover:text-ink-950 disabled:cursor-wait disabled:opacity-70"
-            >
-              {busy === "simulating" ? <Spinner /> : null}
-              {busy === "simulating" ? "Simulating…" : "Demo mode: simulate payment"}
-            </button>
-          )}
         </div>
 
-        {demoMode && (
-          <p className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
-            <strong>Testnet-only phase.</strong> Payments run on Arc Testnet. Set{" "}
-            <code className="font-mono">USDC_RECEIVER</code> to your own EVM address to receive
-            testnet USDC directly, instead of the demo burn address.
-          </p>
-        )}          <p className="mt-6 text-center text-xs font-bold text-ink-400">
+        <p className="mt-6 text-center text-xs font-bold text-ink-400">
             <svg viewBox="0 0 24 24" className="inline size-3.5 -mt-0.5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="4" y="10" width="16" height="11" rx="2" />
               <path d="M8 10V7a4 4 0 0 1 8 0v3" />
