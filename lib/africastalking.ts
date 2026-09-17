@@ -55,12 +55,20 @@ export async function sendAirtime(recipients: AirtimeRecipient[]): Promise<Airti
   });
 
   const data = await res.json().catch(() => ({}));
+  console.log("[africastalking] response", JSON.stringify(data));
   if (!res.ok) {
+    console.error("[africastalking] API error", res.status, data);
     return { delivered: false, message: data?.message || `Africa's Talking error (${res.status})` };
   }
 
-  const response = Array.isArray(data?.responses) ? data.responses[0] : undefined;
-  const ok = !response || response.status === "Success";
+  const responses = data?.responses;
+  if (!Array.isArray(responses) || !responses.length) {
+    console.error("[africastalking] no responses array in payload", data);
+    return { delivered: false, message: data?.message || "Airtime API returned no delivery status." };
+  }
+  const response = responses[0];
+  const ok = response.status === "Success";
+  if (!ok) console.error("[africastalking] delivery failed", response);
   return {
     delivered: ok,
     ref: response?.requestId,

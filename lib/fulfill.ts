@@ -30,8 +30,10 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
   if (order.status === "delivered") return order;
 
   await updateOrder(orderId, { status: "paid" });
+  console.log("[fulfill] order", orderId, "service", order.service, "recipient", order.recipient, "amount", order.amountLocal, order.currency);
 
   if (order.service === "airtime") {
+    console.log("[fulfill] airtime configured:", isAirtimeConfigured());
     if (!isAirtimeConfigured()) {
       // Real money, no delivery path. This must surface as a failure so it gets
       // refunded — never as a fake "delivered" credit.
@@ -41,6 +43,11 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
           "Airtime delivery isn't configured on this server, so the top-up couldn't be sent. Contact support for a refund.",
       });
     } else {
+      console.log("[fulfill] calling sendAirtime with", JSON.stringify({
+        phoneNumber: order.recipient,
+        amount: String(order.amountLocal),
+        currencyCode: order.currency,
+      }));
       const result = await sendAirtime([
         {
           phoneNumber: order.recipient,
@@ -48,6 +55,7 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
           currencyCode: order.currency,
         },
       ]);
+      console.log("[fulfill] sendAirtime result", JSON.stringify(result));
 
       if (result) {
         await updateOrder(orderId, {
