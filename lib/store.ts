@@ -66,8 +66,8 @@ async function redisAddOrder(order: Order): Promise<Order> {
 }
 
 async function redisGetOrder(id: string): Promise<Order | undefined> {
-  const raw = await redis!.get<string>(orderKey(id));
-  return raw ? (JSON.parse(raw) as Order) : undefined;
+  const raw = await redis!.get<Order>(orderKey(id));
+  return raw ?? undefined;
 }
 
 async function redisUpdateOrder(id: string, patch: Partial<Order>): Promise<Order | undefined> {
@@ -86,11 +86,9 @@ async function redisListOrders(): Promise<Order[]> {
   const ids = await redis!.lrange(ALL_ORDERS_KEY, 0, -1);
   if (!ids.length) return [];
   const pipeline = redis!.pipeline();
-  for (const id of ids) pipeline.get<string>(orderKey(id));
-  const raws = await pipeline.exec<string[]>();
-  return raws
-    .filter((r): r is string => Boolean(r))
-    .map((r) => JSON.parse(r) as Order);
+  for (const id of ids) pipeline.get<Order>(orderKey(id));
+  const raws = await pipeline.exec<Order[]>();
+  return raws.filter((r): r is Order => Boolean(r));
 }
 
 /** Orders paid for by a given wallet address (the "cloud history" source). */
@@ -100,11 +98,10 @@ export async function listOrdersByWallet(address: string): Promise<Order[]> {
     const ids = await redis!.smembers(walletKey(address));
     if (!ids.length) return [];
     const pipeline = redis!.pipeline();
-    for (const id of ids) pipeline.get<string>(orderKey(id));
-    const raws = await pipeline.exec<string[]>();
+    for (const id of ids) pipeline.get<Order>(orderKey(id));
+    const raws = await pipeline.exec<Order[]>();
     return raws
-      .filter((r): r is string => Boolean(r))
-      .map((r) => JSON.parse(r) as Order)
+      .filter((r): r is Order => Boolean(r))
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
   // Fallback (file store): filter in-process by wallet.
