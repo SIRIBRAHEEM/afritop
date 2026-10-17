@@ -4,7 +4,6 @@ import {
   hexToBigInt,
   parseUnits,
   type Hash,
-  type Log,
 } from "viem";
 import { ARC_SYSTEM_EMITTER, type UsdcChain } from "@/lib/chains";
 

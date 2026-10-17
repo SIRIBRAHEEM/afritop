@@ -19,16 +19,30 @@ export function isCircleConfigured(): boolean {
   return Boolean(process.env.CIRCLE_API_KEY);
 }
 
+/**
+ * Circle API base URL. Mirrors the `AT_ENV` convention: `CIRCLE_ENV=live`
+ * targets production, and anything else (including unset) stays on sandbox.
+ *
+ * Defaulting to sandbox is deliberate. Circle hosted checkout is not part of
+ * the Arc mainnet launch, so an unconfigured or half-configured deployment must
+ * never reach Circle's production API by accident. Flipping it live requires an
+ * explicit, intentional `CIRCLE_ENV=live`.
+ */
+function circleBaseUrl(): string {
+  return process.env.CIRCLE_ENV === "live"
+    ? "https://api.circle.com/v1"
+    : "https://api-sandbox.circle.com/v1";
+}
+
 /** Returns the hosted checkout URL, or null when Circle is not configured. */
 export async function createCheckoutSession(input: CheckoutSessionInput): Promise<string | null> {
   if (!isCircleConfigured()) return null;
 
   // DEFERRED: Circle hosted checkout is not part of the Arc mainnet launch. The
-  // wallet path is the single supported payment route, and this sandbox base URL
-  // keeps the integration dormant rather than half-live. Before this can take
-  // real payments it needs the production base (https://api.circle.com/v1), a
-  // production key, and `CIRCLE_ENV` actually honoured.
-  const base = "https://api-sandbox.circle.com/v1";
+  // wallet path is the single supported payment route, so this integration
+  // stays dormant by defaulting to the sandbox base until `CIRCLE_ENV=live`
+  // is set on purpose.
+  const base = circleBaseUrl();
 
   const res = await fetch(`${base}/checkout/sessions`, {
     method: "POST",
