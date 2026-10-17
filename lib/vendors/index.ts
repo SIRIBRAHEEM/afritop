@@ -2,16 +2,16 @@
  * Vendor registry.
  *
  * Order matters: the first vendor that covers a request *and* is configured
- * wins. Reloadly leads for airtime/data so it becomes the primary partner (as
- * requested), while Africa's Talking stays in the list as a fallback for
- * airtime so an existing deployment keeps delivering if Reloadly isn't switched
- * on yet.
+ * wins. Reloadly is the one telco partner (airtime + data, all four countries);
+ * VTPass covers Nigerian prepaid electricity. Africa's Talking is still present
+ * as a temporary airtime fallback so live airtime doesn't go dark before
+ * Reloadly is configured — remove it (and `lib/africastalking.ts`) once Reloadly
+ * credentials are live.
  */
 
 import { isAirtimeConfigured, sendAirtime } from "@/lib/africastalking";
 import reloadly from "./reloadly";
 import vtpass from "./vtpass";
-import hubtel from "./hubtel";
 import type { ServiceKind, VendRequest, VendResult, Vendor } from "./types";
 
 export type { ServiceKind, VendRequest, VendResult, Vendor } from "./types";
@@ -35,7 +35,7 @@ const africastalking: Vendor = {
   },
 };
 
-export const VENDORS: Vendor[] = [reloadly, vtpass, hubtel, africastalking];
+export const VENDORS: Vendor[] = [reloadly, vtpass, africastalking];
 
 /** The vendor that will actually run this request, if any. */
 export function resolveVendor(request: VendRequest): Vendor | undefined {

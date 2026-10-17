@@ -237,8 +237,8 @@ export default function DocsPage() {
               <p className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
                 <strong className="text-ink-900">What&apos;s delivered today.</strong> Top-ups are
                 vended through live partners — Reloadly for airtime and data in every country,
-                VTPass for Nigerian electricity and Hubtel for Ghana. Any route that doesn&apos;t
-                have a partner connected yet is clearly labelled <em>simulated</em> before you pay,
+                VTPass for Nigerian prepaid electricity. Any route that doesn&apos;t have a partner
+                connected yet is clearly labelled <em>simulated</em> before you pay,
                 so you never pay real USDC for something that isn&apos;t issued.
               </p>
             </Section>

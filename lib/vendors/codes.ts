@@ -11,7 +11,6 @@
  *   RELOADLY_OPERATOR_IDS   {"NG:mtn":341,"GH:mtn-gh":102}
  *   RELOADLY_BUNDLES        {"ng-mtn-1gb":{"operatorId":341,"amount":500}}
  *   VTPASS_SERVICE_IDS      {"electricity:ikeja":"ikeja-electric"}
- *   HUBTEL_SERVICE_IDS      {"electricity:GH:ecg":"e6d6bac062b5499cb1ece1ac3d742a84"}
  */
 
 function jsonEnv<T extends object>(name: string, fallback: T): T {
@@ -51,15 +50,4 @@ export function vtpassServiceId(service: string, networkId: string): string | un
 /** How many VTPass service ids are configured — used to gate the vendor on. */
 export function vtpassServiceIdCount(): number {
   return Object.keys(jsonEnv<Record<string, string>>("VTPASS_SERVICE_IDS", {})).length;
-}
-
-/** Hubtel product service ids, keyed "service:country:networkId". */
-export function hubtelServiceId(service: string, countryCode: string, networkId: string): string | undefined {
-  const map = jsonEnv<Record<string, string>>("HUBTEL_SERVICE_IDS", {});
-  return map[`${service}:${countryCode}:${networkId}`];
-}
-
-/** How many Hubtel service ids are configured — used to gate the vendor on. */
-export function hubtelServiceIdCount(): number {
-  return Object.keys(jsonEnv<Record<string, string>>("HUBTEL_SERVICE_IDS", {})).length;
 }

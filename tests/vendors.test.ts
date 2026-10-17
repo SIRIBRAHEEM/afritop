@@ -12,11 +12,6 @@ const MANAGED = [
   "VTPASS_FALLBACK_PHONE",
   "VTPASS_SERVICE_IDS",
   "VTPASS_ENV",
-  "HUBTEL_ACCOUNT_NUMBER",
-  "HUBTEL_API_ID",
-  "HUBTEL_API_KEY",
-  "HUBTEL_ELECTRICITY_ENABLED",
-  "HUBTEL_SERVICE_IDS",
   "AT_API_KEY",
   "AT_USERNAME",
   "AFRITOP_REQUIRE_REAL_DELIVERY",
@@ -81,15 +76,13 @@ describe("vendor coverage", () => {
     expect(canDeliver("electricity", "GH")).toBe(false);
   });
 
-  it("keeps Hubtel off until it is explicitly enabled", () => {
+  it("never offers electricity outside Nigeria, even with Reloadly configured", () => {
     clearAll();
-    process.env.HUBTEL_ACCOUNT_NUMBER = "a";
-    process.env.HUBTEL_API_ID = "i";
-    process.env.HUBTEL_API_KEY = "k";
-    process.env.HUBTEL_SERVICE_IDS = JSON.stringify({ "electricity:GH:ecg": "x" });
-    expect(canDeliver("electricity", "GH")).toBe(false);
-    process.env.HUBTEL_ELECTRICITY_ENABLED = "true";
-    expect(canDeliver("electricity", "GH")).toBe(true);
+    process.env.RELOADLY_CLIENT_ID = "id";
+    process.env.RELOADLY_CLIENT_SECRET = "secret";
+    for (const c of ["GH", "KE", "ZA"]) {
+      expect(canDeliver("electricity", c), c).toBe(false);
+    }
   });
 });
 
