@@ -235,10 +235,11 @@ export default function DocsPage() {
                 ))}
               </div>
               <p className="mt-4 border-2 border-ink-950 bg-sun-50 px-4 py-3 text-xs leading-relaxed text-sun-800">
-                <strong className="text-ink-900">What&apos;s delivered today.</strong> Airtime is
-                delivered for real through Africa&apos;s Talking. Data bundles and prepaid
-                electricity tokens are still fulfilled by a simulated pipeline — no vending
-                partner is connected yet — so they are labelled as simulated before you pay.
+                <strong className="text-ink-900">What&apos;s delivered today.</strong> Top-ups are
+                vended through live partners — Reloadly for airtime and data in every country,
+                VTPass for Nigerian electricity and Hubtel for Ghana. Any route that doesn&apos;t
+                have a partner connected yet is clearly labelled <em>simulated</em> before you pay,
+                so you never pay real USDC for something that isn&apos;t issued.
               </p>
             </Section>
 
@@ -290,7 +291,7 @@ export default function DocsPage() {
             <Section id="delivery" title="Delivery & receipts" lead="Airtime lands in seconds; electricity tokens are generated the moment payment settles.">
               <ul className="mt-6 list-disc space-y-2 pl-5 text-sm leading-relaxed text-ink-600">
                 <li><strong className="text-ink-900">Airtime & data</strong> are credited to the line within seconds of on-chain confirmation.</li>
-                <li><strong className="text-ink-900">Electricity</strong> shows a 20-digit recharge token on your receipt. Enter it on your meter.</li>
+                <li><strong className="text-ink-900">Electricity</strong> returns the real meter token from our vending partner, shown on your receipt. Enter it on your meter. Simulated tokens are labelled as such.</li>
                 <li><strong className="text-ink-900">Receipts</strong> are saved for every order, with the token, amount and on-chain transaction link.</li>
                 <li><strong className="text-ink-900">History on any device</strong>: sign in with your wallet and your history syncs to the cloud and follows you.</li>
                 <li><strong className="text-ink-900">No account needed</strong>. Receipts stay saved on your device even before you sign in.</li>

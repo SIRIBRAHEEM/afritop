@@ -21,6 +21,7 @@ export interface Order {
   fee: number;
   usdTotal: number;
   bundle?: { size: string; validity: string };
+  bundleId?: string; // catalog bundle id — how the vendor layer finds the bundle code
   token?: string; // electricity recharge token
   /** Delivery was produced by our simulated pipeline, not a real vendor. */
   simulated?: boolean;

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { SERVICES, getCountry, getProvider, findBundle } from "@/lib/catalog";
+import { SERVICES, getCountry, getProvider, findBundle, type ServiceId } from "@/lib/catalog";
 import { toUsd, platformFee, round2 } from "@/lib/fx";
 import { getFxRates } from "@/lib/fx-rates";
 import { addOrder, getOrder, updateOrder } from "@/lib/store";
 import { createCheckoutSession, isCircleConfigured } from "@/lib/circle";
-import { isAirtimeConfigured } from "@/lib/africastalking";
+import { canDeliver, strictDelivery } from "@/lib/vendors";
 import { paymentReceiver, paymentsEnabled } from "@/lib/chains";
 import { uid, normalizePhone, isValidPhone, isValidMeter } from "@/lib/utils";
 
@@ -84,14 +84,19 @@ export async function POST(request: Request) {
       return json(400, { error: "Unknown service." });
     }
 
-    // Airtime is the one service we deliver for real. If Africa's Talking isn't
-    // configured we must not take the money: the old behaviour silently credited
-    // a fake top-up, which was harmless with testnet USDC and is not with real
-    // USDC. Data bundles and electricity are simulated by design and are
-    // labelled as such before payment.
-    if (service === "airtime" && !isAirtimeConfigured()) {
+    // Fail closed on anything we can't actually deliver.
+    //
+    // Airtime always fails closed: the customer pays real USDC on Arc mainnet,
+    // so if no airtime vendor is configured we must not take the money (the old
+    // behaviour silently credited a fake top-up — harmless on testnet, not now).
+    // Data and electricity fall back to the clearly-labelled simulated pipeline
+    // unless AFRITOP_REQUIRE_REAL_DELIVERY=true is set, in which case they fail
+    // closed too.
+    if (!canDeliver(service as ServiceId, country.code) && (service === "airtime" || strictDelivery())) {
+      const what =
+        service === "airtime" ? "Airtime top-ups" : service === "data" ? "Data bundles" : "Electricity tokens";
       return json(503, {
-        error: "Airtime top-ups are temporarily unavailable. Please try again later.",
+        error: `${what} are temporarily unavailable for ${country.name}. Please try again later.`,
       });
     }
 
@@ -173,6 +178,7 @@ export async function POST(request: Request) {
       fee,
       usdTotal,
       bundle: bundle ? { size: bundle.size, validity: bundle.validity } : undefined,
+      bundleId: bundle?.id,
       paymentMethod: "wallet",
       receiver,
     });

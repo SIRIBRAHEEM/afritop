@@ -8,7 +8,8 @@ import {
   SIMULATED_DELIVERY_NOTICE,
   getCountry,
   findBundle,
-  isSimulatedService,
+  routeStatus,
+  type DeliveryReport,
   type ServiceId,
 } from "@/lib/catalog";
 import {
@@ -40,7 +41,7 @@ import {
   type DetectedWallet,
 } from "@/lib/web3";
 
-export function BuyFlow({ paymentsEnabled }: { paymentsEnabled: boolean }) {
+export function BuyFlow({ paymentsEnabled, delivery }: { paymentsEnabled: boolean; delivery: DeliveryReport }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const cancelled = searchParams.get("cancelled") === "1";
@@ -144,7 +145,7 @@ export function BuyFlow({ paymentsEnabled }: { paymentsEnabled: boolean }) {
     return { subtotal, fee, total: round2(subtotal + fee) };
   }, [rates, amountLocal, country.currency]);
 
-  const simulatedService = isSimulatedService(service);
+  const simulatedService = routeStatus(delivery, service, country.code) === "simulated";
 
   const ready =
     recipientValid && amountValid && Boolean(provider) && quote !== null && paymentsEnabled;
@@ -437,7 +438,7 @@ export function BuyFlow({ paymentsEnabled }: { paymentsEnabled: boolean }) {
                     <span>
                       <span className="block text-sm font-extrabold text-ink-900">{s.label}</span>
                       <span className="block text-xs text-ink-400">{s.tagline}</span>
-                      {s.delivery === "simulated" && (
+                      {routeStatus(delivery, s.id, country.code) === "simulated" && (
                         <span className="mt-1 inline-block border border-ink-950 bg-sun-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-sun-800">
                           Simulated delivery
                         </span>

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { COUNTRIES, SERVICES } from "@/lib/catalog";
+import { COUNTRIES, SERVICES, routeStatus } from "@/lib/catalog";
+import { buildDeliveryReport } from "@/lib/delivery";
 import { formatLocal } from "@/lib/fx";
 import { Faq } from "@/components/Faq";
 import { LiveFxRates } from "@/components/LiveFxRates";
@@ -53,6 +54,8 @@ const FEATURES = [
 
 export default function Home() {
   const ng = COUNTRIES.find((c) => c.code === "NG")!;
+  // Which services actually deliver for real right now (decided on the server).
+  const delivery = buildDeliveryReport();
 
   return (
     <>
@@ -315,7 +318,7 @@ export default function Home() {
                 </span>
                 <h3 className="mt-6 font-display text-2xl font-bold text-ink-950">{s.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-500">{s.tagline}</p>
-                {s.delivery === "simulated" && (
+                {routeStatus(delivery, s.id, "NG") === "simulated" && (
                   <span className="mt-3 inline-block border border-ink-950 bg-sun-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-sun-800">
                     Simulated delivery
                   </span>

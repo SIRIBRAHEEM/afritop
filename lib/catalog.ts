@@ -38,46 +38,51 @@ export const SERVICES: {
   id: ServiceId;
   label: string;
   tagline: string;
-  /**
-   * Whether we can actually deliver this today. Airtime goes out for real via
-   * Africa's Talking; data bundles and electricity tokens are still fulfilled
-   * by a simulated pipeline (see `lib/fulfill.ts`).
-   *
-   * Mainnet means real USDC, so anything simulated is labelled *before* the
-   * customer approves the payment — never only on the receipt.
-   */
-  delivery: "live" | "simulated";
 }[] = [
   {
     id: "airtime",
     label: "Airtime",
     tagline: "Instant top-up for any mobile number",
-    delivery: "live",
   },
   {
     id: "data",
     label: "Data bundles",
     tagline: "Surf fast with prepaid data packs",
-    delivery: "simulated",
   },
   {
     id: "electricity",
     label: "Electricity",
     tagline: "Prepaid tokens for your home & business",
-    delivery: "simulated",
   },
 ];
+
+/**
+ * Delivery capability is decided per (country, service) on the server, because
+ * it depends on which vending partners are configured. Client components can't
+ * read `process.env`, so the result is computed once in `lib/delivery.ts` and
+ * passed down as this plain, serializable report.
+ *
+ * Mainnet means real USDC, so anything simulated is labelled *before* the
+ * customer approves the payment — never only on the receipt.
+ */
+export type DeliveryStatus = "live" | "simulated";
+
+export interface DeliveryReport {
+  /** Keyed `${countryCode}:${serviceId}` → status (e.g. "NG:airtime"). */
+  byRoute: Record<string, DeliveryStatus>;
+}
+
+/** Status for a route. Unknown routes are treated as simulated (fail safe). */
+export function routeStatus(report: DeliveryReport, service: string, countryCode: string): DeliveryStatus {
+  return report.byRoute[`${countryCode}:${service}`] ?? "simulated";
+}
 
 /**
  * The notice shown wherever a simulated service is offered or reported. Kept in
  * one place so the buy form, the pay panel and the receipt can't drift apart.
  */
 export const SIMULATED_DELIVERY_NOTICE =
-  "Simulated delivery. Our vending partner isn't connected yet, so this top-up isn't issued automatically — you'd be paying real USDC and not receiving the bundle or token. Airtime is delivered for real.";
-
-export function isSimulatedService(service: string): boolean {
-  return SERVICES.find((s) => s.id === service)?.delivery === "simulated";
-}
+  "Simulated delivery. No live vending partner is connected for this country yet, so this top-up isn't issued automatically — you'd be paying real USDC and not receiving it. Contact support for a refund.";
 
 export const COUNTRIES: Country[] = [
   {

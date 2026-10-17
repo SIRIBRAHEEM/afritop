@@ -8,7 +8,7 @@ import { confirmUsdcPayment, WALLET_INSTALLS, withTimeout } from "@/lib/web3";
 import { BrandMark } from "@/components/BrandMark";
 import { saveReceipt, updateReceipt } from "@/lib/receipt-journal";
 import { formatLocal, formatUsd } from "@/lib/fx";
-import { SIMULATED_DELIVERY_NOTICE, isSimulatedService } from "@/lib/catalog";
+import { SIMULATED_DELIVERY_NOTICE, routeStatus, type DeliveryReport } from "@/lib/catalog";
 import { cn, shortenAddress } from "@/lib/utils";
 
 export interface PayPanelOrder {
@@ -30,6 +30,7 @@ interface PayPanelProps {
   order: PayPanelOrder;
   circleConfigured: boolean;
   cancelled: boolean;
+  delivery: DeliveryReport;
 }
 
 type Busy = "connecting" | "switching" | "sending" | "confirming" | "circle" | null;
@@ -56,7 +57,7 @@ function humanizeError(err: unknown): string {
   return "Something went wrong with the wallet request.";
 }
 
-export function PayPanel({ order, circleConfigured, cancelled }: PayPanelProps) {
+export function PayPanel({ order, circleConfigured, cancelled, delivery }: PayPanelProps) {
   const router = useRouter();
   const [wallet, setWallet] = useState<WalletState | null>(null);
   const [selectedChainId, setSelectedChainId] = useState<number>(USDC_CHAINS[0].chain.id);
@@ -85,7 +86,7 @@ export function PayPanel({ order, circleConfigured, cancelled }: PayPanelProps) 
   // refuses these orders outright, so don't let the UI offer to pay.
   const ready =
     connected && walletMatchesChain && !busy && !lastConfirm && Boolean(order.receiver);
-  const simulatedService = isSimulatedService(order.service);
+  const simulatedService = routeStatus(delivery, order.service, order.countryCode) === "simulated";
   // Chain the broadcast tx actually happened on (user may have switched networks since).
   const confirmChain = lastConfirm ? getUsdcChain(lastConfirm.chainId) ?? selectedChain : null;
 

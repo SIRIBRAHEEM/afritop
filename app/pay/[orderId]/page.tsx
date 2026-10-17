@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getOrder } from "@/lib/store";
 import { paymentsEnabled } from "@/lib/chains";
+import { buildDeliveryReport } from "@/lib/delivery";
 import { isCircleConfigured } from "@/lib/circle";
 import { PayPanel } from "@/components/PayPanel";
 
@@ -96,6 +97,7 @@ export default async function PayPage({
       }}
       circleConfigured={isCircleConfigured()}
       cancelled={cancelled === "1"}
+      delivery={buildDeliveryReport()}
     />
   );
 }

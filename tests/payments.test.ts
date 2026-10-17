@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { paymentReceiver, paymentsEnabled } from "@/lib/chains";
-import { SERVICES, isSimulatedService } from "@/lib/catalog";
+import { routeStatus } from "@/lib/catalog";
 
 const VALID = "0x1111111111111111111111111111111111111111";
 const ZERO = "0x0000000000000000000000000000000000000000";
@@ -54,23 +54,14 @@ describe("paymentReceiver", () => {
   });
 });
 
-describe("service delivery flags", () => {
-  it("marks airtime as really delivered", () => {
-    expect(isSimulatedService("airtime")).toBe(false);
+describe("delivery report", () => {
+  it("treats an unknown route as simulated, so nothing is promised by accident", () => {
+    expect(routeStatus({ byRoute: {} }, "electricity", "ZA")).toBe("simulated");
   });
 
-  it("marks data and electricity as simulated, so they get labelled", () => {
-    expect(isSimulatedService("data")).toBe(true);
-    expect(isSimulatedService("electricity")).toBe(true);
-  });
-
-  it("treats an unknown service as not simulated rather than crashing", () => {
-    expect(isSimulatedService("nope")).toBe(false);
-  });
-
-  it("gives every service an explicit delivery flag", () => {
-    for (const service of SERVICES) {
-      expect(["live", "simulated"]).toContain(service.delivery);
-    }
+  it("reads a route's status when present", () => {
+    const report = { byRoute: { "NG:airtime": "live" as const } };
+    expect(routeStatus(report, "airtime", "NG")).toBe("live");
+    expect(routeStatus(report, "airtime", "GH")).toBe("simulated");
   });
 });

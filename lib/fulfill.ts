@@ -1,5 +1,7 @@
 import { getOrder, updateOrder, type Order } from "@/lib/store";
-import { sendAirtime, isAirtimeConfigured } from "@/lib/africastalking";
+import { getCountry } from "@/lib/catalog";
+import { resolveVendor } from "@/lib/vendors";
+import type { VendRequest } from "@/lib/vendors/types";
 
 /** Generate a standard 20-digit prepaid electricity token, grouped like "1234-5678-…". */
 function generateElectricityToken(): string {
@@ -9,17 +11,16 @@ function generateElectricityToken(): string {
 }
 
 /**
- * Marks an order as paid and executes delivery:
- *  - airtime     → real Africa's Talking send. If it isn't configured the order
- *                  FAILS rather than inventing a credit, because the customer
- *                  has already paid real USDC on Arc mainnet.
- *  - electricity → simulated token vending, flagged `simulated` (wire a vending
- *                  partner like VTpass here)
- *  - data        → simulated bundle, flagged `simulated`
+ * Marks an order as paid and executes delivery through the vendor layer
+ * (`lib/vendors`).
  *
- * `simulated: true` is what the receipt and success page read to tell the
- * customer the top-up wasn't issued by a real partner. Nothing simulated is
- * ever reported as a plain, unqualified delivery.
+ *  - A configured vendor → its real result (delivered / failed, with the
+ *    vendor's reference and, for electricity, the meter token).
+ *  - airtime with no vendor at all → FAIL. The customer has paid real USDC on
+ *    Arc mainnet, so we surface a failure for refund instead of inventing airtime.
+ *  - data / electricity with no vendor for that country → the clearly-labelled
+ *    simulated pipeline (`simulated: true`), so nothing simulated is ever
+ *    reported as a plain, unqualified delivery.
  */
 export async function fulfillOrder(orderId: string): Promise<Order> {
   const order = await getOrder(orderId);
@@ -32,44 +33,40 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
   await updateOrder(orderId, { status: "paid" });
   console.log("[fulfill] order", orderId, "service", order.service, "recipient", order.recipient, "amount", order.amountLocal, order.currency);
 
-  if (order.service === "airtime") {
-    console.log("[fulfill] airtime configured:", isAirtimeConfigured());
-    if (!isAirtimeConfigured()) {
-      // Real money, no delivery path. This must surface as a failure so it gets
-      // refunded — never as a fake "delivered" credit.
-      await updateOrder(orderId, {
-        status: "failed",
-        message:
-          "Airtime delivery isn't configured on this server, so the top-up couldn't be sent. Contact support for a refund.",
-      });
-    } else {
-      console.log("[fulfill] calling sendAirtime with", JSON.stringify({
-        phoneNumber: order.recipient,
-        amount: String(order.amountLocal),
-        currencyCode: order.currency,
-      }));
-      const result = await sendAirtime([
-        {
-          phoneNumber: order.recipient,
-          amount: String(order.amountLocal),
-          currencyCode: order.currency,
-        },
-      ]);
-      console.log("[fulfill] sendAirtime result", JSON.stringify(result));
+  const country = getCountry(order.countryCode);
+  const request: VendRequest = {
+    orderId: order.id,
+    service: order.service,
+    countryCode: order.countryCode,
+    currency: order.currency,
+    networkId: order.provider.id,
+    recipient: order.recipient,
+    phonePrefix: country?.phonePrefix ?? "",
+    amountLocal: order.amountLocal,
+    bundleId: order.bundleId,
+  };
 
-      if (result) {
-        await updateOrder(orderId, {
-          status: result.delivered ? "delivered" : "failed",
-          providerRef: result.ref,
-          message: result.message,
-        });
-      } else {
-        await updateOrder(orderId, {
-          status: "failed",
-          message: "Airtime delivery failed. Contact support for a refund.",
-        });
-      }
-    }
+  const vendor = resolveVendor(request);
+
+  if (vendor) {
+    console.log("[fulfill] vending via", vendor.id, "for", order.service, order.countryCode);
+    const result = await vendor.vend(request);
+    console.log("[fulfill]", vendor.id, "result", JSON.stringify(result));
+    await updateOrder(orderId, {
+      status: result.delivered ? "delivered" : "failed",
+      simulated: false,
+      providerRef: result.ref,
+      token: result.token,
+      message: result.message,
+    });
+  } else if (order.service === "airtime") {
+    // Real money, no delivery path. This must surface as a failure so it gets
+    // refunded — never as a fake "delivered" credit.
+    await updateOrder(orderId, {
+      status: "failed",
+      message:
+        "Airtime delivery isn't configured on this server, so the top-up couldn't be sent. Contact support for a refund.",
+    });
   } else if (order.service === "electricity") {
     const token = generateElectricityToken();
     await updateOrder(orderId, {
@@ -77,7 +74,7 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
       simulated: true,
       token,
       message:
-        "Simulated token — no vending partner is connected yet, so this token isn't valid on your meter. Contact support for a refund.",
+        "Simulated token — no vending partner is connected for your country yet, so this token isn't valid on your meter. Contact support for a refund.",
     });
   } else {
     // data bundles
@@ -85,7 +82,7 @@ export async function fulfillOrder(orderId: string): Promise<Order> {
       status: "delivered",
       simulated: true,
       message:
-        "Simulated data bundle — no vending partner is connected yet, so no bundle was issued. Contact support for a refund.",
+        "Simulated data bundle — no vending partner is connected for your country yet, so no bundle was issued. Contact support for a refund.",
     });
   }
 
