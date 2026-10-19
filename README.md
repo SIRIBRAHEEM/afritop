@@ -69,6 +69,17 @@ Copy `.env.example` into Vercel → Project → Settings → Environment Variabl
 | `CIRCLE_API_KEY` / `CIRCLE_ENV` / `CIRCLE_WEBHOOK_SECRET` | Deferred — not part of the mainnet launch. The wallet path is the single supported payment route. |
 | `NEXT_PUBLIC_APP_URL` | Public base URL used for redirects. |
 
+### Getting the vendor IDs
+
+The `RELOADLY_OPERATOR_IDS`, `RELOADLY_BUNDLES` and `VTPASS_SERVICE_IDS` values are specific to your provider account. Two read-only scripts fetch the provider's reference data and print the exact JSON to paste into Vercel:
+
+```bash
+RELOADLY_CLIENT_ID=… RELOADLY_CLIENT_SECRET=… npm run explore:reloadly
+VTPASS_API_KEY=… VTPASS_PUBLIC_KEY=…                 npm run explore:vtpass
+```
+
+Both only GET provider data — they never top up or vend. Review anything the Reloadly script marks `REVIEW` (data-bundle sizes vary per operator).
+
 Support-chat extras (`RESEND_API_KEY`, `SUPPORT_EMAIL`, `SUPPORT_INBOUND_DOMAIN`, `SUPPORT_INBOUND_SECRET`) are documented in `.env.local.example`.
 
 ## What's real, what's simulated

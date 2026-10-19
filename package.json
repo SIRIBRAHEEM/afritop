@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "explore:reloadly": "node scripts/reloadly-explore.mjs",
+    "explore:vtpass": "node scripts/vtpass-explore.mjs"
   },
   "dependencies": {
     "@upstash/redis": "^1.38.1",
